@@ -4,6 +4,7 @@ using EasyEnglish.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyEnglish.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220321150816_AddCourseAndAllRelatedModels")]
+    partial class AddCourseAndAllRelatedModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace EasyEnglish.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("CourseStudent", b =>
-                {
-                    b.Property<int>("CoursesId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CoursesId", "StudentsId");
-
-                    b.HasIndex("StudentsId");
-
-                    b.ToTable("CourseStudent");
-                });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Address", b =>
                 {
@@ -311,6 +298,43 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.CourseStudent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("CourseStudents");
+                });
+
             modelBuilder.Entity("EasyEnglish.Data.Models.Currency", b =>
                 {
                     b.Property<int>("Id")
@@ -406,6 +430,43 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("Languages");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.LanguageTeacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("LanguageTeachers");
+                });
+
             modelBuilder.Entity("EasyEnglish.Data.Models.Level", b =>
                 {
                     b.Property<int>("Id")
@@ -429,11 +490,53 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ResourceId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
+                    b.HasIndex("ResourceId");
+
                     b.ToTable("Levels");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.LevelResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LevelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ResourceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LevelId");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("LevelResources");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Payment", b =>
@@ -566,6 +669,9 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -604,6 +710,8 @@ namespace EasyEnglish.Data.Migrations
                     b.HasIndex("AddressId");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("IsDeleted");
 
@@ -640,6 +748,9 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -668,6 +779,8 @@ namespace EasyEnglish.Data.Migrations
                     b.HasIndex("CountryId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LanguageId");
 
                     b.HasIndex("TownId");
 
@@ -709,36 +822,6 @@ namespace EasyEnglish.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Towns");
-                });
-
-            modelBuilder.Entity("LanguageTeacher", b =>
-                {
-                    b.Property<int>("LanguagesId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TeachersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LanguagesId", "TeachersId");
-
-                    b.HasIndex("TeachersId");
-
-                    b.ToTable("LanguageTeacher");
-                });
-
-            modelBuilder.Entity("LevelResource", b =>
-                {
-                    b.Property<int>("LevelsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ResourcesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LevelsId", "ResourcesId");
-
-                    b.HasIndex("ResourcesId");
-
-                    b.ToTable("LevelResource");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -847,21 +930,6 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CourseStudent", b =>
-                {
-                    b.HasOne("EasyEnglish.Data.Models.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("EasyEnglish.Data.Models.Address", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.Town", "Town")
@@ -909,6 +977,23 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.CourseStudent", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyEnglish.Data.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("EasyEnglish.Data.Models.Image", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.Student", "Student")
@@ -916,6 +1001,49 @@ namespace EasyEnglish.Data.Migrations
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.LanguageTeacher", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyEnglish.Data.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Level", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Resource", null)
+                        .WithMany("Levels")
+                        .HasForeignKey("ResourceId");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.LevelResource", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyEnglish.Data.Models.Resource", "Resource")
+                        .WithMany()
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Level");
+
+                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Payment", b =>
@@ -968,6 +1096,10 @@ namespace EasyEnglish.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EasyEnglish.Data.Models.Course", null)
+                        .WithMany("Students")
+                        .HasForeignKey("CourseId");
+
                     b.HasOne("EasyEnglish.Data.Models.Town", "Town")
                         .WithMany()
                         .HasForeignKey("TownId")
@@ -1001,6 +1133,10 @@ namespace EasyEnglish.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EasyEnglish.Data.Models.Language", null)
+                        .WithMany("Teachers")
+                        .HasForeignKey("LanguageId");
+
                     b.HasOne("EasyEnglish.Data.Models.Town", "Town")
                         .WithMany()
                         .HasForeignKey("TownId")
@@ -1029,36 +1165,6 @@ namespace EasyEnglish.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("LanguageTeacher", b =>
-                {
-                    b.HasOne("EasyEnglish.Data.Models.Language", null)
-                        .WithMany()
-                        .HasForeignKey("LanguagesId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LevelResource", b =>
-                {
-                    b.HasOne("EasyEnglish.Data.Models.Level", null)
-                        .WithMany()
-                        .HasForeignKey("LevelsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Resource", null)
-                        .WithMany()
-                        .HasForeignKey("ResourcesId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1135,6 +1241,8 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Payments");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Currency", b =>
@@ -1145,11 +1253,18 @@ namespace EasyEnglish.Data.Migrations
             modelBuilder.Entity("EasyEnglish.Data.Models.Language", b =>
                 {
                     b.Navigation("Courses");
+
+                    b.Navigation("Teachers");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Level", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Resource", b =>
+                {
+                    b.Navigation("Levels");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Student", b =>

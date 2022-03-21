@@ -26,6 +26,30 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Currency> Currencies { get; set; }
+
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<Language> Languages { get; set; }
+
+        public DbSet<Level> Levels { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<Resource> Resources { get; set; }
+
+        public DbSet<Student> Students { get; set; }
+
+        public DbSet<Teacher> Teachers { get; set; }
+
+        public DbSet<Town> Towns { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

@@ -16,6 +16,8 @@ namespace EasyEnglish.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+            this.Teachers = new HashSet<Teacher>();
+            this.Students = new HashSet<Student>();
         }
 
         // Audit info
@@ -33,5 +35,9 @@ namespace EasyEnglish.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        public virtual ICollection<Teacher> Teachers { get; set; }
+
+        public virtual ICollection<Student> Students { get; set; }
     }
 }
