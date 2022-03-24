@@ -2,15 +2,32 @@
 {
     using System.Diagnostics;
 
+    using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels;
-
+    using EasyEnglish.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {
+        private readonly IGetCountsService countsService;
+
+        public HomeController(IGetCountsService countsService)
+        {
+            this.countsService = countsService;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var countsDto = this.countsService.GetCounts();
+            var viewModel = new IndexViewModel
+            {
+                CoursesCount = countsDto.CoursesCount,
+                LanguagesCount = countsDto.LanguagesCount,
+                StudentsCount = countsDto.StudentsCount,
+                TeachersCount = countsDto.TeachersCount,
+            };
+
+            return this.View(viewModel);
         }
 
         public IActionResult Privacy()

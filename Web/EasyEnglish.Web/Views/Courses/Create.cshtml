@@ -1,0 +1,95 @@
+﻿@using EasyEnglish.Common
+@model EasyEnglish.Web.ViewModels.Courses.CreateCourseInputModel
+@{
+    this.ViewData["Title"] = "Create Course";
+    //var levelsItems = this.Model.LevelsItems.Select(x => new SelectListItem(x.Value, x.Key));
+    //var teachersItems = this.Model.TeachersItems.Select(x => new SelectListItem(x.Value, x.Key));
+    //var languagesItems = this.Model.LanguagesItems.Select(x => new SelectListItem(x.Value, x.Key));
+    //var currenciesItems = this.Model.CurrenciesItems.Select(x => new SelectListItem(x.Value, x.Key));
+}
+
+<div class="col-md-6 offset-md-3">
+    <h1 class="display-4">@this.ViewData["Title"]</h1>
+
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="small text-danger"></span>
+        </div>    
+
+        <div class="form-group">
+            <label asp-for="StartDate"></label>
+            <input asp-for="StartDate" class="form-control" placeholder="@DateTime.UtcNow.Date/>
+            <span asp-validation-for="StartDate" class="small text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="EndDate"></label>
+            <input asp-for="EndDate" class="form-control" />
+            <span asp-validation-for="EndDate" class="small text-danger"></span>
+        </div>
+
+        @*<div class="form-group">
+            <label asp-for="TeacherId"></label>
+            <select asp-for="TeacherId" class="form-control" asp-items="teachersItems"></select>
+            <span asp-validation-for="TeacherId" class="small text-danger"></span>
+        </div>*@
+
+        <div class="form-group">
+            <label asp-for="TeacherId"></label>
+            <vc:teachers-drop-down name="TeacherId"></vc:teachers-drop-down>
+            <span asp-validation-for="TeacherId" class="small text-danger"></span>
+        </div>
+
+        @*<div class="form-group">
+            <label asp-for="LanguageId"></label>
+            <select asp-for="LanguageId" class="form-control" asp-items="languagesItems"></select>        
+            <span asp-validation-for="LanguageId" class="small text-danger"></span>
+        </div>*@
+
+        <div class="form-group">
+            <label asp-for="LanguageId"></label>
+            <vc:languages-drop-down name="LanguageId"></vc:languages-drop-down> 
+            <span asp-validation-for="LanguageId" class="small text-danger"></span>
+        </div>
+        
+        @*<div class="form-group">
+            <label asp-for="LevelId"></label>
+            <select asp-for="LevelId" class="form-control" asp-items="levelsItems"></select>
+            <span asp-validation-for="LevelId" class="small text-danger"></span>
+        </div>*@
+
+        <div class="form-group">
+            <label asp-for="LevelId"></label>
+            <vc:levels-drop-down name="LevelId"><span asp-validation-for="LevelId" class="text-danger"></span>-</vc:levels-drop-down>
+            <span asp-validation-for="LevelId" class="small text-danger"></span>
+        </div>
+
+        @*<div class="form-group">
+            <label asp-for="CurrencyId"></label>
+            <select asp-for="CurrencyId" class="form-control" asp-items="currenciesItems"></select>
+            <span asp-validation-for="CurrencyId" class="small text-danger"></span>
+        </div>*@
+
+        <div class="form-group">
+            <label asp-for="CurrencyId"></label>
+            <vc:currencies-drop-down name="CurrencyId"></vc:currencies-drop-down>
+            <span asp-validation-for="CurrencyId" class="small text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="small text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea rows="4" asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="small text-danger"></span>
+
+
+        <input type="submit" class="btn btn-primary mt-3" value="Save" />
+    </form>
+</div>

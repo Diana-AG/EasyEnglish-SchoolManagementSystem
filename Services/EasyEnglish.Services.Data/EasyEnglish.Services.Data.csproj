@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\EasyEnglish.Data.Common\EasyEnglish.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\EasyEnglish.Data.Models\EasyEnglish.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\EasyEnglish.Web.ViewModels\EasyEnglish.Web.ViewModels.csproj" />
     <ProjectReference Include="..\EasyEnglish.Services.Mapping\EasyEnglish.Services.Mapping.csproj" />
   </ItemGroup>
 

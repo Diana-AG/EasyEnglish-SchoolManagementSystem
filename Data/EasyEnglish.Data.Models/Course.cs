@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations.Schema;
     using EasyEnglish.Data.Common.Models;
 
     public class Course : BaseDeletableModel<int>
@@ -19,6 +19,9 @@
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Price { get; set; }
 
         public string TeacherId { get; set; }
 

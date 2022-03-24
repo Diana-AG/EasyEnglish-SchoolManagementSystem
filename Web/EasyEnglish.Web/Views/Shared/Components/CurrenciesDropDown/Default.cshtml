@@ -1,0 +1,6 @@
+﻿@model EasyEnglish.Web.ViewModels.ViewComponents.DropDownViewModel
+@{
+    var currenciesItems = this.Model.Items.Select(x => new SelectListItem(x.Value, x.Key));
+}
+
+<select class="form-control" asp-items="currenciesItems"></select>
