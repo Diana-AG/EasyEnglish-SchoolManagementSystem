@@ -8,9 +8,9 @@
 
     public class TeachersService : ITeachersService
     {
-        private readonly IDeletableEntityRepository<Teacher> teachersRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> teachersRepository;
 
-        public TeachersService(IDeletableEntityRepository<Teacher> teachersRepository)
+        public TeachersService(IDeletableEntityRepository<ApplicationUser> teachersRepository)
         {
             this.teachersRepository = teachersRepository;
         }

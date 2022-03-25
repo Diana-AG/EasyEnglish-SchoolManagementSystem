@@ -28,6 +28,8 @@
 
         public DbSet<Address> Addresses { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Course> Courses { get; set; }
@@ -43,10 +45,6 @@
         public DbSet<Payment> Payments { get; set; }
 
         public DbSet<Resource> Resources { get; set; }
-
-        public DbSet<Student> Students { get; set; }
-
-        public DbSet<Teacher> Teachers { get; set; }
 
         public DbSet<Town> Towns { get; set; }
 

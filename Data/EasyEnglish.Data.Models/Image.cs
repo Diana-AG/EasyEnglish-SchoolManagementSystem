@@ -11,9 +11,9 @@
             this.Id = Guid.NewGuid().ToString();
         }
 
-        public string StudentId { get; set; }
+        public string UserId { get; set; }
 
-        public virtual Student Student { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public string Extension { get; set; }
     }

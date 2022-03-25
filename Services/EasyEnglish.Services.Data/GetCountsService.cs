@@ -10,14 +10,14 @@
     public class GetCountsService : IGetCountsService
     {
         private readonly IDeletableEntityRepository<Course> coursesRepository;
-        private readonly IDeletableEntityRepository<Student> studentsRepository;
-        private readonly IDeletableEntityRepository<Teacher> teachersRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> studentsRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> teachersRepository;
         private readonly IDeletableEntityRepository<Language> languagesRepository;
 
         public GetCountsService(
             IDeletableEntityRepository<Course> coursesRepository,
-            IDeletableEntityRepository<Student> studentsRepository,
-            IDeletableEntityRepository<Teacher> teachersRepository,
+            IDeletableEntityRepository<ApplicationUser> studentsRepository,
+            IDeletableEntityRepository<ApplicationUser> teachersRepository,
             IDeletableEntityRepository<Language> languagesRepository)
         {
             this.coursesRepository = coursesRepository;

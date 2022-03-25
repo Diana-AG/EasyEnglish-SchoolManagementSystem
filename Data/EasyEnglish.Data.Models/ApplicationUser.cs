@@ -3,6 +3,7 @@ namespace EasyEnglish.Data.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using EasyEnglish.Data.Common.Models;
 
@@ -13,11 +14,14 @@ namespace EasyEnglish.Data.Models
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
+            this.Images = new HashSet<Image>();
+            this.TeacherCourses = new HashSet<Course>();
+            this.StudentCourses = new HashSet<Course>();
+            this.Payments = new HashSet<Payment>();
+            this.Languages = new HashSet<Language>();
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
-            this.Teachers = new HashSet<Teacher>();
-            this.Students = new HashSet<Student>();
         }
 
         // Audit info
@@ -30,14 +34,43 @@ namespace EasyEnglish.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
+        public string Name { get; set; }
+
+        public int AddressId { get; set; }
+
+        public virtual Address Address { get; set; }
+
+        public int TownId { get; set; }
+
+        public virtual Town Town { get; set; }
+
+        public int CountryId { get; set; }
+
+        public virtual Country Country { get; set; }
+
+        public string ProfilePicture { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public bool TeacherRequest { get; set; }
+
+        public virtual ICollection<Image> Images { get; set; }
+
+        public virtual ICollection<Course> StudentCourses { get; set; }
+
+        [InverseProperty(nameof(Course.Teacher))]
+        public virtual ICollection<Course> TeacherCourses { get; set; }
+
+        public virtual ICollection<Payment> Payments { get; set; }
+
+        public virtual ICollection<Language> Languages { get; set; }
+
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
-
-        public virtual ICollection<Teacher> Teachers { get; set; }
-
-        public virtual ICollection<Student> Students { get; set; }
     }
 }

@@ -3,13 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
+
     using EasyEnglish.Data.Common.Models;
 
     public class Course : BaseDeletableModel<int>
     {
         public Course()
         {
-            this.Students = new HashSet<Student>();
+            this.Students = new HashSet<ApplicationUser>();
             this.Comments = new HashSet<Comment>();
             this.Payments = new HashSet<Payment>();
         }
@@ -25,7 +26,7 @@
 
         public string TeacherId { get; set; }
 
-        public virtual Teacher Teacher { get; set; }
+        public virtual ApplicationUser Teacher { get; set; }
 
         public int LanguageId { get; set; }
 
@@ -37,7 +38,7 @@
 
         public string Description { get; set; }
 
-        public virtual ICollection<Student> Students { get; set; }
+        public virtual ICollection<ApplicationUser> Students { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
 

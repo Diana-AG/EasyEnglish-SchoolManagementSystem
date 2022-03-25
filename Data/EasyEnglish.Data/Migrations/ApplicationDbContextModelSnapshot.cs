@@ -22,19 +22,34 @@ namespace EasyEnglish.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CourseStudent", b =>
+            modelBuilder.Entity("ApplicationUserCourse", b =>
                 {
-                    b.Property<int>("CoursesId")
+                    b.Property<int>("StudentCoursesId")
                         .HasColumnType("int");
 
                     b.Property<string>("StudentsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("CoursesId", "StudentsId");
+                    b.HasKey("StudentCoursesId", "StudentsId");
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("CourseStudent");
+                    b.ToTable("ApplicationUserCourse");
+                });
+
+            modelBuilder.Entity("ApplicationUserLanguage", b =>
+                {
+                    b.Property<int>("LanguagesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeachersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LanguagesId", "TeachersId");
+
+                    b.HasIndex("TeachersId");
+
+                    b.ToTable("ApplicationUserLanguage");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Address", b =>
@@ -121,9 +136,18 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -138,6 +162,9 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -149,6 +176,9 @@ namespace EasyEnglish.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -167,8 +197,17 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TeacherRequest")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TownId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -179,6 +218,10 @@ namespace EasyEnglish.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("CountryId");
+
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("NormalizedEmail")
@@ -188,6 +231,8 @@ namespace EasyEnglish.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("TownId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -224,7 +269,7 @@ namespace EasyEnglish.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Country", b =>
@@ -367,14 +412,14 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StudentId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Images");
                 });
@@ -471,7 +516,7 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StudentId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -482,7 +527,7 @@ namespace EasyEnglish.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Payments");
                 });
@@ -555,130 +600,6 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("Settings");
                 });
 
-            modelBuilder.Entity("EasyEnglish.Data.Models.Student", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TownId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("TownId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("EasyEnglish.Data.Models.Teacher", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TownId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("TownId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Teachers");
-                });
-
             modelBuilder.Entity("EasyEnglish.Data.Models.Town", b =>
                 {
                     b.Property<int>("Id")
@@ -712,21 +633,6 @@ namespace EasyEnglish.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Towns");
-                });
-
-            modelBuilder.Entity("LanguageTeacher", b =>
-                {
-                    b.Property<int>("LanguagesId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TeachersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LanguagesId", "TeachersId");
-
-                    b.HasIndex("TeachersId");
-
-                    b.ToTable("LanguageTeacher");
                 });
 
             modelBuilder.Entity("LevelResource", b =>
@@ -850,17 +756,32 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CourseStudent", b =>
+            modelBuilder.Entity("ApplicationUserCourse", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.Course", null)
                         .WithMany()
-                        .HasForeignKey("CoursesId")
+                        .HasForeignKey("StudentCoursesId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EasyEnglish.Data.Models.Student", null)
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ApplicationUserLanguage", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Language", null)
+                        .WithMany()
+                        .HasForeignKey("LanguagesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("TeachersId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -872,6 +793,33 @@ namespace EasyEnglish.Data.Migrations
                         .HasForeignKey("TownId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Town");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyEnglish.Data.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EasyEnglish.Data.Models.Town", "Town")
+                        .WithMany()
+                        .HasForeignKey("TownId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Country");
 
                     b.Navigation("Town");
                 });
@@ -901,8 +849,8 @@ namespace EasyEnglish.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EasyEnglish.Data.Models.Teacher", "Teacher")
-                        .WithMany("Courses")
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "Teacher")
+                        .WithMany("TeacherCourses")
                         .HasForeignKey("TeacherId");
 
                     b.Navigation("Language");
@@ -914,11 +862,11 @@ namespace EasyEnglish.Data.Migrations
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Image", b =>
                 {
-                    b.HasOne("EasyEnglish.Data.Models.Student", "Student")
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "User")
                         .WithMany("Images")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Student");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Payment", b =>
@@ -935,15 +883,15 @@ namespace EasyEnglish.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EasyEnglish.Data.Models.Student", "Student")
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "User")
                         .WithMany("Payments")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Course");
 
                     b.Navigation("Currency");
 
-                    b.Navigation("Student");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Resource", b =>
@@ -957,72 +905,6 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("EasyEnglish.Data.Models.Student", b =>
-                {
-                    b.HasOne("EasyEnglish.Data.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Town", "Town")
-                        .WithMany()
-                        .HasForeignKey("TownId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "User")
-                        .WithMany("Students")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("Town");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EasyEnglish.Data.Models.Teacher", b =>
-                {
-                    b.HasOne("EasyEnglish.Data.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Town", "Town")
-                        .WithMany()
-                        .HasForeignKey("TownId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "User")
-                        .WithMany("Teachers")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Country");
-
-                    b.Navigation("Town");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EasyEnglish.Data.Models.Town", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.Country", "Country")
@@ -1032,21 +914,6 @@ namespace EasyEnglish.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("LanguageTeacher", b =>
-                {
-                    b.HasOne("EasyEnglish.Data.Models.Language", null)
-                        .WithMany()
-                        .HasForeignKey("LanguagesId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EasyEnglish.Data.Models.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("LevelResource", b =>
@@ -1119,13 +986,15 @@ namespace EasyEnglish.Data.Migrations
                 {
                     b.Navigation("Claims");
 
+                    b.Navigation("Images");
+
                     b.Navigation("Logins");
+
+                    b.Navigation("Payments");
 
                     b.Navigation("Roles");
 
-                    b.Navigation("Students");
-
-                    b.Navigation("Teachers");
+                    b.Navigation("TeacherCourses");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Country", b =>
@@ -1151,18 +1020,6 @@ namespace EasyEnglish.Data.Migrations
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Level", b =>
-                {
-                    b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("EasyEnglish.Data.Models.Student", b =>
-                {
-                    b.Navigation("Images");
-
-                    b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("EasyEnglish.Data.Models.Teacher", b =>
                 {
                     b.Navigation("Courses");
                 });

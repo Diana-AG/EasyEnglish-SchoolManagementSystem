@@ -13,9 +13,9 @@
                 return;
             }
 
-            await dbContext.Languages.AddAsync(new Models.Language { Name = "English"});
-            await dbContext.Languages.AddAsync(new Models.Language { Name = "German"});
-            await dbContext.Languages.AddAsync(new Models.Language { Name = "French"});
+            await dbContext.Languages.AddAsync(new Models.Language { Name = "English" });
+            await dbContext.Languages.AddAsync(new Models.Language { Name = "German" });
+            await dbContext.Languages.AddAsync(new Models.Language { Name = "French" });
             await dbContext.Languages.AddAsync(new Models.Language { Name = "Russian" });
 
             await dbContext.SaveChangesAsync();
