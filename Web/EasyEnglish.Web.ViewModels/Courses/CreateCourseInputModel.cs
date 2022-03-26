@@ -6,11 +6,6 @@
 
     public class CreateCourseInputModel
     {
-        [Required]
-        [MinLength(3)]
-        [MaxLength(50)]
-        public string Name { get; set; }
-
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
@@ -28,6 +23,7 @@
         [Display(Name = "Level")]
         public int LevelId { get; set; }
 
+        [Range(typeof(decimal), "0.01", "10000000")]
         public decimal Price { get; set; }
 
         [Display(Name = "Currency")]
