@@ -15,11 +15,9 @@
             this.Payments = new HashSet<Payment>();
         }
 
-        public string Name { get; set; }
-
         public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
@@ -28,13 +26,9 @@
 
         public virtual ApplicationUser Teacher { get; set; }
 
-        public int LanguageId { get; set; }
+        public int CourseTypeId { get; set; }
 
-        public virtual Language Language { get; set; }
-
-        public int LevelId { get; set; }
-
-        public virtual Level Level { get; set; }
+        public virtual CourseType CourseType { get; set; }
 
         public string Description { get; set; }
 

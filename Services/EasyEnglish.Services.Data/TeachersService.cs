@@ -20,8 +20,8 @@
             return this.teachersRepository.AllAsNoTracking().Select(x => new
             {
                 x.Id,
-                x.Name,
-            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id, x.Name));
+                x.FullName,
+            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id, x.FullName));
         }
     }
 }

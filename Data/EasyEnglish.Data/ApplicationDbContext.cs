@@ -24,7 +24,6 @@
         {
         }
 
-
         public DbSet<Address> Addresses { get; set; }
 
         public DbSet<Comment> Comments { get; set; }

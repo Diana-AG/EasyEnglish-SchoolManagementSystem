@@ -5,12 +5,19 @@
 
     using EasyEnglish.Data.Common.Models;
 
-    public class Payment : BaseDeletableModel<int>
+    public class Payment : BaseDeletableModel<string>
     {
+        public Payment()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Amount { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime PaidOn { get; set; }
+
+        public DateTime PaidFor { get; set; }
 
         public string UserId { get; set; }
 

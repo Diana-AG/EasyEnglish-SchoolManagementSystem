@@ -15,10 +15,11 @@ namespace EasyEnglish.Data.Models
         {
             this.Id = Guid.NewGuid().ToString();
             this.Images = new HashSet<Image>();
-            this.TeacherCourses = new HashSet<Course>();
-            this.StudentCourses = new HashSet<Course>();
             this.Payments = new HashSet<Payment>();
             this.Languages = new HashSet<Language>();
+            this.StudentCourses = new HashSet<Course>();
+            this.TeacherCourses = new HashSet<Course>();
+            this.TeacherRequests = new HashSet<TeacherRequest>();
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
@@ -34,7 +35,7 @@ namespace EasyEnglish.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        public string Name { get; set; }
+        public string FullName { get; set; }
 
         public int AddressId { get; set; }
 
@@ -54,18 +55,18 @@ namespace EasyEnglish.Data.Models
 
         public DateTime BirthDate { get; set; }
 
-        public bool TeacherRequest { get; set; }
-
         public virtual ICollection<Image> Images { get; set; }
+
+        public virtual ICollection<Payment> Payments { get; set; }
+
+        public virtual ICollection<Language> Languages { get; set; }
 
         public virtual ICollection<Course> StudentCourses { get; set; }
 
         [InverseProperty(nameof(Course.Teacher))]
         public virtual ICollection<Course> TeacherCourses { get; set; }
 
-        public virtual ICollection<Payment> Payments { get; set; }
-
-        public virtual ICollection<Language> Languages { get; set; }
+        public virtual ICollection<TeacherRequest> TeacherRequests { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

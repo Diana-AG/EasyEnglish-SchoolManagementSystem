@@ -8,15 +8,11 @@
     {
         public Resource()
         {
-            this.Levels = new HashSet<Level>();
+            this.CourseTypes = new HashSet<CourseType>();
         }
 
         public string Url { get; set; }
 
-        public int LanguageId { get; set; }
-
-        public virtual Language Language { get; set; }
-
-        public virtual ICollection<Level> Levels { get; set; }
+        public virtual ICollection<CourseType> CourseTypes { get; set; }
     }
 }
