@@ -6,16 +6,16 @@
 
     using EasyEnglish.Data.Models;
 
-    public class TownsSeeder : ISeeder
+    public class CountrySeeder : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (!dbContext.Countries.Any(c => c.Id == 1) || dbContext.Towns.Any())
+            if (dbContext.Countries.Any())
             {
                 return;
             }
 
-            await dbContext.Towns.AddAsync(new Town { Name = "Plovdiv", CountryId = 1 });
+            await dbContext.Countries.AddAsync(new Country { Name = "Bulgaria" });
 
             await dbContext.SaveChangesAsync();
         }
