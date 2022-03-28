@@ -24,7 +24,6 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
 
@@ -33,6 +32,8 @@
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Course> Courses { get; set; }
+
+        public DbSet<CourseType> CourseTypes { get; set; }
 
         public DbSet<Currency> Currencies { get; set; }
 
@@ -45,6 +46,10 @@
         public DbSet<Payment> Payments { get; set; }
 
         public DbSet<Resource> Resources { get; set; }
+
+        public DbSet<Setting> Settings { get; set; }
+
+        public DbSet<TeacherRequest> TeacherRequests { get; set; }
 
         public DbSet<Town> Towns { get; set; }
 

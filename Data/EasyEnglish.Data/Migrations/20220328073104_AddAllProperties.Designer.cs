@@ -4,6 +4,7 @@ using EasyEnglish.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyEnglish.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220328073104_AddAllProperties")]
+    partial class AddAllProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -340,6 +342,12 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LevelId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -357,6 +365,10 @@ namespace EasyEnglish.Data.Migrations
                     b.HasIndex("CourseTypeId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("LevelId");
 
                     b.HasIndex("TeacherId");
 
@@ -593,6 +605,9 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LevelId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -602,6 +617,8 @@ namespace EasyEnglish.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LevelId");
 
                     b.ToTable("Resources");
                 });
@@ -914,6 +931,14 @@ namespace EasyEnglish.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EasyEnglish.Data.Models.Language", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("LanguageId");
+
+                    b.HasOne("EasyEnglish.Data.Models.Level", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("LevelId");
+
                     b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "Teacher")
                         .WithMany("TeacherCourses")
                         .HasForeignKey("TeacherId");
@@ -974,6 +999,13 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Currency");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Resource", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Level", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("LevelId");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.TeacherRequest", b =>
@@ -1084,6 +1116,18 @@ namespace EasyEnglish.Data.Migrations
             modelBuilder.Entity("EasyEnglish.Data.Models.Currency", b =>
                 {
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Language", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Level", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Resources");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Town", b =>

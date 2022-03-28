@@ -1,12 +1,11 @@
-﻿#nullable disable
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
 
 namespace EasyEnglish.Data.Migrations
 {
-    using System;
-
-    using Microsoft.EntityFrameworkCore.Migrations;
-
-    public partial class AddCourseAndRelatedEntities : Migration
+    public partial class AddAllProperties : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,6 +30,12 @@ namespace EasyEnglish.Data.Migrations
                 nullable: false,
                 defaultValue: 0);
 
+            migrationBuilder.AddColumn<string>(
+                name: "FullName",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "Gender",
                 table: "AspNetUsers",
@@ -39,23 +44,10 @@ namespace EasyEnglish.Data.Migrations
                 defaultValue: 0);
 
             migrationBuilder.AddColumn<string>(
-                name: "Name",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
                 name: "ProfilePicture",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "TeacherRequest",
-                table: "AspNetUsers",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
 
             migrationBuilder.AddColumn<int>(
                 name: "TownId",
@@ -74,7 +66,7 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -92,7 +84,7 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -109,7 +101,7 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,7 +123,7 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -148,11 +140,33 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Levels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeacherRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeacherRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeacherRequests_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -166,7 +180,7 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -184,7 +198,7 @@ namespace EasyEnglish.Data.Migrations
                 columns: table => new
                 {
                     LanguagesId = table.Column<int>(type: "int", nullable: false),
-                    TeachersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TeachersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,68 +218,57 @@ namespace EasyEnglish.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resources",
+                name: "CourseTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LanguageId = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Resources", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Resources_Languages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Languages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     LevelId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.PrimaryKey("PK_CourseTypes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_AspNetUsers_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Courses_Languages_LanguageId",
+                        name: "FK_CourseTypes_Languages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Courses_Levels_LevelId",
+                        name: "FK_CourseTypes_Levels_LevelId",
                         column: x => x.LevelId,
                         principalTable: "Levels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LevelId = table.Column<int>(type: "int", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Resources_Levels_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Levels",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -279,7 +282,7 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -293,23 +296,68 @@ namespace EasyEnglish.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LevelResource",
+                name: "Courses",
                 columns: table => new
                 {
-                    LevelsId = table.Column<int>(type: "int", nullable: false),
-                    ResourcesId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CourseTypeId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LanguageId = table.Column<int>(type: "int", nullable: true),
+                    LevelId = table.Column<int>(type: "int", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LevelResource", x => new { x.LevelsId, x.ResourcesId });
+                    table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LevelResource_Levels_LevelsId",
-                        column: x => x.LevelsId,
-                        principalTable: "Levels",
+                        name: "FK_Courses_AspNetUsers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Courses_CourseTypes_CourseTypeId",
+                        column: x => x.CourseTypeId,
+                        principalTable: "CourseTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_LevelResource_Resources_ResourcesId",
+                        name: "FK_Courses_Languages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languages",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Courses_Levels_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Levels",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CourseTypeResource",
+                columns: table => new
+                {
+                    CourseTypesId = table.Column<int>(type: "int", nullable: false),
+                    ResourcesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseTypeResource", x => new { x.CourseTypesId, x.ResourcesId });
+                    table.ForeignKey(
+                        name: "FK_CourseTypeResource_CourseTypes_CourseTypesId",
+                        column: x => x.CourseTypesId,
+                        principalTable: "CourseTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CourseTypeResource_Resources_ResourcesId",
                         column: x => x.ResourcesId,
                         principalTable: "Resources",
                         principalColumn: "Id",
@@ -321,7 +369,7 @@ namespace EasyEnglish.Data.Migrations
                 columns: table => new
                 {
                     StudentCoursesId = table.Column<int>(type: "int", nullable: false),
-                    StudentsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentsId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -351,7 +399,7 @@ namespace EasyEnglish.Data.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -368,17 +416,17 @@ namespace EasyEnglish.Data.Migrations
                 name: "Payments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaidOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaidFor = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -453,6 +501,11 @@ namespace EasyEnglish.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Courses_CourseTypeId",
+                table: "Courses",
+                column: "CourseTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Courses_IsDeleted",
                 table: "Courses",
                 column: "IsDeleted");
@@ -473,6 +526,26 @@ namespace EasyEnglish.Data.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CourseTypeResource_ResourcesId",
+                table: "CourseTypeResource",
+                column: "ResourcesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseTypes_IsDeleted",
+                table: "CourseTypes",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseTypes_LanguageId",
+                table: "CourseTypes",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseTypes_LevelId",
+                table: "CourseTypes",
+                column: "LevelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Currencies_IsDeleted",
                 table: "Currencies",
                 column: "IsDeleted");
@@ -491,11 +564,6 @@ namespace EasyEnglish.Data.Migrations
                 name: "IX_Languages_IsDeleted",
                 table: "Languages",
                 column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LevelResource_ResourcesId",
-                table: "LevelResource",
-                column: "ResourcesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Levels_IsDeleted",
@@ -528,9 +596,19 @@ namespace EasyEnglish.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Resources_LanguageId",
+                name: "IX_Resources_LevelId",
                 table: "Resources",
-                column: "LanguageId");
+                column: "LevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherRequests_IsDeleted",
+                table: "TeacherRequests",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherRequests_UserId",
+                table: "TeacherRequests",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Towns_CountryId",
@@ -594,13 +672,16 @@ namespace EasyEnglish.Data.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "CourseTypeResource");
+
+            migrationBuilder.DropTable(
                 name: "Images");
 
             migrationBuilder.DropTable(
-                name: "LevelResource");
+                name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Payments");
+                name: "TeacherRequests");
 
             migrationBuilder.DropTable(
                 name: "Towns");
@@ -616,6 +697,9 @@ namespace EasyEnglish.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Countries");
+
+            migrationBuilder.DropTable(
+                name: "CourseTypes");
 
             migrationBuilder.DropTable(
                 name: "Languages");
@@ -648,19 +732,15 @@ namespace EasyEnglish.Data.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
+                name: "FullName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
                 name: "Gender",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "Name",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
                 name: "ProfilePicture",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "TeacherRequest",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
