@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EasyEnglish.Data.Migrations
 {
-    public partial class AddAllProperties : Migration
+    public partial class AddEntities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,8 +13,13 @@ namespace EasyEnglish.Data.Migrations
                 name: "AddressId",
                 table: "AspNetUsers",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "AddressText",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "BirthDate",
@@ -27,8 +32,7 @@ namespace EasyEnglish.Data.Migrations
                 name: "CountryId",
                 table: "AspNetUsers",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "FullName",
@@ -53,8 +57,7 @@ namespace EasyEnglish.Data.Migrations
                 name: "TownId",
                 table: "AspNetUsers",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "Countries",
@@ -145,6 +148,23 @@ namespace EasyEnglish.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Levels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Resources",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resources", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,29 +269,6 @@ namespace EasyEnglish.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resources",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LevelId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Resources", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Resources_Levels_LevelId",
-                        column: x => x.LevelId,
-                        principalTable: "Levels",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Addresses",
                 columns: table => new
                 {
@@ -307,8 +304,6 @@ namespace EasyEnglish.Data.Migrations
                     TeacherId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CourseTypeId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LanguageId = table.Column<int>(type: "int", nullable: true),
-                    LevelId = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -328,16 +323,6 @@ namespace EasyEnglish.Data.Migrations
                         principalTable: "CourseTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Courses_Languages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Languages",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Courses_Levels_LevelId",
-                        column: x => x.LevelId,
-                        principalTable: "Levels",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -511,16 +496,6 @@ namespace EasyEnglish.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_LanguageId",
-                table: "Courses",
-                column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_LevelId",
-                table: "Courses",
-                column: "LevelId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Courses_TeacherId",
                 table: "Courses",
                 column: "TeacherId");
@@ -596,11 +571,6 @@ namespace EasyEnglish.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Resources_LevelId",
-                table: "Resources",
-                column: "LevelId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TeacherRequests_IsDeleted",
                 table: "TeacherRequests",
                 column: "IsDeleted");
@@ -625,24 +595,21 @@ namespace EasyEnglish.Data.Migrations
                 table: "AspNetUsers",
                 column: "AddressId",
                 principalTable: "Addresses",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Countries_CountryId",
                 table: "AspNetUsers",
                 column: "CountryId",
                 principalTable: "Countries",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Towns_TownId",
                 table: "AspNetUsers",
                 column: "TownId",
                 principalTable: "Towns",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -721,6 +688,10 @@ namespace EasyEnglish.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "AddressId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "AddressText",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(

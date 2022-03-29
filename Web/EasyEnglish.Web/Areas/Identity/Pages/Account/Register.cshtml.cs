@@ -9,6 +9,8 @@
     using System.Threading.Tasks;
 
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Data;
+    using EasyEnglish.Web.Infrastructure.ValidationAttributes;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -25,17 +27,20 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IAddressService addressService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IAddressService addressService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.addressService = addressService;
         }
 
         [BindProperty]
@@ -62,6 +67,32 @@
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "Full name")]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string FullName { get; set; }
+
+            [Required]
+            [Display(Name = "Address")]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string Address { get; set; }
+
+            [Required]
+            [Display(Name = "Town")]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string Town { get; set; }
+
+            [Required]
+            [Display(Name = "Country")]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string Country { get; set; }
+
+            public Gender Gender { get; set; }
+
+            [Display(Name = "Birth date")]
+            [DataType(DataType.Date)]
+            [CurrentYearMaxValue(1920)]
+            public DateTime BirthDate { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -76,7 +107,16 @@
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = this.Input.Email,
+                    Email = this.Input.Email,
+                    FullName = this.Input.FullName,
+                    AddressText = $"{this.Input.Address}, {this.Input.Town}, {this.Input.Country}",
+                    Gender = this.Input.Gender,
+                    BirthDate = this.Input.BirthDate,
+                };
+
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {

@@ -37,15 +37,17 @@ namespace EasyEnglish.Data.Models
 
         public string FullName { get; set; }
 
-        public int AddressId { get; set; }
+        public string AddressText { get; set; }
 
-        public virtual Address Address { get; set; }
+        public int? AddressId { get; set; }
 
-        public int TownId { get; set; }
+        public Address Address { get; set; }
+
+        public int? TownId { get; set; }
 
         public virtual Town Town { get; set; }
 
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
 
         public virtual Country Country { get; set; }
 
