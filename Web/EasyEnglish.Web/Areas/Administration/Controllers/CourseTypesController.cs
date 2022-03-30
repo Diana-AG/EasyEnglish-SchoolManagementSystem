@@ -91,6 +91,7 @@
             {
                 return this.NotFound();
             }
+
             this.ViewData["LanguageId"] = new SelectList(this.dbContext.Languages, "Id", "Name", courseType.LanguageId);
             this.ViewData["LevelId"] = new SelectList(this.dbContext.Levels, "Id", "Name", courseType.LevelId);
             return this.View(courseType);

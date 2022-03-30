@@ -61,6 +61,7 @@
                 await this.dbContext.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             return this.View(level);
         }
 
@@ -77,6 +78,7 @@
             {
                 return this.NotFound();
             }
+
             return this.View(level);
         }
 
@@ -110,8 +112,10 @@
                         throw;
                     }
                 }
+
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             return this.View(level);
         }
 
@@ -134,7 +138,8 @@
         }
 
         // POST: Administration/Levels/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
