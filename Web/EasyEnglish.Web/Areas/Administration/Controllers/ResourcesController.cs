@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using EasyEnglish.Data;
-using EasyEnglish.Data.Models;
-
-namespace EasyEnglish.Web.Areas.Administration.Controllers
+﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using EasyEnglish.Data;
+    using EasyEnglish.Data.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+
     [Area("Administration")]
     public class ResourcesController : AdministrationController
     {
@@ -55,7 +53,7 @@ namespace EasyEnglish.Web.Areas.Administration.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Url,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Resource resource)
+        public async Task<IActionResult> Create([Bind("Description,Url,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Resource resource)
         {
             if (this.ModelState.IsValid)
             {
@@ -63,6 +61,7 @@ namespace EasyEnglish.Web.Areas.Administration.Controllers
                 await this.dbContext.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             return this.View(resource);
         }
 
@@ -79,6 +78,7 @@ namespace EasyEnglish.Web.Areas.Administration.Controllers
             {
                 return this.NotFound();
             }
+
             return this.View(resource);
         }
 
@@ -87,7 +87,7 @@ namespace EasyEnglish.Web.Areas.Administration.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Url,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Resource resource)
+        public async Task<IActionResult> Edit(int id, [Bind("Description,Url,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Resource resource)
         {
             if (id != resource.Id)
             {
@@ -112,8 +112,10 @@ namespace EasyEnglish.Web.Areas.Administration.Controllers
                         throw;
                     }
                 }
+
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             return this.View(resource);
         }
 
@@ -136,7 +138,8 @@ namespace EasyEnglish.Web.Areas.Administration.Controllers
         }
 
         // POST: Administration/Resources/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

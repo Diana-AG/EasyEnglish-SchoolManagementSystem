@@ -11,6 +11,8 @@
             this.CourseTypes = new HashSet<CourseType>();
         }
 
+        public string Description { get; set; }
+
         public string Url { get; set; }
 
         public virtual ICollection<CourseType> CourseTypes { get; set; }
