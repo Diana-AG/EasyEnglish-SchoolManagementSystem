@@ -1,26 +1,27 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using EasyEnglish.Data;
     using EasyEnglish.Data.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     [Area("Administration")]
     public class LevelsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext dbContext;
 
         public LevelsController(ApplicationDbContext context)
         {
-            _context = context;
+            this.dbContext = context;
         }
 
         // GET: Administration/Levels
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Levels.ToListAsync());
+            return this.View(await this.dbContext.Levels.ToListAsync());
         }
 
         // GET: Administration/Levels/Details/5
@@ -28,23 +29,23 @@
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var level = await _context.Levels
+            var level = await this.dbContext.Levels
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (level == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(level);
+            return this.View(level);
         }
 
         // GET: Administration/Levels/Create
         public IActionResult Create()
         {
-            return View();
+            return this.View();
         }
 
         // POST: Administration/Levels/Create
@@ -54,13 +55,13 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Level level)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _context.Add(level);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                this.dbContext.Add(level);
+                await this.dbContext.SaveChangesAsync();
+                return this.RedirectToAction(nameof(this.Index));
             }
-            return View(level);
+            return this.View(level);
         }
 
         // GET: Administration/Levels/Edit/5
@@ -68,15 +69,15 @@
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var level = await _context.Levels.FindAsync(id);
+            var level = await this.dbContext.Levels.FindAsync(id);
             if (level == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            return View(level);
+            return this.View(level);
         }
 
         // POST: Administration/Levels/Edit/5
@@ -88,30 +89,30 @@
         {
             if (id != level.Id)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(level);
-                    await _context.SaveChangesAsync();
+                    this.dbContext.Update(level);
+                    await this.dbContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LevelExists(level.Id))
+                    if (!this.LevelExists(level.Id))
                     {
-                        return NotFound();
+                        return this.NotFound();
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(this.Index));
             }
-            return View(level);
+            return this.View(level);
         }
 
         // GET: Administration/Levels/Delete/5
@@ -119,17 +120,17 @@
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var level = await _context.Levels
+            var level = await this.dbContext.Levels
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (level == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(level);
+            return this.View(level);
         }
 
         // POST: Administration/Levels/Delete/5
@@ -137,15 +138,15 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var level = await _context.Levels.FindAsync(id);
-            _context.Levels.Remove(level);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var level = await this.dbContext.Levels.FindAsync(id);
+            this.dbContext.Levels.Remove(level);
+            await this.dbContext.SaveChangesAsync();
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool LevelExists(int id)
         {
-            return _context.Levels.Any(e => e.Id == id);
+            return this.dbContext.Levels.Any(e => e.Id == id);
         }
     }
 }

@@ -61,12 +61,18 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LanguageId,LevelId,Description,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] CourseType courseType)
         {
+            if (this.dbContext.CourseTypes.Any(x => x.LevelId == courseType.LevelId && x.LanguageId == courseType.LanguageId))
+            {
+                return this.View(courseType);
+            }
+
             if (this.ModelState.IsValid)
             {
                 this.dbContext.Add(courseType);
                 await this.dbContext.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             this.ViewData["LanguageId"] = new SelectList(this.dbContext.Languages, "Id", "Name", courseType.LanguageId);
             this.ViewData["LevelId"] = new SelectList(this.dbContext.Levels, "Id", "Name", courseType.LevelId);
             return this.View(courseType);
@@ -120,8 +126,10 @@
                         throw;
                     }
                 }
+
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             this.ViewData["LanguageId"] = new SelectList(this.dbContext.Languages, "Id", "Name", courseType.LanguageId);
             this.ViewData["LevelId"] = new SelectList(this.dbContext.Levels, "Id", "Name", courseType.LevelId);
             return this.View(courseType);
@@ -148,7 +156,8 @@
         }
 
         // POST: Administration/CourseTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
