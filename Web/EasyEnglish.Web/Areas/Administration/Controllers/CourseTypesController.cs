@@ -10,7 +10,7 @@
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
-    public class CourseTypesController : Controller
+    public class CourseTypesController : AdministrationController
     {
         private readonly ApplicationDbContext dbContext;
 
