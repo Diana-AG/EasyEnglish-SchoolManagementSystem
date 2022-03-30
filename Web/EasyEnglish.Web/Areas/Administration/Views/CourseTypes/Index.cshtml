@@ -1,19 +1,25 @@
-﻿@model IEnumerable<EasyEnglish.Data.Models.Language>
+﻿@model IEnumerable<EasyEnglish.Data.Models.CourseType>
 
 @{
-    this.ViewData["Title"] = "Languages";
+    ViewData["Title"] = "Course Types";
 }
 
 <h1>@this.ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Add Language</a>
+    <a asp-action="Create" class="btn btn-primary">Add Course Type</a>
 </p>
 <table class="table table-hover table-striped">
-     <thead>
+    <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Language)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Level)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
@@ -32,7 +38,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => item.Language.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Level.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.IsDeleted)
