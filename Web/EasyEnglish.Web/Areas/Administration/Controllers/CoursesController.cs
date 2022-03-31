@@ -16,24 +16,45 @@
     [Area("Administration")]
     public class CoursesController : AdministrationController
     {
-        private readonly IDeletableEntityRepository<Course> courseRepository;
-        private readonly IDeletableEntityRepository<CourseType> courseTypeRepository;
+        private readonly IDeletableEntityRepository<Course> coursesRepository;
+        private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
 
         public CoursesController(
-            IDeletableEntityRepository<Course> courseRepository,
-            IDeletableEntityRepository<CourseType> courseTypeRepository,
+            IDeletableEntityRepository<Course> coursesRepository,
+            IDeletableEntityRepository<CourseType> courseTypesRepository,
             IDeletableEntityRepository<ApplicationUser> usersRepository)
         {
-            this.courseRepository = courseRepository;
-            this.courseTypeRepository = courseTypeRepository;
+            this.coursesRepository = coursesRepository;
+            this.courseTypesRepository = courseTypesRepository;
             this.usersRepository = usersRepository;
         }
 
         // GET: Administration/Courses
         public async Task<IActionResult> Index()
         {
-            var courses = this.courseRepository.All().Include(c => c.CourseType).Include(c => c.Teacher);
+            var courses = this.coursesRepository.All()
+                .Include(c => c.CourseType)
+                .Include(c => c.Teacher)
+                .Select(c => new IndexCourseViewModel
+                {
+                    Id = c.Id,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    Price = c.Price,
+                    Description = c.Description,
+                    CourseType = new CourseTypeViewModel
+                    {
+                        Id = c.CourseTypeId,
+                        Name = $"{c.CourseType.Language.Name} - {c.CourseType.Level.Name}",
+                    },
+                    Teacher = new TeacherViewModel
+                    {
+                        Id = c.TeacherId,
+                        Name = c.Teacher.FullName,
+                    },
+                });
+
             return this.View(await courses.ToListAsync());
         }
 
@@ -45,7 +66,7 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseRepository.All()
+            var course = await this.coursesRepository.All()
                 .Include(c => c.CourseType)
                 .Include(c => c.Teacher)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -61,7 +82,7 @@
         public IActionResult Create()
         {
             this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName");
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypeRepository.All(), "Id", "Description");
+            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description");
             return this.View();
         }
 
@@ -84,12 +105,12 @@
                     Description = input.Description,
                 };
 
-                await this.courseRepository.AddAsync(course);
-                await this.courseRepository.SaveChangesAsync();
+                await this.coursesRepository.AddAsync(course);
+                await this.coursesRepository.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypeRepository.All(), "Id", "Description", input.CourseTypeId);
+            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", input.CourseTypeId);
             this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName", input.TeacherId);
             return this.View(input);
         }
@@ -102,13 +123,13 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            var course = await this.coursesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
             if (course == null)
             {
                 return this.NotFound();
             }
 
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypeRepository.All(), "Id", "Description", course.CourseTypeId);
+            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
             this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
             return this.View(course);
         }
@@ -129,8 +150,8 @@
             {
                 try
                 {
-                    this.courseRepository.Update(course);
-                    await this.courseRepository.SaveChangesAsync();
+                    this.coursesRepository.Update(course);
+                    await this.coursesRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -147,7 +168,7 @@
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypeRepository.All(), "Id", "Description", course.CourseTypeId);
+            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
             this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
             return this.View(course);
         }
@@ -160,7 +181,7 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseRepository.All()
+            var course = await this.coursesRepository.All()
                 .Include(c => c.CourseType)
                 .Include(c => c.Teacher)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -178,15 +199,15 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await this.courseRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            this.courseRepository.Delete(course);
-            await this.courseRepository.SaveChangesAsync();
+            var course = await this.coursesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            this.coursesRepository.Delete(course);
+            await this.coursesRepository.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool CourseExists(int id)
         {
-            return this.courseRepository.All().Any(x => x.Id == id);
+            return this.coursesRepository.All().Any(x => x.Id == id);
         }
     }
 }

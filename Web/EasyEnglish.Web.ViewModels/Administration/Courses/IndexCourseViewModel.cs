@@ -2,11 +2,8 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
-    using EasyEnglish.Data.Models;
-
-    public class CreateCourseInputModel
+    public class IndexCourseViewModel
     {
         public int Id { get; set; }
 
@@ -18,22 +15,32 @@
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 
-        [Range(typeof(decimal), "0.01", "10000000")]
         public decimal Price { get; set; }
 
-        [Display(Name = "Teacher")]
-        public string TeacherId { get; set; }
+        public TeacherViewModel Teacher { get; set; }
 
-        public ApplicationUser Teacher { get; set; }
-
-        [Display(Name = "Language-Level")]
-        public int CourseTypeId { get; set; }
-
-        public CourseType CourseType { get; set; }
+        public CourseTypeViewModel CourseType { get; set; }
 
         [Required]
         [MinLength(4)]
         [MaxLength(100)]
         public string Description { get; set; }
     }
+
+    public class TeacherViewModel 
+    {
+        public string Id { get; set; }
+
+        [Display(Name = "Teacher")]
+        public string Name { get; set; }
+    }
+
+    public class CourseTypeViewModel
+    {
+        public int Id { get; set; }
+
+        [Display(Name = "Language - Level")]
+        public string Name { get; set; }
+    }
+
 }

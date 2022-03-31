@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EasyEnglish.Data.Models.Course>
+﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Courses.IndexCourseViewModel>
 
 @{
     ViewData["Title"] = "Courses";
@@ -22,10 +22,10 @@
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Teacher.FullName)
+                @Html.DisplayNameFor(model => model.Teacher.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CourseType.Description)
+                @Html.DisplayNameFor(model => model.CourseType.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
@@ -46,10 +46,10 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Teacher.FullName)
+                @Html.DisplayFor(modelItem => item.Teacher.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CourseType.Description)
+                @Html.DisplayFor(modelItem => item.CourseType.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
