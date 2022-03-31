@@ -12,6 +12,8 @@
             this.Resources = new HashSet<Resource>();
         }
 
+        // public string Name { get; set; }
+
         public int LanguageId { get; set; }
 
         public virtual Language Language { get; set; }

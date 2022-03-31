@@ -1,0 +1,64 @@
+﻿@model EasyEnglish.Web.Areas.Administration.ViewModels.CourseTypeResourseViewModel
+@{
+    ViewData["Title"] = "Add Resource to Course";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+
+
+<h4>Resources</h4>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Resources.)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedOn)
+            </th>
+            <th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Resources)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Url)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsDeleted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeletedOn)
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModifiedOn)
+                </td>
+                <td>
+                    @*<input type="submit" value="Add Resouce To Course" class="btn btn-primary" />*@
+                    @*<input type="submit" class="btn btn-primary mt-3" value="Save" id=@item.Id courseId=@Model.CourseId />*@
+                    @*<a asp-action="AddResouce" asp-route-id="@item.Id">Add Resouce To Course</a>*@
+                    <a asp-action="AddResource" asp-method="post" class="btn btn-primary">Add this resource</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back to All Course Types</a>
+</div>

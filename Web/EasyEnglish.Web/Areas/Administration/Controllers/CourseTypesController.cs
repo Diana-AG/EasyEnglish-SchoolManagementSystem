@@ -5,6 +5,7 @@
 
     using EasyEnglish.Data;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Web.Areas.Administration.ViewModels;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -95,6 +96,47 @@
             this.ViewData["LanguageId"] = new SelectList(this.dbContext.Languages, "Id", "Name", courseType.LanguageId);
             this.ViewData["LevelId"] = new SelectList(this.dbContext.Levels, "Id", "Name", courseType.LevelId);
             return this.View(courseType);
+        }
+
+        // GET: Administration/CourseTypes/AddResource/5
+        public async Task<IActionResult> AddResource(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var resources = await this.dbContext.Resources.ToListAsync();
+
+            var courseTypeResouce = new CourseTypeResourseViewModel
+            {
+                CourseId = (int)id,
+                Resources = resources,
+            };
+
+            return this.View(courseTypeResouce);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddResource(CourseTypereSourseInputModel model)
+        {
+            if (model.Id == null || model.CourseId == null)
+            {
+                return this.NotFound();
+            }
+
+            var courseType = await this.dbContext.CourseTypes.FindAsync(model.CourseId);
+            var resource = await this.dbContext.Resources.FindAsync(model.Id);
+            if (courseType == null || resource == null)
+            {
+                return this.NotFound();
+            }
+
+            courseType.Resources.Add(resource);
+            await this.dbContext.SaveChangesAsync();
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // POST: Administration/CourseTypes/Edit/5
