@@ -1,38 +1,44 @@
 ﻿namespace EasyEnglish.Services.Data
 {
-    using System.Linq;
-
+    using EasyEnglish.Common;
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data.Models;
-    using EasyEnglish.Web.ViewModels.Home;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using System.Linq;
 
     public class GetCountsService : IGetCountsService
     {
         private readonly IDeletableEntityRepository<Course> coursesRepository;
-        private readonly IDeletableEntityRepository<ApplicationUser> studentsRepository;
-        private readonly IDeletableEntityRepository<ApplicationUser> teachersRepository;
+        private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly IDeletableEntityRepository<Language> languagesRepository;
+        private readonly IRepository<ApplicationRole> rolesRepo;
 
         public GetCountsService(
             IDeletableEntityRepository<Course> coursesRepository,
-            IDeletableEntityRepository<ApplicationUser> studentsRepository,
-            IDeletableEntityRepository<ApplicationUser> teachersRepository,
-            IDeletableEntityRepository<Language> languagesRepository)
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            IDeletableEntityRepository<Language> languagesRepository,
+            IRepository<ApplicationRole> rolesRepo)
         {
             this.coursesRepository = coursesRepository;
-            this.studentsRepository = studentsRepository;
-            this.teachersRepository = teachersRepository;
+            this.usersRepository = usersRepository;
             this.languagesRepository = languagesRepository;
+            this.rolesRepo = rolesRepo;
         }
 
         public CountsDto GetCounts()
         {
+            var teacherRoleId = this.rolesRepo.AllAsNoTracking()
+                .Where(r => r.Name == GlobalConstants.TeacherRoleName)
+                .Select(r => r.Id)
+                .FirstOrDefault();
+
             var data = new CountsDto
             {
                 CoursesCount = this.coursesRepository.AllAsNoTracking().Count(),
-                StudentsCount = this.studentsRepository.AllAsNoTracking().Count(),
-                TeachersCount = this.teachersRepository.AllAsNoTracking().Count(),
+                TeachersCount = this.usersRepository.AllAsNoTracking().Count(x => x.Roles.Any(r => r.RoleId == teacherRoleId)),
+                StudentsCount = this.usersRepository.AllAsNoTracking().Count(x => x.StudentCourses.Any()),
                 LanguagesCount = this.languagesRepository.AllAsNoTracking().Count(),
             };
 
