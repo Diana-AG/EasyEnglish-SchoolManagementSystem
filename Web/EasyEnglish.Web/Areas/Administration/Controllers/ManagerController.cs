@@ -1,10 +1,13 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
     using EasyEnglish.Common;
+    using EasyEnglish.Web.Controllers;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
 
     [Authorize(Roles = GlobalConstants.ManagerRoleName)]
-    public class ManagerController : TeacherController
+    [Area("Administration")]
+    public class ManagerController : BaseController
     {
     }
 }

@@ -53,9 +53,9 @@ namespace EasyEnglish.Data.Models
 
         public string ProfilePicture { get; set; }
 
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }
 

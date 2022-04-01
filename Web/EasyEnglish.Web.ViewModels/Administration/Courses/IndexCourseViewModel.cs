@@ -42,5 +42,4 @@
         [Display(Name = "Language - Level")]
         public string Name { get; set; }
     }
-
 }

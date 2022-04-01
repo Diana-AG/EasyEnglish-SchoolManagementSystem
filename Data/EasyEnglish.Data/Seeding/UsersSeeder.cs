@@ -9,7 +9,7 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            await dbContext.Users.AddAsync(new ApplicationUser 
+            await dbContext.Users.AddAsync(new ApplicationUser
             {
                 FullName = "Plovdiv",
                 AddressText = "Plovdiv, 1 Test Str.",

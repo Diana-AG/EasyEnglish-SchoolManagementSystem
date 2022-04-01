@@ -2,7 +2,8 @@
 {
     public class CourseTypereSourseInputModel
     {
-        public int Id { get; set; }
-        public int CourseId { get; set; }
+        public int? Id { get; set; }
+
+        public int? CourseId { get; set; }
     }
 }

@@ -1,12 +1,11 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System.Linq;
+
     using EasyEnglish.Common;
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data.Models;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq;
 
     public class GetCountsService : IGetCountsService
     {

@@ -11,7 +11,7 @@
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
-    public class CoursesController : TeacherController
+    public class CoursesController : AdministratorController
     {
         private readonly IDeletableEntityRepository<Course> coursesRepository;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
