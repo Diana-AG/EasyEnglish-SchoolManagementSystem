@@ -9,7 +9,7 @@
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
-    public class LanguagesController : AdministrationController
+    public class LanguagesController : AdministratorController
     {
         private readonly IDeletableEntityRepository<Language> dataRepository;
 

@@ -9,7 +9,7 @@
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
-    public class LevelsController : AdministrationController
+    public class LevelsController : AdministratorController
     {
         private readonly ApplicationDbContext dbContext;
 

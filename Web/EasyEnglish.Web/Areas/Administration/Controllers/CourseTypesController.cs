@@ -11,7 +11,7 @@
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
-    public class CourseTypesController : AdministrationController
+    public class CourseTypesController : AdministratorController
     {
         private readonly ApplicationDbContext dbContext;
 
