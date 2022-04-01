@@ -1,11 +1,8 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using EasyEnglish.Data;
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
@@ -14,7 +11,7 @@
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
-    public class CoursesController : AdministratorController
+    public class CoursesController : TeacherController
     {
         private readonly IDeletableEntityRepository<Course> coursesRepository;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
