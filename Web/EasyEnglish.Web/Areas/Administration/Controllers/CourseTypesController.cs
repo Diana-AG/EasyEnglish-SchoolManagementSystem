@@ -4,8 +4,10 @@
     using System.Threading.Tasks;
 
     using EasyEnglish.Data;
+    using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Web.Areas.Administration.ViewModels;
+    using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -14,17 +16,29 @@
     public class CourseTypesController : AdministratorController
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
 
-        public CourseTypesController(ApplicationDbContext context)
+        public CourseTypesController(
+            ApplicationDbContext context,
+            IDeletableEntityRepository<CourseType> courseTypesRepository)
         {
             this.dbContext = context;
+            this.courseTypesRepository = courseTypesRepository;
         }
 
         // GET: Administration/CourseTypes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = this.dbContext.CourseTypes.Include(c => c.Language).Include(c => c.Level);
-            return this.View(await applicationDbContext.ToListAsync());
+            var courseTypes = this.courseTypesRepository.All()
+                .Include(x => x.Language)
+                .Include(x => x.Level)
+                .Select(x => new CourseTypeViewModel
+                {
+                    Id = x.Id,
+                    Name = $"{x.Language.Name} - {x.Level.Name}",
+                });
+
+            return this.View(await courseTypes.ToListAsync());
         }
 
         // GET: Administration/CourseTypes/Details/5
