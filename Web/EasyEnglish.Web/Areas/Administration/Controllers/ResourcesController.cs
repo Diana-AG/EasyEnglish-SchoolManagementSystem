@@ -5,18 +5,27 @@
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
     public class ResourcesController : AdministratorController
     {
+        private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly IDeletableEntityRepository<Resource> dataRepository;
+        private readonly IResourceService resourceService;
 
-        public ResourcesController(IDeletableEntityRepository<Resource> dataRepository)
+        public ResourcesController(
+            IDeletableEntityRepository<CourseType> courseTypesRepository,
+            IDeletableEntityRepository<Resource> dataRepository,
+            IResourceService resourceService)
         {
+            this.courseTypesRepository = courseTypesRepository;
             this.dataRepository = dataRepository;
+            this.resourceService = resourceService;
         }
 
         // GET: Administration/Resources
@@ -54,6 +63,7 @@
         // GET: Administration/Resources/Create
         public IActionResult Create()
         {
+            this.ViewData["CourseTypes"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description");
             return this.View();
         }
 
@@ -62,16 +72,16 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,Url,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Resource resource)
+        public async Task<IActionResult> Create(CreateResourceInputModel input)
         {
             if (this.ModelState.IsValid)
             {
-                await this.dataRepository.AddAsync(resource);
-                await this.dataRepository.SaveChangesAsync();
+                await this.resourceService.CreateAsync(input);
+
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(resource);
+            return this.View(input);
         }
 
         // GET: Administration/Resources/Edit/5

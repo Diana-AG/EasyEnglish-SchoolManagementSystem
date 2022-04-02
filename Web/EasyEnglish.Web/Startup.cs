@@ -71,6 +71,7 @@
             services.AddTransient<ILanguagesService, LanguagesService>();
             services.AddTransient<ICurrenciesService, CurrenciesService>();
             services.AddTransient<IAddressService, AddressService>();
+            services.AddTransient<IResourceService, ResourceService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

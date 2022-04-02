@@ -46,6 +46,8 @@
 
         public DbSet<Resource> Resources { get; set; }
 
+        public DbSet<ResourceCourseType> ResourceCourseTypes { get; set; }
+
         public DbSet<Setting> Settings { get; set; }
 
         public DbSet<TeacherRequest> TeacherRequests { get; set; }
