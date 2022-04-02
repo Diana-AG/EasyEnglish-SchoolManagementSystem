@@ -5,6 +5,7 @@
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,14 @@
         // GET: Administration/Languages
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.dataRepository.AllWithDeleted().ToListAsync());
+            var viewModels = await this.dataRepository.AllAsNoTracking()
+                .Select(x => new LanguageViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
+            return this.View(viewModels);
         }
 
         // GET: Administration/Languages/Details/5
@@ -33,7 +41,7 @@
             }
 
             var language = await this.dataRepository.All()
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (language == null)
             {
                 return this.NotFound();
@@ -146,6 +154,7 @@
             var language = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
             this.dataRepository.Delete(language);
             await this.dataRepository.SaveChangesAsync();
+
             return this.RedirectToAction(nameof(this.Index));
         }
 

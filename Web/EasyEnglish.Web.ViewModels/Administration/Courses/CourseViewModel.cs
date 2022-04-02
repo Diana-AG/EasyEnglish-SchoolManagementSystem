@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class IndexCourseViewModel
+    public class CourseViewModel
     {
         public int Id { get; set; }
 
@@ -25,21 +25,5 @@
         [MinLength(4)]
         [MaxLength(100)]
         public string Description { get; set; }
-    }
-
-    public class TeacherViewModel 
-    {
-        public string Id { get; set; }
-
-        [Display(Name = "Teacher")]
-        public string Name { get; set; }
-    }
-
-    public class CourseTypeViewModel
-    {
-        public int Id { get; set; }
-
-        [Display(Name = "Language - Level")]
-        public string Name { get; set; }
     }
 }

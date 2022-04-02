@@ -33,7 +33,7 @@
             var courses = this.coursesRepository.All()
                 .Include(c => c.CourseType)
                 .Include(c => c.Teacher)
-                .Select(c => new IndexCourseViewModel
+                .Select(c => new CourseViewModel
                 {
                     Id = c.Id,
                     StartDate = c.StartDate,
@@ -88,7 +88,7 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateCourseInputModel input)
+        public async Task<IActionResult> Create(CourseInputModel input)
         {
             if (this.ModelState.IsValid)
             {

@@ -3,25 +3,33 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using EasyEnglish.Data;
+    using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
     public class LevelsController : AdministratorController
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly IDeletableEntityRepository<Level> dataRepository;
 
-        public LevelsController(ApplicationDbContext context)
+        public LevelsController(IDeletableEntityRepository<Level> dataRepository)
         {
-            this.dbContext = context;
+            this.dataRepository = dataRepository;
         }
 
         // GET: Administration/Levels
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.dbContext.Levels.ToListAsync());
+            var viewModels = await this.dataRepository.AllAsNoTracking()
+                .Select(x => new LevelViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                }).ToListAsync();
+
+            return this.View(viewModels);
         }
 
         // GET: Administration/Levels/Details/5
@@ -32,8 +40,8 @@
                 return this.NotFound();
             }
 
-            var level = await this.dbContext.Levels
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var level = await this.dataRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (level == null)
             {
                 return this.NotFound();
@@ -57,8 +65,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.dbContext.Add(level);
-                await this.dbContext.SaveChangesAsync();
+                await this.dataRepository.AddAsync(level);
+                await this.dataRepository.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
 
@@ -73,7 +81,7 @@
                 return this.NotFound();
             }
 
-            var level = await this.dbContext.Levels.FindAsync(id);
+            var level = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
             if (level == null)
             {
                 return this.NotFound();
@@ -98,8 +106,8 @@
             {
                 try
                 {
-                    this.dbContext.Update(level);
-                    await this.dbContext.SaveChangesAsync();
+                    this.dataRepository.Update(level);
+                    await this.dataRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,8 +135,8 @@
                 return this.NotFound();
             }
 
-            var level = await this.dbContext.Levels
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var level = await this.dataRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (level == null)
             {
                 return this.NotFound();
@@ -143,15 +151,15 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var level = await this.dbContext.Levels.FindAsync(id);
-            this.dbContext.Levels.Remove(level);
-            await this.dbContext.SaveChangesAsync();
+            var level = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            this.dataRepository.Delete(level);
+            await this.dataRepository.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool LevelExists(int id)
         {
-            return this.dbContext.Levels.Any(e => e.Id == id);
+            return this.dataRepository.All().Any(x => x.Id == id);
         }
     }
 }

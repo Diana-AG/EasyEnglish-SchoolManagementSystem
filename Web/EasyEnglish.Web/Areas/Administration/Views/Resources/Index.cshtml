@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EasyEnglish.Data.Models.Resource>
+﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Courses.ResourceWiewModel>
 
 @{
     ViewData["Title"] = "Resources";
@@ -17,16 +17,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Url)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedOn)
-            </th>
+            </th>            
             <th></th>
         </tr>
     </thead>
@@ -39,16 +30,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Url)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsDeleted)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DeletedOn)
-                    @Html.DisplayFor(modelItem => item.CreatedOn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ModifiedOn)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

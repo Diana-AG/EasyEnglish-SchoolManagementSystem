@@ -3,25 +3,34 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using EasyEnglish.Data;
+    using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
     public class ResourcesController : AdministratorController
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly IDeletableEntityRepository<Resource> dataRepository;
 
-        public ResourcesController(ApplicationDbContext context)
+        public ResourcesController(IDeletableEntityRepository<Resource> dataRepository)
         {
-            this.dbContext = context;
+            this.dataRepository = dataRepository;
         }
 
         // GET: Administration/Resources
         public async Task<IActionResult> Index()
         {
-            return this.View(await this.dbContext.Resources.ToListAsync());
+            var viewModels = await this.dataRepository.AllAsNoTracking()
+                .Select(x => new ResourceWiewModel
+                {
+                    Id = x.Id,
+                    Description = x.Description,
+                    Url = x.Url,
+                }).ToListAsync();
+
+            return this.View(viewModels);
         }
 
         // GET: Administration/Resources/Details/5
@@ -32,8 +41,8 @@
                 return this.NotFound();
             }
 
-            var resource = await this.dbContext.Resources
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var resource = await this.dataRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (resource == null)
             {
                 return this.NotFound();
@@ -57,8 +66,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.dbContext.Add(resource);
-                await this.dbContext.SaveChangesAsync();
+                await this.dataRepository.AddAsync(resource);
+                await this.dataRepository.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
 
@@ -73,7 +82,7 @@
                 return this.NotFound();
             }
 
-            var resource = await this.dbContext.Resources.FindAsync(id);
+            var resource = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
             if (resource == null)
             {
                 return this.NotFound();
@@ -98,8 +107,8 @@
             {
                 try
                 {
-                    this.dbContext.Update(resource);
-                    await this.dbContext.SaveChangesAsync();
+                    this.dataRepository.Update(resource);
+                    await this.dataRepository.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,8 +136,8 @@
                 return this.NotFound();
             }
 
-            var resource = await this.dbContext.Resources
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var resource = await this.dataRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (resource == null)
             {
                 return this.NotFound();
@@ -143,15 +152,16 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var resource = await this.dbContext.Resources.FindAsync(id);
-            this.dbContext.Resources.Remove(resource);
-            await this.dbContext.SaveChangesAsync();
+            var resource = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            this.dataRepository.Delete(resource);
+            await this.dataRepository.SaveChangesAsync();
+
             return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool ResourceExists(int id)
         {
-            return this.dbContext.Resources.Any(e => e.Id == id);
+            return this.dataRepository.All().Any(x => x.Id == id);
         }
     }
 }

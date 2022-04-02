@@ -6,7 +6,7 @@
 
     using EasyEnglish.Data.Models;
 
-    public class CreateCourseInputModel
+    public class CourseInputModel
     {
         public int Id { get; set; }
 
