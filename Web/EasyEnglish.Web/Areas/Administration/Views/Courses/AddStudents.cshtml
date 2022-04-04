@@ -1,0 +1,40 @@
+﻿@model EasyEnglish.Web.ViewModels.Administration.Courses.CourseAddStudentInputModel
+
+@{
+    ViewData["Title"] = "Add Students to Course";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Students.First().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Students.First().Email)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+       @* @foreach (var item in Model.Students)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <form method="post">
+                        <input type="submit" class="btn btn-primary mt-3" value="Save" />
+                    </form>
+                    <a asp-area="Administration" asp-controller="Courses" asp-action="AddStudents" asp-route-id="@Model.CourseId">Add To Course</a>
+                </td>
+            </tr>
+        }*@
+    </tbody>
+    </table>

@@ -131,6 +131,60 @@
             return this.View(course);
         }
 
+        // GET: Administration/Courses/AddStudent/5
+        public async Task<IActionResult> AddStudent(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var allStudents = this.usersRepository.All()
+                .Select(x => new CourseAddStudentInputModel
+                {
+                    CourseId = (int)id,
+                    StudentId = x.Id,
+                    StudentName = x.FullName,
+                    StudentEmail = x.Email,
+                });
+
+            return this.View(await allStudents.ToListAsync());
+        }
+
+        // GET: Administration/Courses/AddStudents/5
+        public async Task<IActionResult> AddStudents(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            //var course = await this.coursesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            //if (course == null)
+            //{
+            //    return this.NotFound();
+            //}
+
+            var viewModel = new CourseAddStudentInputModel { CourseId = (int)id };
+            var allStudents = this.usersRepository.All()
+                .Select(x => new StudentViewModel
+                {
+                    Id = x.Id,
+                    Name = x.FullName,
+                    Email = x.Email,
+                }).ToList();
+
+            //viewModel.Students = this.usersRepository.All()
+            //    .Select(x => new StudentViewModel
+            //    {
+            //        Id = x.Id,
+            //        Name = x.FullName,
+            //        Email = x.Email,
+            //    }).ToList();
+
+            return this.View(viewModel);
+        }
+
         // POST: Administration/Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

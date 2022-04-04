@@ -1,0 +1,47 @@
+﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Courses.CourseAddStudentInputModel>
+
+@{
+    ViewData["Title"] = "Add Student to Course";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentEmail)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <form method="post">
+                <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentEmail)
+                </td>
+                <td>
+                    <input type="text" hidden id="id" name="courseId" value="@item.CourseId" />
+                    <input type="text" hidden id="id" name="studentId" value="@item.StudentId" />
+                        <div>
+                            <button type="submit" asp-action="AddStudent" class="btn btn-block btn-primary text-white mb-3">Add</button>
+                        </div>
+                    @*<form method="post">
+                        <input type="submit" class="btn btn-primary mt-3" value="Save" />
+                    </form>*@
+                    @*<a asp-area="Administration" asp-controller="Courses" asp-action="AddStudent" asp-route-id="@item">Add To Course</a>*@
+                </td>
+            </tr>
+            </form>
+        }
+    </tbody>
+    </table>
