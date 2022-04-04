@@ -8,6 +8,6 @@
         public string Id { get; set; }
 
         [Display(Name = "Teacher")]
-        public string Name { get; set; }
+        public string FullName { get; set; }
     }
 }

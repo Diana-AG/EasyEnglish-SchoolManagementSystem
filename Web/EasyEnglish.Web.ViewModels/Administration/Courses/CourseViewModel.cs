@@ -1,6 +1,7 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class CourseViewModel
@@ -19,11 +20,18 @@
 
         public TeacherViewModel Teacher { get; set; }
 
+        [Display(Name = "Course Type")]
         public CourseTypeViewModel CourseType { get; set; }
+
+        [Display(Name = "Students")]
+        public IEnumerable<StudentViewModel> Students { get; set; }
 
         [Required]
         [MinLength(4)]
         [MaxLength(100)]
         public string Description { get; set; }
+
+        [Display(Name = "Students Count")]
+        public int StudentsCount { get; set; }
     }
 }

@@ -5,6 +5,7 @@
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,41 +17,24 @@
         private readonly IDeletableEntityRepository<Course> coursesRepository;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
+        private readonly ICourseService courseService;
 
         public CoursesController(
             IDeletableEntityRepository<Course> coursesRepository,
             IDeletableEntityRepository<CourseType> courseTypesRepository,
-            IDeletableEntityRepository<ApplicationUser> usersRepository)
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            ICourseService courseService)
         {
             this.coursesRepository = coursesRepository;
             this.courseTypesRepository = courseTypesRepository;
             this.usersRepository = usersRepository;
+            this.courseService = courseService;
         }
 
         // GET: Administration/Courses
         public async Task<IActionResult> Index()
         {
-            var courses = this.coursesRepository.All()
-                .Include(c => c.CourseType)
-                .Include(c => c.Teacher)
-                .Select(c => new CourseViewModel
-                {
-                    Id = c.Id,
-                    StartDate = c.StartDate,
-                    EndDate = c.EndDate,
-                    Price = c.Price,
-                    Description = c.Description,
-                    CourseType = new CourseTypeViewModel
-                    {
-                        Id = c.CourseTypeId,
-                        Name = $"{c.CourseType.Language.Name} - {c.CourseType.Level.Name}",
-                    },
-                    Teacher = new TeacherViewModel
-                    {
-                        Id = c.TeacherId,
-                        Name = c.Teacher.FullName,
-                    },
-                });
+            var courses = this.courseService.AllCourses();
 
             return this.View(await courses.ToListAsync());
         }
@@ -63,10 +47,8 @@
                 return this.NotFound();
             }
 
-            var course = await this.coursesRepository.All()
-                .Include(c => c.CourseType)
-                .Include(c => c.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var course = await this.courseService.GetCourseByIdAsync(id);
+
             if (course == null)
             {
                 return this.NotFound();
@@ -140,7 +122,7 @@
             }
 
             var allStudents = this.usersRepository.All()
-                .Select(x => new CourseAddStudentInputModel
+                .Select(x => new CourseAddStudentViewModel
                 {
                     CourseId = (int)id,
                     StudentId = x.Id,
@@ -149,6 +131,25 @@
                 });
 
             return this.View(await allStudents.ToListAsync());
+        }
+
+        // POST: Administration/Courses/AddStudent
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddStudent(CourseAddStudentInputModel input)
+        {
+            if (input.CourseId == null || input.StudentId == null)
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                await this.courseService.AddStudent(input);
+                return this.RedirectToAction(nameof(this.Details), new { id = input.CourseId });
+            }
+
+            return this.View();
         }
 
         // GET: Administration/Courses/AddStudents/5
@@ -165,7 +166,7 @@
             //    return this.NotFound();
             //}
 
-            var viewModel = new CourseAddStudentInputModel { CourseId = (int)id };
+            var viewModel = new CourseAddStudentViewModel { CourseId = (int)id };
             var allStudents = this.usersRepository.All()
                 .Select(x => new StudentViewModel
                 {
