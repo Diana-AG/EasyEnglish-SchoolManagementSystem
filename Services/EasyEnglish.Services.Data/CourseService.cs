@@ -22,7 +22,14 @@
             this.usersRespository = usersRespository;
         }
 
-        public async Task AddStudent(CourseAddStudentInputModel input)
+        public async Task<CourseViewModel> GetCourseByIdAsync(int? id)
+        {
+            var course = await this.AllCourses().FirstOrDefaultAsync(x => x.Id == id);
+
+            return course;
+        }
+
+        public async Task AddStudent(CourseStudentInputModel input)
         {
             var course = this.coursesRepository.All().Include(c => c.Students).FirstOrDefault(x => x.Id == input.CourseId);
             var student = this.usersRespository.All().FirstOrDefault(x => x.Id == input.StudentId);
@@ -35,6 +42,25 @@
             if (!course.Students.Any(x => x.Id == student.Id))
             {
                 course.Students.Add(student);
+
+                this.coursesRepository.Update(course);
+                await this.coursesRepository.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveStudent(CourseStudentInputModel input)
+        {
+            var course = this.coursesRepository.All().Include(c => c.Students).FirstOrDefault(x => x.Id == input.CourseId);
+            var student = this.usersRespository.All().FirstOrDefault(x => x.Id == input.StudentId);
+
+            //if (course == null || student == null)
+            //{
+
+            //}
+
+            if (course.Students.Any(x => x.Id == student.Id))
+            {
+                course.Students.Remove(student);
 
                 this.coursesRepository.Update(course);
                 await this.coursesRepository.SaveChangesAsync();
@@ -65,6 +91,7 @@
                         FullName = c.Teacher.FullName,
                     },
                     Students = c.Students
+                    .OrderBy(s => s.FullName)
                     .Select(s => new StudentViewModel
                     {
                         Id = s.Id,
@@ -78,11 +105,5 @@
             return courses;
         }
 
-        public async Task<CourseViewModel> GetCourseByIdAsync(int? id)
-        {
-            var course = await this.AllCourses().FirstOrDefaultAsync(x => x.Id == id);
-
-            return course;
-        }
     }
 }

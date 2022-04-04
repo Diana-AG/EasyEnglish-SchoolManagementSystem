@@ -16,14 +16,14 @@
 
         public TeacherRequestsController(ApplicationDbContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         // GET: Administration/TeacherRequests
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TeacherRequests.Include(t => t.User);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = this._context.TeacherRequests.Include(t => t.User);
+            return this.View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Administration/TeacherRequests/Details/5
@@ -31,25 +31,25 @@
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var teacherRequest = await _context.TeacherRequests
+            var teacherRequest = await this._context.TeacherRequests
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (teacherRequest == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(teacherRequest);
+            return this.View(teacherRequest);
         }
 
         // GET: Administration/TeacherRequests/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            this.ViewData["UserId"] = new SelectList(this._context.Users, "Id", "Id");
+            return this.View();
         }
 
         // POST: Administration/TeacherRequests/Create
@@ -59,14 +59,14 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] TeacherRequest teacherRequest)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _context.Add(teacherRequest);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                this._context.Add(teacherRequest);
+                await this._context.SaveChangesAsync();
+                return this.RedirectToAction(nameof(this.Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", teacherRequest.UserId);
-            return View(teacherRequest);
+            this.ViewData["UserId"] = new SelectList(this._context.Users, "Id", "Id", teacherRequest.UserId);
+            return this.View(teacherRequest);
         }
 
         // GET: Administration/TeacherRequests/Edit/5
@@ -74,16 +74,16 @@
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var teacherRequest = await _context.TeacherRequests.FindAsync(id);
+            var teacherRequest = await this._context.TeacherRequests.FindAsync(id);
             if (teacherRequest == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", teacherRequest.UserId);
-            return View(teacherRequest);
+            this.ViewData["UserId"] = new SelectList(this._context.Users, "Id", "Id", teacherRequest.UserId);
+            return this.View(teacherRequest);
         }
 
         // POST: Administration/TeacherRequests/Edit/5
@@ -95,31 +95,31 @@
         {
             if (id != teacherRequest.Id)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(teacherRequest);
-                    await _context.SaveChangesAsync();
+                    this._context.Update(teacherRequest);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeacherRequestExists(teacherRequest.Id))
+                    if (!this.TeacherRequestExists(teacherRequest.Id))
                     {
-                        return NotFound();
+                        return this.NotFound();
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(this.Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", teacherRequest.UserId);
-            return View(teacherRequest);
+            this.ViewData["UserId"] = new SelectList(this._context.Users, "Id", "Id", teacherRequest.UserId);
+            return this.View(teacherRequest);
         }
 
         // GET: Administration/TeacherRequests/Delete/5
@@ -127,18 +127,18 @@
         {
             if (id == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            var teacherRequest = await _context.TeacherRequests
+            var teacherRequest = await this._context.TeacherRequests
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (teacherRequest == null)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return View(teacherRequest);
+            return this.View(teacherRequest);
         }
 
         // POST: Administration/TeacherRequests/Delete/5
@@ -146,15 +146,15 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var teacherRequest = await _context.TeacherRequests.FindAsync(id);
-            _context.TeacherRequests.Remove(teacherRequest);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var teacherRequest = await this._context.TeacherRequests.FindAsync(id);
+            this._context.TeacherRequests.Remove(teacherRequest);
+            await this._context.SaveChangesAsync();
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         private bool TeacherRequestExists(int id)
         {
-            return _context.TeacherRequests.Any(e => e.Id == id);
+            return this._context.TeacherRequests.Any(e => e.Id == id);
         }
     }
 }

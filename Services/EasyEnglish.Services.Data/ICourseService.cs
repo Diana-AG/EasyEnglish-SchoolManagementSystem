@@ -7,7 +7,9 @@
 
     public interface ICourseService
     {
-        Task AddStudent(CourseAddStudentInputModel input);
+        Task AddStudent(CourseStudentInputModel input);
+
+        Task RemoveStudent(CourseStudentInputModel input);
 
         IQueryable<CourseViewModel> AllCourses();
 

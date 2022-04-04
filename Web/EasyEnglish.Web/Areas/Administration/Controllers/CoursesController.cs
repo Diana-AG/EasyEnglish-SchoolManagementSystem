@@ -122,6 +122,8 @@
             }
 
             var allStudents = this.usersRepository.All()
+                .Where(x => !x.StudentCourses.Any(sc => sc.Id == id))
+                .OrderBy(x => x.FullName)
                 .Select(x => new CourseAddStudentViewModel
                 {
                     CourseId = (int)id,
@@ -136,7 +138,7 @@
         // POST: Administration/Courses/AddStudent
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddStudent(CourseAddStudentInputModel input)
+        public async Task<IActionResult> AddStudent(CourseStudentInputModel input)
         {
             if (input.CourseId == null || input.StudentId == null)
             {
@@ -146,6 +148,25 @@
             if (this.ModelState.IsValid)
             {
                 await this.courseService.AddStudent(input);
+                return this.RedirectToAction(nameof(this.Details), new { id = input.CourseId });
+            }
+
+            return this.View();
+        }
+
+        // POST: Administration/Courses/RemoveStudent
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveStudent(CourseStudentInputModel input)
+        {
+            if (input.CourseId == null || input.StudentId == null)
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                await this.courseService.RemoveStudent(input);
                 return this.RedirectToAction(nameof(this.Details), new { id = input.CourseId });
             }
 
@@ -217,7 +238,7 @@
                     }
                 }
 
-                return this.RedirectToAction(nameof(this.Index));
+                return this.RedirectToAction(nameof(this.Details), new { Id = id});
             }
 
             this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);

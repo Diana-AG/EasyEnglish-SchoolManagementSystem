@@ -1,6 +1,6 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
 {
-    public class CourseAddStudentInputModel
+    public class CourseStudentInputModel
     {
         public int? CourseId { get; set; }
 

@@ -63,23 +63,36 @@
             <th>
                 @Html.DisplayNameFor(model => model.Students.First().Email)
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.Students)
         {
-          <tr>
-              <td>
-                  @Html.DisplayFor(modelItem => item.Name)
-              </td>
-              <td>
-                  @Html.DisplayFor(modelItem => item.Email)
-              </td>                
-          </tr>         
+            <form method="post">
+                <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <input type="text" hidden id="id" name="courseId" value="@Model.Id" />
+                    <input type="text" hidden id="id" name="studentId" value="@item.Id" />
+                    <div>
+                        <button type="submit" asp-action="RemoveStudent" class="btn btn-primary">Remove Student</button>
+                    </div>
+                </td>
+                </tr>
+            </form>         
         }
     </tbody>
 </table>
 <div>
+    <div>
+        <button type="submit" asp-action="AddStudent" asp-route-id="@Model.Id" class="btn btn-primary">Add Student</button>
+    </div>
     <a asp-action="AddStudent" asp-route-id="@Model.Id">Add Student</a> |
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
