@@ -1,6 +1,7 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -35,5 +36,9 @@
         [MinLength(4)]
         [MaxLength(100)]
         public string Description { get; set; }
+
+        public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
+
+        public IEnumerable<KeyValuePair<string, string>> TeachersItems { get; set; }
     }
 }

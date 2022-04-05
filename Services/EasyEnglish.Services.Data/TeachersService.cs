@@ -17,11 +17,13 @@
 
         public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
         {
-            return this.teachersRepository.AllAsNoTracking().Select(x => new
-            {
-                x.Id,
-                x.FullName,
-            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id, x.FullName));
+            return this.teachersRepository.AllAsNoTracking()
+                .OrderBy(x => x.FullName)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.FullName,
+                }).ToList().Select(x => new KeyValuePair<string, string>(x.Id, x.FullName));
         }
     }
 }

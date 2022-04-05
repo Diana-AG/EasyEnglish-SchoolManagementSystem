@@ -3,16 +3,25 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
 
     public interface ICourseService
     {
-        Task AddStudent(CourseStudentInputModel input);
+        Task CreateCourseAsync(CourseInputModel input);
 
-        Task RemoveStudent(CourseStudentInputModel input);
+        Task EditCourseAsync(CourseInputModel input);
+
+        Task AddStudentAsync(CourseStudentInputModel input);
+
+        Task RemoveStudentAsync(CourseStudentInputModel input);
 
         IQueryable<CourseViewModel> AllCourses();
 
-        Task<CourseViewModel> GetCourseByIdAsync(int? id);
+        IQueryable<CourseAddStudentViewModel> AllStudents(int id);
+
+        Task<Course> GetCourseByIdAsync(int? id);
+
+        Task<CourseViewModel> GetCourseViewModelByIdAsync(int? id);
     }
 }

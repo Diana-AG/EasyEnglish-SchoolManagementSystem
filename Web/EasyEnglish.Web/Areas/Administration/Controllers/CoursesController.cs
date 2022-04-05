@@ -18,17 +18,23 @@
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly ICourseService courseService;
+        private readonly ITeachersService teachersService;
+        private readonly ICourseTypeService courseTypeService;
 
         public CoursesController(
             IDeletableEntityRepository<Course> coursesRepository,
             IDeletableEntityRepository<CourseType> courseTypesRepository,
             IDeletableEntityRepository<ApplicationUser> usersRepository,
-            ICourseService courseService)
+            ICourseService courseService,
+            ITeachersService teachersService,
+            ICourseTypeService courseTypeService)
         {
             this.coursesRepository = coursesRepository;
             this.courseTypesRepository = courseTypesRepository;
             this.usersRepository = usersRepository;
             this.courseService = courseService;
+            this.teachersService = teachersService;
+            this.courseTypeService = courseTypeService;
         }
 
         // GET: Administration/Courses
@@ -47,7 +53,7 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseService.GetCourseByIdAsync(id);
+            var course = await this.courseService.GetCourseViewModelByIdAsync(id);
 
             if (course == null)
             {
@@ -60,9 +66,12 @@
         // GET: Administration/Courses/Create
         public IActionResult Create()
         {
-            this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName");
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description");
-            return this.View();
+            var viewModel = new CourseInputModel();
+
+            viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
+            return this.View(viewModel);
         }
 
         // POST: Administration/Courses/Create
@@ -74,23 +83,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                var course = new Course
-                {
-                    StartDate = input.StartDate,
-                    EndDate = input.EndDate,
-                    Price = input.Price,
-                    TeacherId = input.TeacherId,
-                    CourseTypeId = input.CourseTypeId,
-                    Description = input.Description,
-                };
+                await this.courseService.CreateCourseAsync(input);
 
-                await this.coursesRepository.AddAsync(course);
-                await this.coursesRepository.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", input.CourseTypeId);
-            this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName", input.TeacherId);
+            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
             return this.View(input);
         }
 
@@ -102,15 +102,57 @@
                 return this.NotFound();
             }
 
-            var course = await this.coursesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            var course = await this.courseService.GetCourseByIdAsync(id);
             if (course == null)
             {
                 return this.NotFound();
             }
 
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
-            this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
-            return this.View(course);
+            var viewModel = await this.courseService.GetCourseViewModelByIdAsync(id);
+            viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
+            //this.ViewData["CourseTypeItems"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
+            //this.ViewData["TeacherItems"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
+
+            return this.View(viewModel);
+        }
+
+        // POST: Administration/Courses/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, CourseInputModel input)
+        {
+            if (id != input.Id)
+            {
+                return this.NotFound();
+            }
+
+            if (this.ModelState.IsValid)
+            {
+                try
+                {
+                    await this.courseService.EditCourseAsync(input);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (await this.courseService.GetCourseByIdAsync(id) == null)
+                    {
+                        return this.NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return this.RedirectToAction(nameof(this.Details), new { Id = id });
+            }
+
+            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
+            return this.View(input);
         }
 
         // GET: Administration/Courses/AddStudent/5
@@ -121,18 +163,9 @@
                 return this.NotFound();
             }
 
-            var allStudents = this.usersRepository.All()
-                .Where(x => !x.StudentCourses.Any(sc => sc.Id == id))
-                .OrderBy(x => x.FullName)
-                .Select(x => new CourseAddStudentViewModel
-                {
-                    CourseId = (int)id,
-                    StudentId = x.Id,
-                    StudentName = x.FullName,
-                    StudentEmail = x.Email,
-                });
+            var students = this.courseService.AllStudents((int)id);
 
-            return this.View(await allStudents.ToListAsync());
+            return this.View(await students.ToListAsync());
         }
 
         // POST: Administration/Courses/AddStudent
@@ -147,7 +180,7 @@
 
             if (this.ModelState.IsValid)
             {
-                await this.courseService.AddStudent(input);
+                await this.courseService.AddStudentAsync(input);
                 return this.RedirectToAction(nameof(this.Details), new { id = input.CourseId });
             }
 
@@ -166,7 +199,7 @@
 
             if (this.ModelState.IsValid)
             {
-                await this.courseService.RemoveStudent(input);
+                await this.courseService.RemoveStudentAsync(input);
                 return this.RedirectToAction(nameof(this.Details), new { id = input.CourseId });
             }
 
@@ -207,44 +240,7 @@
             return this.View(viewModel);
         }
 
-        // POST: Administration/Courses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StartDate,EndDate,Price,TeacherId,CourseTypeId,Description,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Course course)
-        {
-            if (id != course.Id)
-            {
-                return this.NotFound();
-            }
-
-            if (this.ModelState.IsValid)
-            {
-                try
-                {
-                    this.coursesRepository.Update(course);
-                    await this.coursesRepository.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!this.CourseExists(course.Id))
-                    {
-                        return this.NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return this.RedirectToAction(nameof(this.Details), new { Id = id});
-            }
-
-            this.ViewData["CourseTypeId"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
-            this.ViewData["TeacherId"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
-            return this.View(course);
-        }
+        
 
         // GET: Administration/Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)

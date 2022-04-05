@@ -33,5 +33,9 @@
 
         [Display(Name = "Students Count")]
         public int StudentsCount { get; set; }
+
+        public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
+
+        public IEnumerable<KeyValuePair<string, string>> TeachersItems { get; set; }
     }
 }

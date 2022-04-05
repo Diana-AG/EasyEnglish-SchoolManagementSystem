@@ -12,27 +12,27 @@
     public class CourseService : ICourseService
     {
         private readonly IDeletableEntityRepository<Course> coursesRepository;
-        private readonly IDeletableEntityRepository<ApplicationUser> usersRespository;
+        private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
 
         public CourseService(
             IDeletableEntityRepository<Course> coursesRepository,
-            IDeletableEntityRepository<ApplicationUser> usersRespository)
+            IDeletableEntityRepository<ApplicationUser> usersRepository)
         {
             this.coursesRepository = coursesRepository;
-            this.usersRespository = usersRespository;
+            this.usersRepository = usersRepository;
         }
 
-        public async Task<CourseViewModel> GetCourseByIdAsync(int? id)
+        public async Task<CourseViewModel> GetCourseViewModelByIdAsync(int? id)
         {
             var course = await this.AllCourses().FirstOrDefaultAsync(x => x.Id == id);
 
             return course;
         }
 
-        public async Task AddStudent(CourseStudentInputModel input)
+        public async Task AddStudentAsync(CourseStudentInputModel input)
         {
             var course = this.coursesRepository.All().Include(c => c.Students).FirstOrDefault(x => x.Id == input.CourseId);
-            var student = this.usersRespository.All().FirstOrDefault(x => x.Id == input.StudentId);
+            var student = this.usersRepository.All().FirstOrDefault(x => x.Id == input.StudentId);
 
             //if (course == null || student == null)
             //{
@@ -48,10 +48,10 @@
             }
         }
 
-        public async Task RemoveStudent(CourseStudentInputModel input)
+        public async Task RemoveStudentAsync(CourseStudentInputModel input)
         {
             var course = this.coursesRepository.All().Include(c => c.Students).FirstOrDefault(x => x.Id == input.CourseId);
-            var student = this.usersRespository.All().FirstOrDefault(x => x.Id == input.StudentId);
+            var student = this.usersRepository.All().FirstOrDefault(x => x.Id == input.StudentId);
 
             //if (course == null || student == null)
             //{
@@ -65,6 +65,22 @@
                 this.coursesRepository.Update(course);
                 await this.coursesRepository.SaveChangesAsync();
             }
+        }
+
+        public IQueryable<CourseAddStudentViewModel> AllStudents(int id)
+        {
+            var students = this.usersRepository.All()
+                .Where(x => !x.StudentCourses.Any(sc => sc.Id == id))
+                .OrderBy(x => x.FullName)
+                .Select(x => new CourseAddStudentViewModel
+                {
+                    CourseId = (int)id,
+                    StudentId = x.Id,
+                    StudentName = x.FullName,
+                    StudentEmail = x.Email,
+                });
+
+            return students;
         }
 
         public IQueryable<CourseViewModel> AllCourses()
@@ -105,5 +121,39 @@
             return courses;
         }
 
+        public async Task CreateCourseAsync(CourseInputModel input)
+        {
+            var course = new Course
+            {
+                StartDate = input.StartDate,
+                EndDate = input.EndDate,
+                Price = input.Price,
+                TeacherId = input.TeacherId,
+                CourseTypeId = input.CourseTypeId,
+                Description = input.Description,
+            };
+
+            await this.coursesRepository.AddAsync(course);
+            await this.coursesRepository.SaveChangesAsync();
+        }
+
+        public async Task EditCourseAsync(CourseInputModel input)
+        {
+            var course = await this.GetCourseByIdAsync(input.Id);
+            course.StartDate = input.StartDate;
+            course.EndDate = input.EndDate;
+            course.Price = input.Price;
+            course.TeacherId = input.TeacherId;
+            course.CourseTypeId = input.CourseTypeId;
+            course.Description = input.Description;
+
+            this.coursesRepository.Update(course);
+            await this.coursesRepository.SaveChangesAsync();
+        }
+
+        public async Task<Course> GetCourseByIdAsync(int? id)
+        {
+            return await this.coursesRepository.All().Include(x => x.Teacher).Include(x => x.CourseType).FirstOrDefaultAsync(x => x.Id == id);
+        }        
     }
 }
