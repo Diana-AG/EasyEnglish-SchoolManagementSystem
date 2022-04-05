@@ -14,13 +14,17 @@
 
         Task AddStudentAsync(CourseStudentInputModel input);
 
+        Task DeleteAsync(int id);
+
         Task RemoveStudentAsync(CourseStudentInputModel input);
 
         IQueryable<CourseViewModel> AllCourses();
 
         IQueryable<CourseAddStudentViewModel> AllStudents(int id);
 
-        Task<Course> GetCourseByIdAsync(int? id);
+        Task<Course> GetCourseByIdAsync(int id);
+
+        Task<ApplicationUser> GetUserByIdAsync(string id);
 
         Task<CourseViewModel> GetCourseViewModelByIdAsync(int? id);
     }

@@ -22,6 +22,16 @@
             this.usersRepository = usersRepository;
         }
 
+        public async Task<ApplicationUser> GetUserByIdAsync(string id)
+        {
+            return await this.usersRepository.All().Include(x => x.StudentCourses).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Course> GetCourseByIdAsync(int id)
+        {
+            return await this.coursesRepository.All().Include(x => x.Teacher).Include(x => x.CourseType).Include(x => x.Students).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<CourseViewModel> GetCourseViewModelByIdAsync(int? id)
         {
             var course = await this.AllCourses().FirstOrDefaultAsync(x => x.Id == id);
@@ -31,13 +41,8 @@
 
         public async Task AddStudentAsync(CourseStudentInputModel input)
         {
-            var course = this.coursesRepository.All().Include(c => c.Students).FirstOrDefault(x => x.Id == input.CourseId);
-            var student = this.usersRepository.All().FirstOrDefault(x => x.Id == input.StudentId);
-
-            //if (course == null || student == null)
-            //{
-
-            //}
+            var course = await this.GetCourseByIdAsync((int)input.CourseId);
+            var student = await this.GetUserByIdAsync(input.StudentId);
 
             if (!course.Students.Any(x => x.Id == student.Id))
             {
@@ -50,13 +55,8 @@
 
         public async Task RemoveStudentAsync(CourseStudentInputModel input)
         {
-            var course = this.coursesRepository.All().Include(c => c.Students).FirstOrDefault(x => x.Id == input.CourseId);
-            var student = this.usersRepository.All().FirstOrDefault(x => x.Id == input.StudentId);
-
-            //if (course == null || student == null)
-            //{
-
-            //}
+            var course = await this.GetCourseByIdAsync((int)input.CourseId);
+            var student = await this.GetUserByIdAsync(input.StudentId);
 
             if (course.Students.Any(x => x.Id == student.Id))
             {
@@ -151,9 +151,11 @@
             await this.coursesRepository.SaveChangesAsync();
         }
 
-        public async Task<Course> GetCourseByIdAsync(int? id)
+        public async Task DeleteAsync(int id)
         {
-            return await this.coursesRepository.All().Include(x => x.Teacher).Include(x => x.CourseType).FirstOrDefaultAsync(x => x.Id == id);
-        }        
+            var course = await this.GetCourseByIdAsync(id);
+            this.coursesRepository.Delete(course);
+            await this.coursesRepository.SaveChangesAsync();
+        }
     }
 }

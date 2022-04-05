@@ -1,37 +1,33 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
-    using System.Linq;
     using System.Threading.Tasks;
 
-    using EasyEnglish.Data.Common.Repositories;
-    using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
     public class CoursesController : AdministratorController
     {
-        private readonly IDeletableEntityRepository<Course> coursesRepository;
-        private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
-        private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
+        // private readonly IDeletableEntityRepository<Course> coursesRepository;
+        // private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
+        // private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly ICourseService courseService;
         private readonly ITeachersService teachersService;
         private readonly ICourseTypeService courseTypeService;
 
         public CoursesController(
-            IDeletableEntityRepository<Course> coursesRepository,
-            IDeletableEntityRepository<CourseType> courseTypesRepository,
-            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            // IDeletableEntityRepository<Course> coursesRepository,
+            // IDeletableEntityRepository<CourseType> courseTypesRepository,
+            // IDeletableEntityRepository<ApplicationUser> usersRepository,
             ICourseService courseService,
             ITeachersService teachersService,
             ICourseTypeService courseTypeService)
         {
-            this.coursesRepository = coursesRepository;
-            this.courseTypesRepository = courseTypesRepository;
-            this.usersRepository = usersRepository;
+            // this.coursesRepository = coursesRepository;
+            // this.courseTypesRepository = courseTypesRepository;
+            // this.usersRepository = usersRepository;
             this.courseService = courseService;
             this.teachersService = teachersService;
             this.courseTypeService = courseTypeService;
@@ -43,6 +39,35 @@
             var courses = this.courseService.AllCourses();
 
             return this.View(await courses.ToListAsync());
+        }
+
+        // GET: Administration/Courses/Create
+        public IActionResult Create()
+        {
+            var viewModel = new CourseInputModel();
+
+            viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
+            return this.View(viewModel);
+        }
+
+        // POST: Administration/Courses/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CourseInputModel input)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.courseService.CreateCourseAsync(input);
+
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
+            return this.View(input);
         }
 
         // GET: Administration/Courses/Details/5
@@ -63,37 +88,6 @@
             return this.View(course);
         }
 
-        // GET: Administration/Courses/Create
-        public IActionResult Create()
-        {
-            var viewModel = new CourseInputModel();
-
-            viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
-
-            return this.View(viewModel);
-        }
-
-        // POST: Administration/Courses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CourseInputModel input)
-        {
-            if (this.ModelState.IsValid)
-            {
-                await this.courseService.CreateCourseAsync(input);
-
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
-
-            return this.View(input);
-        }
-
         // GET: Administration/Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -102,7 +96,7 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseService.GetCourseByIdAsync(id);
+            var course = await this.courseService.GetCourseByIdAsync((int)id);
             if (course == null)
             {
                 return this.NotFound();
@@ -112,8 +106,8 @@
             viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
             viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
-            //this.ViewData["CourseTypeItems"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
-            //this.ViewData["TeacherItems"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
+            // this.ViewData["CourseTypeItems"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
+            // this.ViewData["TeacherItems"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
 
             return this.View(viewModel);
         }
@@ -178,6 +172,13 @@
                 return this.NotFound();
             }
 
+            var course = await this.courseService.GetCourseByIdAsync((int)input.CourseId);
+            var student = await this.courseService.GetUserByIdAsync(input.StudentId);
+            if (course == null || student == null)
+            {
+                return this.NotFound();
+            }
+
             if (this.ModelState.IsValid)
             {
                 await this.courseService.AddStudentAsync(input);
@@ -197,6 +198,13 @@
                 return this.NotFound();
             }
 
+            var course = await this.courseService.GetCourseByIdAsync((int)input.CourseId);
+            var student = await this.courseService.GetUserByIdAsync(input.StudentId);
+            if (course == null || student == null)
+            {
+                return this.NotFound();
+            }
+
             if (this.ModelState.IsValid)
             {
                 await this.courseService.RemoveStudentAsync(input);
@@ -206,42 +214,6 @@
             return this.View();
         }
 
-        // GET: Administration/Courses/AddStudents/5
-        public async Task<IActionResult> AddStudents(int? id)
-        {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            //var course = await this.coursesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            //if (course == null)
-            //{
-            //    return this.NotFound();
-            //}
-
-            var viewModel = new CourseAddStudentViewModel { CourseId = (int)id };
-            var allStudents = this.usersRepository.All()
-                .Select(x => new StudentViewModel
-                {
-                    Id = x.Id,
-                    Name = x.FullName,
-                    Email = x.Email,
-                }).ToList();
-
-            //viewModel.Students = this.usersRepository.All()
-            //    .Select(x => new StudentViewModel
-            //    {
-            //        Id = x.Id,
-            //        Name = x.FullName,
-            //        Email = x.Email,
-            //    }).ToList();
-
-            return this.View(viewModel);
-        }
-
-        
-
         // GET: Administration/Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -250,10 +222,7 @@
                 return this.NotFound();
             }
 
-            var course = await this.coursesRepository.All()
-                .Include(c => c.CourseType)
-                .Include(c => c.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var course = await this.courseService.GetCourseViewModelByIdAsync(id);
             if (course == null)
             {
                 return this.NotFound();
@@ -268,15 +237,8 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await this.coursesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            this.coursesRepository.Delete(course);
-            await this.coursesRepository.SaveChangesAsync();
+            await this.courseService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
-        }
-
-        private bool CourseExists(int id)
-        {
-            return this.coursesRepository.All().Any(x => x.Id == id);
         }
     }
 }
