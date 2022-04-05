@@ -1,4 +1,4 @@
-﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
+﻿namespace EasyEnglish.Web.ViewModels.Administration.Levels
 {
     public class LevelViewModel
     {

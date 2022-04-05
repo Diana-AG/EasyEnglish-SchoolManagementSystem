@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Courses.LevelViewModel>
+﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Levels.LevelViewModel>
 
 @{
     ViewData["Title"] = "Levels";
@@ -27,7 +27,6 @@
                 </td>            
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>

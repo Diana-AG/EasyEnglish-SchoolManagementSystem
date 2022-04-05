@@ -5,6 +5,7 @@
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -13,52 +14,30 @@
     public class LanguagesController : AdministratorController
     {
         private readonly IDeletableEntityRepository<Language> dataRepository;
+        private readonly ILanguagesService languagesService;
 
-        public LanguagesController(IDeletableEntityRepository<Language> dataRepository)
+        public LanguagesController(IDeletableEntityRepository<Language> dataRepository,
+            ILanguagesService languagesService)
         {
             this.dataRepository = dataRepository;
+            this.languagesService = languagesService;
         }
 
         // GET: Administration/Languages
         public async Task<IActionResult> Index()
         {
-            var viewModels = await this.dataRepository.AllAsNoTracking()
-                .Select(x => new LanguageViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                }).ToListAsync();
+            var languageViewModels = this.languagesService.AllLanguages();
 
-            return this.View(viewModels);
+            return this.View(await languageViewModels.ToListAsync());
         }
 
-        // GET: Administration/Languages/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var language = await this.dataRepository.All()
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (language == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View(language);
-        }
-
-        // GET: Administration/Languages/Create
+        // GET: Administration/Languages/Create 
         public IActionResult Create()
         {
             return this.View();
         }
 
         // POST: Administration/Languages/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Language language)
