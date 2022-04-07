@@ -44,12 +44,12 @@
         // GET: Administration/Courses/Create
         public IActionResult Create()
         {
-            var viewModel = new CourseInputModel();
+            var input = new CourseInputModel();
 
-            viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
-            return this.View(viewModel);
+            return this.View(input);
         }
 
         // POST: Administration/Courses/Create
@@ -103,8 +103,8 @@
             }
 
             var viewModel = await this.courseService.GetCourseViewModelByIdAsync(id);
-            viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            //viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
+            //viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
             // this.ViewData["CourseTypeItems"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
             // this.ViewData["TeacherItems"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);

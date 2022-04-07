@@ -19,15 +19,21 @@
         private readonly ApplicationDbContext dbContext;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly ICourseTypeService courseTypeService;
+        private readonly ILanguagesService languagesService;
+        private readonly ILevelsService levelsService;
 
         public CourseTypesController(
             ApplicationDbContext context,
             IDeletableEntityRepository<CourseType> courseTypesRepository,
-            ICourseTypeService courseTypeService)
+            ICourseTypeService courseTypeService,
+            ILanguagesService languagesService,
+            ILevelsService levelsService)
         {
             this.dbContext = context;
             this.courseTypesRepository = courseTypesRepository;
             this.courseTypeService = courseTypeService;
+            this.languagesService = languagesService;
+            this.levelsService = levelsService;
         }
 
         // GET: Administration/CourseTypes
@@ -46,10 +52,7 @@
                 return this.NotFound();
             }
 
-            var courseType = await this.dbContext.CourseTypes
-                .Include(c => c.Language)
-                .Include(c => c.Level)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var courseType = await this.courseTypeService.GetCourseTypeViewModelByIdAsync((int)id);
             if (courseType == null)
             {
                 return this.NotFound();
@@ -61,33 +64,41 @@
         // GET: Administration/CourseTypes/Create
         public IActionResult Create()
         {
-            this.ViewData["LanguageId"] = new SelectList(this.dbContext.Languages, "Id", "Name");
-            this.ViewData["LevelId"] = new SelectList(this.dbContext.Levels, "Id", "Name");
-            return this.View();
+            var input = new CourseTypeInputModel();
+
+            input.LevelsItems = this.levelsService.GetAllAsKeyValuePair();
+            input.LanguagesItems = this.languagesService.GetAllAsKeyValuePair();
+            return this.View(input);
         }
 
         // POST: Administration/CourseTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LanguageId,LevelId,Description,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] CourseType courseType)
+        public async Task<IActionResult> Create(CourseTypeInputModel input)
         {
-            if (this.dbContext.CourseTypes.Any(x => x.LevelId == courseType.LevelId && x.LanguageId == courseType.LanguageId))
+            var language = await this.languagesService.GetLanguageByIdAsync(input.LanguageId);
+            var level = await this.levelsService.GetLevelByIdAsync(input.LevelId);
+            if (language == null || level == null)
             {
-                return this.View(courseType);
+                return this.NotFound();
             }
 
-            if (this.ModelState.IsValid)
+            //if (this.courseTypeService.CourseTypeExists(input.LanguageId, input.LevelId))
+            //{
+            //    //return message "Course Type with this language and this level already exist" redirect Details/courseTypeId
+            //    input.LevelsItems = this.levelsService.GetAllAsKeyValuePair();
+            //    input.LanguagesItems = this.languagesService.GetAllAsKeyValuePair();
+            //    return this.View(input);
+            //}
+            if (this.ModelState.IsValid && !this.courseTypeService.CourseTypeExists(input.LanguageId, input.LevelId))
             {
-                this.dbContext.Add(courseType);
-                await this.dbContext.SaveChangesAsync();
+                await this.courseTypeService.CreateCourseAsync(input);
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            this.ViewData["LanguageId"] = new SelectList(this.dbContext.Languages, "Id", "Name", courseType.LanguageId);
-            this.ViewData["LevelId"] = new SelectList(this.dbContext.Levels, "Id", "Name", courseType.LevelId);
-            return this.View(courseType);
+            input.LevelsItems = this.levelsService.GetAllAsKeyValuePair();
+            input.LanguagesItems = this.languagesService.GetAllAsKeyValuePair(); 
+            return this.View(input);
         }
 
         // GET: Administration/CourseTypes/Edit/5
@@ -195,11 +206,7 @@
                 return this.NotFound();
             }
 
-            var courseType = await this.dbContext.CourseTypes
-                .Include(c => c.Language)
-                .Include(c => c.Level)
-                .Include(c => c.Resources)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var courseType = await this.courseTypeService.GetCourseTypeViewModelByIdAsync((int)id);
             if (courseType == null)
             {
                 return this.NotFound();
@@ -214,10 +221,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var courseType = await this.dbContext.CourseTypes.FindAsync(id);
-            //this.dbContext.CourseTypes.Remove(courseType);
-            this.courseTypesRepository.Delete(courseType);
-            await this.courseTypesRepository.SaveChangesAsync();
+            await this.courseTypeService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
         }
 

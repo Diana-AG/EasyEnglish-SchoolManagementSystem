@@ -1,13 +1,12 @@
 ﻿@model EasyEnglish.Web.ViewModels.Administration.Courses.CourseViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Course Details";
 }
 
-<h1>Details</h1>
+<h1>@this.ViewData["Title"]</h2>
 
 <div>
-    <h4>Course</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -54,43 +53,58 @@
         </dd>
     </dl>
 </div>
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students.First().Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Students)
-        {
-            <form method="post">
-                <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    <input type="text" hidden id="id" name="courseId" value="@Model.Id" />
-                    <input type="text" hidden id="id" name="studentId" value="@item.Id" />
-                    <div>
-                        <button type="submit" asp-action="RemoveStudent" class="btn btn-primary">Remove Student</button>
-                    </div>
-                </td>
-                </tr>
-            </form>         
-        }
-    </tbody>
-</table>
-<div>    
-    <a asp-action="AddStudent" asp-route-id="@Model.Id">Add Student</a> |
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to All courses</a>
+<hr />
+<div>
+    @if(Model.StudentsCount == 0)
+    {
+        <div>
+            <h4>There are not any students at this class!</h4>
+        </div>
+    }
+    @if(Model.StudentsCount != 0)
+    {
+        <div>
+            <h4> Students in this class:</h4>
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Students.First().Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Students.First().Email)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Students)
+                    {
+                        <form method="post">
+                            <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                <input type="text" hidden id="id" name="courseId" value="@Model.Id" />
+                                <input type="text" hidden id="id" name="studentId" value="@item.Id" />
+                                <div>
+                                    <button type="submit" asp-action="RemoveStudent" class="btn btn-primary">Remove Student</button>
+                                </div>
+                            </td>
+                            </tr>
+                        </form>         
+                    }
+                </tbody>
+            </table>
+            <div>    
+                <a asp-action="AddStudent" asp-route-id="@Model.Id">Add Student</a> |
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-action="Index">Back to All courses</a>
+            </div>
+        </div>
+    }
 </div>

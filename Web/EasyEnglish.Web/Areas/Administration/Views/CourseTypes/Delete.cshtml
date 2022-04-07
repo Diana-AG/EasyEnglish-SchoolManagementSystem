@@ -1,27 +1,32 @@
-﻿@model EasyEnglish.Data.Models.CourseType
+﻿@model EasyEnglish.Web.ViewModels.Administration.CourseTypes.CourseTypeViewModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Course Type";
 }
 
-<h1>Delete</h1>
+<h1>@this.ViewData["Title"]</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h4>Are you sure you want to delete this Course Type</h4>
 <div>
-    <h4>CourseType</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Language)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Language.Name)
+            @Html.DisplayFor(model => model.Language)
         </dd class>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Level)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Level.Name)
+            @Html.DisplayFor(model => model.Level)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
         </dd class>
     </dl>
     

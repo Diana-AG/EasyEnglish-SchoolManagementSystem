@@ -20,11 +20,13 @@
 
         public IQueryable<LevelViewModel> AllLevels()
         {
-            var levels = this.levelsRepository.All().Select(x => new LevelViewModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-            });
+            var levels = this.levelsRepository.All()
+                .OrderBy(x => x.Name)
+                .Select(x => new LevelViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                });
 
             return levels;
         }

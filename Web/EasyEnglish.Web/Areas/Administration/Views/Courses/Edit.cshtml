@@ -2,14 +2,12 @@
 @model EasyEnglish.Web.ViewModels.Administration.Courses.CourseViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Course";
     //var teachersItems = this.Model.TeachersItems.Select(x => new SelectListItem(x.Value, x.Key));
     //var courseTypesItems = this.Model.CourseTypeItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
-<h1>Edit</h1>
-
-<h4>Course</h4>
+<h1>@this.ViewData["Title"]</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">

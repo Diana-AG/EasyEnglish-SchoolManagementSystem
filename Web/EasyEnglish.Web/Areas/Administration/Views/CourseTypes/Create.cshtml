@@ -1,12 +1,12 @@
-﻿@model EasyEnglish.Data.Models.CourseType
+﻿@model EasyEnglish.Web.ViewModels.Administration.CourseTypes.CourseTypeInputModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Course Type";
+    var levelsItems = this.Model.LevelsItems.Select(x => new SelectListItem(x.Value, x.Key));
+    var languagesItems = this.Model.LanguagesItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
-<h1>Create</h1>
-
-<h4>CourseType</h4>
+<h1>@this.ViewData["Title"]</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,11 +14,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="LanguageId" class="control-label"></label>
-                <select asp-for="LanguageId" class ="form-control" asp-items="ViewBag.LanguageId"></select>
+                <select asp-for="LanguageId" class ="form-control" asp-items="languagesItems"></select>
             </div>
             <div class="form-group">
                 <label asp-for="LevelId" class="control-label"></label>
-                <select asp-for="LevelId" class ="form-control" asp-items="ViewBag.LevelId"></select>
+                <select asp-for="LevelId" class ="form-control" asp-items="levelsItems"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>

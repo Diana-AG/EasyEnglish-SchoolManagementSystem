@@ -20,11 +20,13 @@
 
         public IQueryable<LanguageViewModel> AllLanguages()
         {
-            var languages = this.languagesRepository.All().Select(x => new LanguageViewModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-            });
+            var languages = this.languagesRepository.All()
+                .OrderBy(x => x.Name)
+                .Select(x => new LanguageViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                });
 
             return languages;
         }
