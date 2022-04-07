@@ -1,6 +1,6 @@
-﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
+﻿namespace EasyEnglish.Web.ViewModels.Administration.Resources
 {
-    public class ResourceWiewModel
+    public class ResourceViewModel
     {
         public int Id { get; set; }
 

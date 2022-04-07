@@ -24,6 +24,12 @@
     </dl>
 </div>
 <div>
+    <form asp-action="AddCourseType">
+        <input type="hidden" asp-for="@Model.Id" />
+        <input type="submit" value="Add Course Type" class="btn btn-primary" /> |
+        <a asp-action="Index">Back to All Resources</a>
+    </form>
+    <a asp-action="AddCourseType" asp-route-id="@Model.Id">Add Course Type</a>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back All Resources</a>
+    <a asp-action="Index">Back to All Resources</a>
 </div>

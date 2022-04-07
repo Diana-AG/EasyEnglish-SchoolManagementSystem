@@ -1,13 +1,15 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System.Linq;
     using System.Threading.Tasks;
-
-    using EasyEnglish.Web.ViewModels.Administration.Courses;
+    using EasyEnglish.Data.Models;
+    using EasyEnglish.Web.ViewModels.Administration.Resources;
 
     public interface IResourceService
     {
-        Task CreateAsync(CreateResourceInputModel input);
-            //, string userId, string imagePath);
+        Task CreateAsync(ResourceInputModel input);
+
+        //string userId, string imagePath);
 
         //IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12);
 
@@ -21,6 +23,12 @@
 
         //IEnumerable<T> GetByIngredients<T>(IEnumerable<int> ingredientIds);
 
-        //Task DeleteAsync(int id);
+        IQueryable<ResourceViewModel> AllResources();
+
+        Task DeleteAsync(int id);
+
+        Task<Resource> GetResourceByIdAsync(int id);
+
+        Task<ResourceViewModel> GetResourceViewModelByIdAsync(int id);
     }
 }

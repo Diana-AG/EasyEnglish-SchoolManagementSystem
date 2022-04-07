@@ -58,7 +58,7 @@
     @if(Model.StudentsCount == 0)
     {
         <div>
-            <h4>There are not any students at this class!</h4>
+            <h4>There are not any students in this class!</h4>
         </div>
     }
     @if(Model.StudentsCount != 0)
@@ -99,12 +99,12 @@
                         </form>         
                     }
                 </tbody>
-            </table>
-            <div>    
-                <a asp-action="AddStudent" asp-route-id="@Model.Id">Add Student</a> |
-                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-                <a asp-action="Index">Back to All courses</a>
-            </div>
+            </table>            
         </div>
     }
+    <div>    
+        <a asp-action="AddStudent" asp-route-id="@Model.Id">Add Student</a> |
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to All courses</a>
+    </div>
 </div>

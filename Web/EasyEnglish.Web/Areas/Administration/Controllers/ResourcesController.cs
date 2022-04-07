@@ -1,12 +1,13 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
-    using EasyEnglish.Web.ViewModels.Administration.Courses;
+    using EasyEnglish.Web.ViewModels.Administration.Resources;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -17,22 +18,25 @@
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly IDeletableEntityRepository<Resource> dataRepository;
         private readonly IResourceService resourceService;
+        private readonly ICourseTypeService courseTypeService;
 
         public ResourcesController(
             IDeletableEntityRepository<CourseType> courseTypesRepository,
             IDeletableEntityRepository<Resource> dataRepository,
-            IResourceService resourceService)
+            IResourceService resourceService,
+            ICourseTypeService courseTypeService)
         {
             this.courseTypesRepository = courseTypesRepository;
             this.dataRepository = dataRepository;
             this.resourceService = resourceService;
+            this.courseTypeService = courseTypeService;
         }
 
         // GET: Administration/Resources
         public async Task<IActionResult> Index()
         {
             var viewModels = await this.dataRepository.All()
-                .Select(x => new ResourceWiewModel
+                .Select(x => new ResourceViewModel
                 {
                     Id = x.Id,
                     Description = x.Description,
@@ -50,8 +54,7 @@
                 return this.NotFound();
             }
 
-            var resource = await this.dataRepository.All()
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var resource = await this.resourceService.GetResourceByIdAsync((int)id);
             if (resource == null)
             {
                 return this.NotFound();
@@ -63,8 +66,10 @@
         // GET: Administration/Resources/Create
         public IActionResult Create()
         {
-            this.ViewData["CourseTypes"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description");
-            return this.View();
+            var input = new ResourceInputModel();
+            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
+            return this.View(input);
         }
 
         // POST: Administration/Resources/Create
@@ -72,7 +77,7 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateResourceInputModel input)
+        public async Task<IActionResult> Create(ResourceInputModel input)
         {
             if (this.ModelState.IsValid)
             {
@@ -102,8 +107,6 @@
         }
 
         // POST: Administration/Resources/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Description,Url,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Resource resource)
@@ -146,14 +149,13 @@
                 return this.NotFound();
             }
 
-            var resource = await this.dataRepository.All()
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (resource == null)
+            var resourceViewModel = await this.resourceService.GetResourceViewModelByIdAsync((int)id);
+            if (resourceViewModel == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(resource);
+            return this.View(resourceViewModel);
         }
 
         // POST: Administration/Resources/Delete/5
@@ -162,10 +164,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var resource = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            this.dataRepository.Delete(resource);
-            await this.dataRepository.SaveChangesAsync();
-
+            await this.resourceService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
         }
 

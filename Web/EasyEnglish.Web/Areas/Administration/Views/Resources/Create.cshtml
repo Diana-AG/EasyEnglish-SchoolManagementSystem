@@ -1,7 +1,8 @@
-﻿@model EasyEnglish.Web.ViewModels.Administration.Courses.CreateResourceInputModel
+﻿@model EasyEnglish.Web.ViewModels.Administration.Resources.ResourceInputModel
 
 @{
     ViewData["Title"] = "Create Resourse";
+    var courseTypesItems = this.Model.CourseTypeItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 <h1>@this.ViewData["Title"]</h1>
@@ -20,10 +21,21 @@
                 <input asp-for="Url" class="form-control" />
                 <span asp-validation-for="Url" class="text-danger"></span>
             </div>
-            <div id="CourseTypesContainer">
-                <label asp-for="CourseTypes"></label>
-                <a class="btn btn-success" onclick="AddMoreCourseTypes()">AddCourseType</a>
-            </div>
+           @* @using (Html.BeginForm("Create", "ResourceInputModel", FormMethod.Post)) 
+            {
+               <div>
+                @Html.LabelFor(model => model.CourseTypes)
+                @for(var i = 0; i < Model.CourseTypes.Count; i++)
+                {    
+            
+                    @Html.HiddenFor(m => Model.CourseTypes[i].ID)
+                    @Html.HiddenFor(m => Model.CourseTypes[i].Description)
+                    @Html.CheckBoxFor(m => Model.CourseTypes[i].Checked)
+                    @Model.CourseTypes[i].Description<br/>
+                 }
+                </div>
+            <input type="submit" value="Submit" />
+            }*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -32,17 +44,9 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back All Resources</a>
+    <a asp-action="Index">Back to All Resources</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        var courseTypeIndex = 0;
-        function AddMoreCourseTypes() {
-            $("#CourseTypesContainer").
-                append("<div class='form-control'>CourseType: <input type='text' name='CourseTypes[" + courseTypeIndex + "].Description' /> </div>");
-            courseTypeIndex++;
-        }
-    </script>
 }
