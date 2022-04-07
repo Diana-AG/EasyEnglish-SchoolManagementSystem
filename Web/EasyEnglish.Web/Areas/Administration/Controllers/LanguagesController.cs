@@ -6,7 +6,7 @@
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
-    using EasyEnglish.Web.ViewModels.Administration.Courses;
+    using EasyEnglish.Web.ViewModels.Administration.Languages;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +16,8 @@
         private readonly IDeletableEntityRepository<Language> dataRepository;
         private readonly ILanguagesService languagesService;
 
-        public LanguagesController(IDeletableEntityRepository<Language> dataRepository,
+        public LanguagesController(
+            IDeletableEntityRepository<Language> dataRepository,
             ILanguagesService languagesService)
         {
             this.dataRepository = dataRepository;
@@ -31,7 +32,7 @@
             return this.View(await languageViewModels.ToListAsync());
         }
 
-        // GET: Administration/Languages/Create 
+        // GET: Administration/Languages/Create
         public IActionResult Create()
         {
             return this.View();
@@ -40,16 +41,15 @@
         // POST: Administration/Languages/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Language language)
+        public async Task<IActionResult> Create(LanguageInputModel input)
         {
             if (this.ModelState.IsValid)
             {
-                await this.dataRepository.AddAsync(language);
-                await this.dataRepository.SaveChangesAsync();
+                await this.languagesService.CreateLanguageAsync(input);
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(language);
+            return this.View(input);
         }
 
         // GET: Administration/Languages/Edit/5
@@ -70,8 +70,6 @@
         }
 
         // POST: Administration/Languages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Language language)
@@ -114,14 +112,13 @@
                 return this.NotFound();
             }
 
-            var language = await this.dataRepository.All()
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (language == null)
+            var languageViewModel = await this.languagesService.GetLanguageViewModelByIdAsync((int)id);
+            if (languageViewModel == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(language);
+            return this.View(languageViewModel);
         }
 
         // POST: Administration/Languages/Delete/5
@@ -130,10 +127,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var language = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            this.dataRepository.Delete(language);
-            await this.dataRepository.SaveChangesAsync();
-
+            await this.languagesService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
         }
 

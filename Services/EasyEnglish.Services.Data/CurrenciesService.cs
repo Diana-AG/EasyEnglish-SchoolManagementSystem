@@ -17,7 +17,7 @@
 
         public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
         {
-            return this.currenciesRepository.AllAsNoTracking().Select(x => new
+            return this.currenciesRepository.All().Select(x => new
             {
                 x.Id,
                 x.CurrencyCode,

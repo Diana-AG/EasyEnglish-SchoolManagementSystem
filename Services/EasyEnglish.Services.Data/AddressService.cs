@@ -25,7 +25,7 @@
         public async Task<Address> SetAddress(string addressName)
         {
             addressName = addressName.ToUpper();
-            var address = this.addressesRepository.AllAsNoTracking().FirstOrDefault(a => a.Name == addressName);
+            var address = this.addressesRepository.All().FirstOrDefault(a => a.Name == addressName);
 
             if (address == null)
             {
@@ -40,7 +40,7 @@
         public async Task<Country> SetCountry(string countryName)
         {
             countryName = countryName.ToUpper();
-            var country = this.countriesRepository.AllAsNoTracking().FirstOrDefault(t => t.Name == countryName);
+            var country = this.countriesRepository.All().FirstOrDefault(t => t.Name == countryName);
 
             if (country == null)
             {
@@ -55,7 +55,7 @@
         public async Task<Town> SetTown(string townName)
         {
             townName = townName.ToUpper();
-            var town = this.townsRepository.AllAsNoTracking().FirstOrDefault(c => c.Name == townName);
+            var town = this.townsRepository.All().FirstOrDefault(c => c.Name == townName);
 
             if (town == null)
             {

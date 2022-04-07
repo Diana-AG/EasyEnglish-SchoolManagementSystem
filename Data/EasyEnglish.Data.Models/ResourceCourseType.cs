@@ -1,10 +1,10 @@
 ﻿namespace EasyEnglish.Data.Models
 {
-    public class ResourceCourseType
+    using EasyEnglish.Data.Common.Models;
+
+    public class ResourceCourseType : BaseDeletableModel<int>
     {
-        public int Id { get; set; }
-      
-        public int ReourceId { get; set; }
+        public int ResourceId { get; set; }
 
         public Resource Resource { get; set; }
 

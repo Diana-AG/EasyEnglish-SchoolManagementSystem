@@ -2,7 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Threading.Tasks;
+    using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Languages;
 
     public interface ILanguagesService
@@ -11,6 +12,12 @@
 
         IQueryable<LanguageViewModel> AllLanguages();
 
-        LanguageViewModel GetLanguageViewModelById(int? id);
+        Task<LanguageViewModel> GetLanguageViewModelByIdAsync(int id);
+
+        Task CreateLanguageAsync(LanguageInputModel input);
+
+        Task<Language> GetLanguageByIdAsync(int id);
+
+        Task DeleteAsync(int id);
     }
 }

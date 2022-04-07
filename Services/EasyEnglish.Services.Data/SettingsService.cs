@@ -18,7 +18,7 @@
 
         public int GetCount()
         {
-            return this.settingsRepository.AllAsNoTracking().Count();
+            return this.settingsRepository.All().Count();
         }
 
         public IEnumerable<T> GetAll<T>()

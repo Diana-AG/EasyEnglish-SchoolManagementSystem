@@ -33,7 +33,7 @@
                 var courseType = this.courseTypesRespository.All().FirstOrDefault(x => x.Description == inputCourseTypes.Description);
 
                 //Add logic when courseType doesnt exist
-                resource.CourseTypes.Add(courseType);
+                resource.CourseTypes.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = courseType.Id });
             }
 
             await this.resourcesRespository.AddAsync(resource);

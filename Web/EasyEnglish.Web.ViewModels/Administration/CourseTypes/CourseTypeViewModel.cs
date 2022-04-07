@@ -1,6 +1,5 @@
-﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
+﻿namespace EasyEnglish.Web.ViewModels.Administration.CourseTypes
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
 
     public class CourseTypeViewModel

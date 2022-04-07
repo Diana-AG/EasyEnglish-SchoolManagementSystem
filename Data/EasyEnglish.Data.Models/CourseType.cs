@@ -9,7 +9,7 @@
         public CourseType()
         {
             this.Courses = new HashSet<Course>();
-            this.Resources = new HashSet<Resource>();
+            this.Resources = new HashSet<ResourceCourseType>();
         }
 
         // public string Name { get; set; }
@@ -25,6 +25,6 @@
 
         public virtual ICollection<Course> Courses { get; set; }
 
-        public virtual ICollection<Resource> Resources { get; set; }
+        public virtual ICollection<ResourceCourseType> Resources { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
 {
+    using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -18,10 +19,10 @@
 
         public decimal Price { get; set; }
 
-        public TeacherViewModel Teacher { get; set; }
+        public string Teacher { get; set; }
 
         [Display(Name = "Course Type")]
-        public CourseTypeViewModel CourseType { get; set; }
+        public string CourseType { get; set; }
 
         [Display(Name = "Students")]
         public IEnumerable<StudentViewModel> Students { get; set; }
@@ -33,9 +34,5 @@
 
         [Display(Name = "Students Count")]
         public int StudentsCount { get; set; }
-
-        public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
-
-        public IEnumerable<KeyValuePair<string, string>> TeachersItems { get; set; }
     }
 }

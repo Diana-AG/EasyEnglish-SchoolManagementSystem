@@ -7,6 +7,7 @@
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
+    using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
     using Microsoft.EntityFrameworkCore;
 
     public class CourseService : ICourseService
@@ -96,16 +97,18 @@
                     EndDate = c.EndDate,
                     Price = c.Price,
                     Description = c.Description,
-                    CourseType = new CourseTypeViewModel
-                    {
-                        Id = c.CourseTypeId,
-                        Name = $"{c.CourseType.Language.Name} - {c.CourseType.Level.Name}",
-                    },
-                    Teacher = new TeacherViewModel
-                    {
-                        Id = c.TeacherId,
-                        FullName = c.Teacher.FullName,
-                    },
+                    CourseType = $"{c.CourseType.Language.Name} - {c.CourseType.Level.Name}",
+                    Teacher = c.Teacher.FullName,
+                    //CourseType = new CourseTypeViewModel
+                    //{
+                    //    Id = c.CourseTypeId,
+                    //    Name = $"{c.CourseType.Language.Name} - {c.CourseType.Level.Name}",
+                    //},
+                    //Teacher = new TeacherViewModel
+                    //{
+                    //    Id = c.TeacherId,
+                    //    FullName = c.Teacher.FullName,
+                    //},
                     Students = c.Students
                     .OrderBy(s => s.FullName)
                     .Select(s => new StudentViewModel

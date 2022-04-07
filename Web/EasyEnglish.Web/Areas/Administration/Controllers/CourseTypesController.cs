@@ -6,8 +6,9 @@
     using EasyEnglish.Data;
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Areas.Administration.ViewModels;
-    using EasyEnglish.Web.ViewModels.Administration.Courses;
+    using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -17,28 +18,24 @@
     {
         private readonly ApplicationDbContext dbContext;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
+        private readonly ICourseTypeService courseTypeService;
 
         public CourseTypesController(
             ApplicationDbContext context,
-            IDeletableEntityRepository<CourseType> courseTypesRepository)
+            IDeletableEntityRepository<CourseType> courseTypesRepository,
+            ICourseTypeService courseTypeService)
         {
             this.dbContext = context;
             this.courseTypesRepository = courseTypesRepository;
+            this.courseTypeService = courseTypeService;
         }
 
         // GET: Administration/CourseTypes
         public async Task<IActionResult> Index()
         {
-            var courseTypes = this.courseTypesRepository.All()
-                .Include(x => x.Language)
-                .Include(x => x.Level)
-                .Select(x => new CourseTypeViewModel
-                {
-                    Id = x.Id,
-                    Name = $"{x.Language.Name} - {x.Level.Name}",
-                });
+            var courseTypeViewModels = this.courseTypeService.AllCourseTypes();
 
-            return this.View(await courseTypes.ToListAsync());
+            return this.View(await courseTypeViewModels.ToListAsync());
         }
 
         // GET: Administration/CourseTypes/Details/5
@@ -147,15 +144,13 @@
                 return this.NotFound();
             }
 
-            courseType.Resources.Add(resource);
+            courseType.Resources.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = courseType.Id });
             await this.dbContext.SaveChangesAsync();
 
             return this.RedirectToAction(nameof(this.Index));
         }
 
         // POST: Administration/CourseTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LanguageId,LevelId,Description,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] CourseType courseType)
@@ -203,7 +198,8 @@
             var courseType = await this.dbContext.CourseTypes
                 .Include(c => c.Language)
                 .Include(c => c.Level)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(c => c.Resources)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (courseType == null)
             {
                 return this.NotFound();
@@ -219,8 +215,9 @@
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var courseType = await this.dbContext.CourseTypes.FindAsync(id);
-            this.dbContext.CourseTypes.Remove(courseType);
-            await this.dbContext.SaveChangesAsync();
+            //this.dbContext.CourseTypes.Remove(courseType);
+            this.courseTypesRepository.Delete(courseType);
+            await this.courseTypesRepository.SaveChangesAsync();
             return this.RedirectToAction(nameof(this.Index));
         }
 

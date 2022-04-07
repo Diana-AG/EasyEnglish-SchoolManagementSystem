@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Languages;
+    using Microsoft.EntityFrameworkCore;
 
     public class LanguagesService : ILanguagesService
     {
@@ -27,19 +29,39 @@
             return languages;
         }
 
+        public async Task CreateLanguageAsync(LanguageInputModel input)
+        {
+            var language = new Language { Name = input.Name };
+
+            await this.languagesRepository.AddAsync(language);
+            await this.languagesRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var language = await this.GetLanguageByIdAsync(id);
+            this.languagesRepository.Delete(language);
+            await this.languagesRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
         {
-            return this.languagesRepository.AllAsNoTracking().Select(x => new
+            return this.languagesRepository.All().Select(x => new
             {
                 x.Id,
                 x.Name,
             }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
-        public LanguageViewModel GetLanguageViewModelById(int? id)
+        public async Task<Language> GetLanguageByIdAsync(int id)
+        {
+            return await this.languagesRepository.All().Include(x => x.Teachers).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<LanguageViewModel> GetLanguageViewModelByIdAsync(int id)
         {
 
-            var language = this.AllLanguages().FirstOrDefault(x => x.Id == id);
+            var language = await this.AllLanguages().FirstOrDefaultAsync(x => x.Id == id);
 
             return language;
         }

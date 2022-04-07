@@ -31,7 +31,7 @@
         // GET: Administration/Resources
         public async Task<IActionResult> Index()
         {
-            var viewModels = await this.dataRepository.AllAsNoTracking()
+            var viewModels = await this.dataRepository.All()
                 .Select(x => new ResourceWiewModel
                 {
                     Id = x.Id,

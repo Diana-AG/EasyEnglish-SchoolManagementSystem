@@ -17,7 +17,7 @@
 
         public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
         {
-            return this.teachersRepository.AllAsNoTracking()
+            return this.teachersRepository.All()
                 .OrderBy(x => x.FullName)
                 .Select(x => new
                 {

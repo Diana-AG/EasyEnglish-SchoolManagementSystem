@@ -6,7 +6,6 @@
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
-    using EasyEnglish.Web.ViewModels.Administration.Courses;
     using EasyEnglish.Web.ViewModels.Administration.Levels;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -17,7 +16,8 @@
         private readonly IDeletableEntityRepository<Level> dataRepository;
         private readonly ILevelsService levelService;
 
-        public LevelsController(IDeletableEntityRepository<Level> dataRepository,
+        public LevelsController(
+            IDeletableEntityRepository<Level> dataRepository,
             ILevelsService levelService)
         {
             this.dataRepository = dataRepository;
@@ -41,16 +41,15 @@
         // POST: Administration/Levels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Level level)
+        public async Task<IActionResult> Create(LevelInputModel input)
         {
             if (this.ModelState.IsValid)
             {
-                await this.dataRepository.AddAsync(level);
-                await this.dataRepository.SaveChangesAsync();
+                await this.levelService.CreateLevelAsync(input);
                 return this.RedirectToAction(nameof(this.Index));
             }
 
-            return this.View(level);
+            return this.View(input);
         }
 
         // GET: Administration/Levels/Edit/5
@@ -115,14 +114,13 @@
                 return this.NotFound();
             }
 
-            var level = await this.dataRepository.All()
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (level == null)
+            var levelViewModel = await this.levelService.GetLevelViewModelByIdAsync((int)id);
+            if (levelViewModel == null)
             {
                 return this.NotFound();
             }
 
-            return this.View(level);
+            return this.View(levelViewModel);
         }
 
         // POST: Administration/Levels/Delete/5
@@ -131,9 +129,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var level = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            this.dataRepository.Delete(level);
-            await this.dataRepository.SaveChangesAsync();
+            await this.levelService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
         }
 
