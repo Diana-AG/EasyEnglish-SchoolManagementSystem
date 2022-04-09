@@ -1,6 +1,8 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
 {
-    using System.Collections.Generic;
+    using AutoMapper;
+    using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
 
     public class CourseAddStudentViewModel
     {
@@ -8,7 +10,7 @@
 
         public string StudentId { get; set; }
 
-        public string StudentName { get; set; }
+        public string StudentFullName { get; set; }
 
         public string StudentEmail { get; set; }
     }

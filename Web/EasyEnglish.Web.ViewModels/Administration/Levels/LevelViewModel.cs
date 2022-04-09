@@ -1,6 +1,9 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Levels
 {
-    public class LevelViewModel
+    using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
+
+    public class LevelViewModel : IMapFrom<Level>
     {
         public int Id { get; set; }
 

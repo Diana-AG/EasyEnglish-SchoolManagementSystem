@@ -1,6 +1,9 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Languages
 {
-    public class LanguageViewModel
+    using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
+
+    public class LanguageViewModel : IMapFrom<Language>
     {
         public int Id { get; set; }
 

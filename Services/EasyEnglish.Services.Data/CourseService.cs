@@ -84,20 +84,19 @@
             return courses;
         }
 
-        public IEnumerable<T> AllStudents<T>(int id)
+        public IEnumerable<CourseAddStudentViewModel> AllStudents(int id)
         {
             var students = this.usersRepository.All()
                 .Where(x => !x.StudentCourses.Any(sc => sc.Id == id))
                 .OrderBy(x => x.FullName)
-                .To<T>().ToList();
-
-                // .Select(x => new CourseAddStudentViewModel
-                // {
-                //    CourseId = (int)id,
-                //    StudentId = x.Id,
-                //    StudentName = x.FullName,
-                //    StudentEmail = x.Email,
-                // });
+                 .Select(x => new CourseAddStudentViewModel
+                 {
+                     CourseId = id,
+                     StudentId = x.Id,
+                     StudentFullName = x.FullName,
+                     StudentEmail = x.Email,
+                 })
+                 .ToList();
             return students;
         }
 
@@ -126,8 +125,8 @@
 
         public async Task AddStudentAsync(CourseStudentInputModel input)
         {
-            var course = this.GetById<Course>((int)input.CourseId);
-            var student = this.GetById<ApplicationUser>(input.StudentId);
+            var course = this.coursesRepository.All().FirstOrDefault(x => x.Id == (int)input.CourseId);
+            var student = this.usersRepository.All().FirstOrDefault(x => x.Id == input.StudentId);
 
             if (!course.Students.Any(x => x.Id == student.Id))
             {
@@ -140,8 +139,8 @@
 
         public async Task RemoveStudentAsync(CourseStudentInputModel input)
         {
-            var course = this.GetById<Course>((int)input.CourseId);
-            var student = this.GetById<ApplicationUser>(input.StudentId);
+            var course = this.coursesRepository.All().Include(x => x.Students).FirstOrDefault(x => x.Id == (int)input.CourseId);
+            var student = this.usersRepository.All().FirstOrDefault(x => x.Id == input.StudentId);
 
             if (course.Students.Any(x => x.Id == student.Id))
             {

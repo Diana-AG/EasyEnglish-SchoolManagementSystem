@@ -27,9 +27,9 @@
         // GET: Administration/Languages
         public async Task<IActionResult> Index()
         {
-            var languageViewModels = this.languagesService.AllLanguages();
+            var languageViewModels = this.languagesService.GetAll<LanguageViewModel>();
 
-            return this.View(await languageViewModels.ToListAsync());
+            return this.View(languageViewModels);
         }
 
         // GET: Administration/Languages/Create
@@ -112,7 +112,7 @@
                 return this.NotFound();
             }
 
-            var languageViewModel = await this.languagesService.GetLanguageViewModelByIdAsync((int)id);
+            var languageViewModel = await this.languagesService.GetByIdAsync<LanguageViewModel>((int)id);
             if (languageViewModel == null)
             {
                 return this.NotFound();

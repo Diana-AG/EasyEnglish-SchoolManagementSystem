@@ -27,9 +27,9 @@
         // GET: Administration/Levels
         public async Task<IActionResult> Index()
         {
-            var levelViewModels = this.levelService.AllLevels();
+            var levelViewModels = this.levelService.GetAll<LevelViewModel>();
 
-            return this.View(await levelViewModels.ToListAsync());
+            return this.View(levelViewModels);
         }
 
         // GET: Administration/Levels/Create
@@ -114,7 +114,7 @@
                 return this.NotFound();
             }
 
-            var levelViewModel = await this.levelService.GetLevelViewModelByIdAsync((int)id);
+            var levelViewModel = await this.levelService.GetByIdAsync<LevelViewModel>((int)id);
             if (levelViewModel == null)
             {
                 return this.NotFound();

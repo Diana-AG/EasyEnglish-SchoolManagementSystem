@@ -11,13 +11,13 @@
     {
         IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair();
 
-        IQueryable<LevelViewModel> AllLevels();
+        IEnumerable<T> GetAll<T>();
 
         Task CreateLevelAsync(LevelInputModel input);
 
         Task<Level> GetLevelByIdAsync(int id);
 
-        Task<LevelViewModel> GetLevelViewModelByIdAsync(int id);
+        Task<T> GetByIdAsync<T>(int id);
 
         Task DeleteAsync(int id);
     }

@@ -155,9 +155,9 @@
                 return this.NotFound();
             }
 
-            var students = this.courseService.AllStudents<CourseAddStudentViewModel>((int)id);
+            var viewModel = this.courseService.AllStudents((int)id);
 
-            return this.View(students);
+            return this.View(viewModel);
         }
 
         // POST: Administration/Courses/AddStudent
@@ -170,8 +170,8 @@
                 return this.NotFound();
             }
 
-            var course = this.courseService.GetById<Course>((int)input.CourseId);
-            var student = this.courseService.GetById<ApplicationUser>(input.StudentId);
+            var course = this.courseService.GetById<CourseViewModel>((int)input.CourseId);
+            var student = this.courseService.GetById<StudentViewModel>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();
@@ -196,8 +196,8 @@
                 return this.NotFound();
             }
 
-            var course = this.courseService.GetById<Course>((int)input.CourseId);
-            var student = this.courseService.GetById<ApplicationUser>(input.StudentId);
+            var course = this.courseService.GetById<CourseViewModel>((int)input.CourseId);
+            var student = this.courseService.GetById<StudentViewModel>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();

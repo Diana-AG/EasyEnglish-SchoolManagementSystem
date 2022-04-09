@@ -61,7 +61,7 @@
             <h4>There are not any students in this class!</h4>
         </div>
     }
-    @*@if(Model.StudentsCount != 0)
+    @if(Model.StudentsCount != 0)
     {
         <div>
             <h4> Students in this class:</h4>
@@ -69,7 +69,7 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Students.First().Name)
+                            @Html.DisplayNameFor(model => model.Students.First().FullName)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Students.First().Email)
@@ -83,7 +83,7 @@
                         <form method="post">
                             <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Name)
+                                @Html.DisplayFor(modelItem => item.FullName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Email)
@@ -101,7 +101,7 @@
                 </tbody>
             </table>            
         </div>
-    }*@
+    }
     <div>    
         <a asp-action="AddStudent" asp-route-id="@Model.Id">Add Student</a> |
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

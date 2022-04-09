@@ -6,6 +6,7 @@
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
     using EasyEnglish.Web.ViewModels.Administration.Levels;
     using Microsoft.EntityFrameworkCore;
 
@@ -18,15 +19,11 @@
             this.levelsRepository = levelsRepository;
         }
 
-        public IQueryable<LevelViewModel> AllLevels()
+        public IEnumerable<T> GetAll<T>()
         {
             var levels = this.levelsRepository.All()
                 .OrderBy(x => x.Name)
-                .Select(x => new LevelViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                });
+                .To<T>().ToList();
 
             return levels;
         }
@@ -48,9 +45,13 @@
             }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
-        public async Task<LevelViewModel> GetLevelViewModelByIdAsync(int id)
+        public async Task<T> GetByIdAsync<T>(int id)
         {
-            return await this.AllLevels().FirstOrDefaultAsync(x => x.Id == id);
+            var level = await this.levelsRepository.AllAsNoTracking()
+                           .Where(x => x.Id == id)
+                           .To<T>().FirstOrDefaultAsync();
+
+            return level;
         }
 
         public async Task<Level> GetLevelByIdAsync(int id)

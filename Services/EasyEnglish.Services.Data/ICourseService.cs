@@ -27,6 +27,6 @@
 
         Task RemoveStudentAsync(CourseStudentInputModel input);
 
-        IEnumerable<T> AllStudents<T>(int id);
+        IEnumerable<CourseAddStudentViewModel> AllStudents(int id);
     }
 }

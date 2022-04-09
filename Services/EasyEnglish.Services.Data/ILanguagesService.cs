@@ -11,13 +11,13 @@
     {
         IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair();
 
-        IQueryable<LanguageViewModel> AllLanguages();
-
-        Task<LanguageViewModel> GetLanguageViewModelByIdAsync(int id);
+        IEnumerable<T> GetAll<T>();
 
         Task CreateLanguageAsync(LanguageInputModel input);
 
         Task<Language> GetLanguageByIdAsync(int id);
+
+        Task<T> GetByIdAsync<T>(int id);
 
         Task DeleteAsync(int id);
     }

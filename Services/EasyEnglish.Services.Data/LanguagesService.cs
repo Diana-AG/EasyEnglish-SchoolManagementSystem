@@ -6,6 +6,7 @@
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
     using EasyEnglish.Web.ViewModels.Administration.Languages;
     using Microsoft.EntityFrameworkCore;
 
@@ -16,19 +17,6 @@
         public LanguagesService(IDeletableEntityRepository<Language> languagesRepository)
         {
             this.languagesRepository = languagesRepository;
-        }
-
-        public IQueryable<LanguageViewModel> AllLanguages()
-        {
-            var languages = this.languagesRepository.All()
-                .OrderBy(x => x.Name)
-                .Select(x => new LanguageViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                });
-
-            return languages;
         }
 
         public async Task CreateLanguageAsync(LanguageInputModel input)
@@ -60,12 +48,22 @@
             return await this.languagesRepository.All().Include(x => x.Teachers).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<LanguageViewModel> GetLanguageViewModelByIdAsync(int id)
+        public async Task<T> GetByIdAsync<T>(int id)
         {
-
-            var language = await this.AllLanguages().FirstOrDefaultAsync(x => x.Id == id);
+            var language = await this.languagesRepository.AllAsNoTracking()
+                           .Where(x => x.Id == id)
+                           .To<T>().FirstOrDefaultAsync();
 
             return language;
+        }
+
+        public IEnumerable<T> GetAll<T>()
+        {
+            var languages = this.languagesRepository.All()
+                .OrderBy(x => x.Name)
+                .To<T>().ToList();
+
+            return languages;
         }
     }
 }
