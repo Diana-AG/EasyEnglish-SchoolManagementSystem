@@ -22,11 +22,6 @@
         [Range(typeof(decimal), "0.01", "10000000")]
         public decimal Price { get; set; }
 
-        [Display(Name = "Teacher")]
-        public string TeacherId { get; set; }
-
-        public ApplicationUser Teacher { get; set; }
-
         [Display(Name = "Language-Level")]
         public int CourseTypeId { get; set; }
 
@@ -38,7 +33,5 @@
         public string Description { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
-
-        public IEnumerable<KeyValuePair<string, string>> TeachersItems { get; set; }
     }
 }

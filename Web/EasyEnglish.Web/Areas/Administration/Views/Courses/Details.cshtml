@@ -28,10 +28,10 @@
             @Html.DisplayFor(model => model.Price)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Teacher)
+            @Html.DisplayNameFor(model => model.TeacherFullName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Teacher)
+            @Html.DisplayFor(model => model.TeacherFullName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CourseType)
@@ -61,7 +61,7 @@
             <h4>There are not any students in this class!</h4>
         </div>
     }
-    @if(Model.StudentsCount != 0)
+    @*@if(Model.StudentsCount != 0)
     {
         <div>
             <h4> Students in this class:</h4>
@@ -101,7 +101,7 @@
                 </tbody>
             </table>            
         </div>
-    }
+    }*@
     <div>    
         <a asp-action="AddStudent" asp-route-id="@Model.Id">Add Student</a> |
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

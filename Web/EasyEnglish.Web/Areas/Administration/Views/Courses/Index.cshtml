@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Courses.CourseViewModel>
+﻿@model EasyEnglish.Web.ViewModels.Administration.Courses.CourseListViewModel
 
 @{
     ViewData["Title"] = "Courses";
@@ -12,62 +12,52 @@
 <table class="table table-hover table-striped">
     <thead>
         <tr>
+            
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                @Html.DisplayNameFor(model => model.Courses.First().CourseType)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Courses.First().StudentsCount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
+                @Html.DisplayNameFor(model => model.Courses.First().Students)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
+                @Html.DisplayNameFor(model => model.Courses.First().Description)
+            </th>           
             <th>
-                @Html.DisplayNameFor(model => model.Teacher)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StudentsCount)
+                @Html.DisplayNameFor(model => model.Courses.First().TeacherFullName)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Teacher)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StudentsCount)
-        </td>
-        <td>
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-            <a asp-action="AddStudent" asp-route-id="@item.Id">Add Student</a>
-        </td>
-    </tr>
-}
+        @foreach (var item in Model.Courses)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseType)
+                </td>                
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentsCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Students)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TeacherFullName)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-action="AddStudent" asp-route-id="@item.Id">Add Student</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<partial name="_PagingPartial" model="@Model" />

@@ -43,14 +43,13 @@
                 Url = input.Url,
             };
 
-            //foreach (var inputCourseTypes in input.CourseTypes)
-            //{
+            // foreach (var inputCourseTypes in input.CourseTypes)
+            // {
             //    var courseType = this.courseTypesRespository.All().FirstOrDefault(x => x.Description == inputCourseTypes.Description);
 
-            //    //Add logic when courseType doesnt exist
+            // //Add logic when courseType doesnt exist
             //    resource.CourseTypes.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = courseType.Id });
-            //}
-
+            // }
             await this.resourcesRepository.AddAsync(resource);
             await this.resourcesRepository.SaveChangesAsync();
         }

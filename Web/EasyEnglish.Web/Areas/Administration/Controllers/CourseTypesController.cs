@@ -83,13 +83,13 @@
                 return this.NotFound();
             }
 
-            //if (this.courseTypeService.CourseTypeExists(input.LanguageId, input.LevelId))
-            //{
+            // if (this.courseTypeService.CourseTypeExists(input.LanguageId, input.LevelId))
+            // {
             //    //return message "Course Type with this language and this level already exist" redirect Details/courseTypeId
             //    input.LevelsItems = this.levelsService.GetAllAsKeyValuePair();
             //    input.LanguagesItems = this.languagesService.GetAllAsKeyValuePair();
             //    return this.View(input);
-            //}
+            // }
             if (this.ModelState.IsValid && !this.courseTypeService.CourseTypeExists(input.LanguageId, input.LevelId))
             {
                 await this.courseTypeService.CreateCourseAsync(input);

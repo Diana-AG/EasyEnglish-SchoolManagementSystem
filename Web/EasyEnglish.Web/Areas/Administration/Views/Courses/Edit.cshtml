@@ -1,10 +1,8 @@
-﻿@*@model EasyEnglish.Data.Models.Course*@
-@model EasyEnglish.Web.ViewModels.Administration.Courses.CourseViewModel
+﻿@model EasyEnglish.Web.ViewModels.Administration.Courses.EditCourseInputModel
 
 @{
     ViewData["Title"] = "Edit Course";
-    //var teachersItems = this.Model.TeachersItems.Select(x => new SelectListItem(x.Value, x.Key));
-    //var courseTypesItems = this.Model.CourseTypeItems.Select(x => new SelectListItem(x.Value, x.Key));
+    var courseTypesItems = this.Model.CourseTypeItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 <h1>@this.ViewData["Title"]</h1>
@@ -28,16 +26,10 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="@Model.Teacher.Id" class="control-label"></label>
-                <select asp-for="@Model.Teacher.Id" class="form-control" asp-items="teachersItems"></select>
-                <span asp-validation-for="@Model.Teacher.Id" class="text-danger"></span>
+             <div class="form-group">
+                <label asp-for="CourseTypeId" class="control-label"></label>
+                <select asp-for="CourseTypeId" class ="form-control" asp-items="courseTypesItems"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="@Model.CourseType.Id" class="control-label"></label>
-                <select asp-for="@Model.CourseType.Id" class="form-control" asp-items="courseTypesItems"></select>
-                <span asp-validation-for="@Model.CourseType.Id" class="text-danger"></span>
-            </div>*@
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />

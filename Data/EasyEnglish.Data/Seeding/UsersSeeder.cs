@@ -11,7 +11,7 @@
         {
             await dbContext.Users.AddAsync(new ApplicationUser
             {
-                FullName = "Plovdiv",
+                FullName = "Full Name",
                 AddressText = "Plovdiv, 1 Test Str.",
                 BirthDate = DateTime.Now,
                 Email = "testUser@easyengish.com",

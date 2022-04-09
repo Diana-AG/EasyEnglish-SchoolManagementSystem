@@ -1,26 +1,16 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     using AutoMapper;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Mapping;
 
-    public class CourseViewModel : IMapFrom<Course>, IHaveCustomMappings
+    public class CourseInListViewModel : IMapFrom<Course>, IHaveCustomMappings
     {
         public int Id { get; set; }
-
-        [Display(Name = "Start Date")]
-        [DataType(DataType.Date)]
-        public DateTime StartDate { get; set; }
-
-        [Display(Name = "End Date")]
-        [DataType(DataType.Date)]
-        public DateTime? EndDate { get; set; }
-
-        public decimal Price { get; set; }
 
         [Display(Name = "Teacher")]
         public string TeacherFullName { get; set; }
@@ -28,8 +18,8 @@
         [Display(Name = "Course Type")]
         public string CourseType { get; set; }
 
-        //[Display(Name = "Students")]
-        //public IEnumerable<StudentViewModel> Students { get; set; }
+        [Display(Name = "Students")]
+        public string Students { get; set; }
 
         [Required]
         [MinLength(4)]
@@ -41,13 +31,13 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Course, CourseViewModel>()
+            configuration.CreateMap<Course, CourseInListViewModel>()
                   .ForMember(x => x.CourseType, options =>
                       options.MapFrom(x => $"{x.CourseType.Language.Name} - {x.CourseType.Level.Name}"))
                   .ForMember(x => x.StudentsCount, options =>
-                      options.MapFrom(x => x.Students.Count));
-                  //.ForMember(x => x.Students, options =>
-                  //    options.MapFrom();
+                      options.MapFrom(x => x.Students.Count))
+                  .ForMember(x => x.Students, options =>
+                      options.MapFrom(x => string.Join(", ", x.Students.Select(x => x.FullName))));
         }
     }
 }

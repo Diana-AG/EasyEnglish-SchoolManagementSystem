@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -8,24 +9,24 @@
 
     public interface ICourseService
     {
-        Task CreateCourseAsync(CourseInputModel input);
+        Task CreateAsync(CourseInputModel input, string userId);
 
-        Task EditCourseAsync(CourseInputModel input);
+        IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12);
 
-        Task AddStudentAsync(CourseStudentInputModel input);
+        int GetCount();
+
+        T GetById<T>(int id);
+
+        T GetById<T>(string id);
 
         Task DeleteAsync(int id);
 
+        Task UpdateAsync(int id, EditCourseInputModel input);
+
+        Task AddStudentAsync(CourseStudentInputModel input);
+
         Task RemoveStudentAsync(CourseStudentInputModel input);
 
-        IQueryable<CourseViewModel> AllCourses();
-
-        IQueryable<CourseAddStudentViewModel> AllStudents(int id);
-
-        Task<Course> GetCourseByIdAsync(int id);
-
-        Task<ApplicationUser> GetUserByIdAsync(string id);
-
-        Task<CourseViewModel> GetCourseViewModelByIdAsync(int? id);
+        IEnumerable<T> AllStudents<T>(int id);
     }
 }

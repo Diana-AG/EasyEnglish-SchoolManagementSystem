@@ -1,55 +1,62 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
+    using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
     public class CoursesController : AdministratorController
     {
-        // private readonly IDeletableEntityRepository<Course> coursesRepository;
-        // private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
-        // private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly ICourseService courseService;
         private readonly ITeachersService teachersService;
         private readonly ICourseTypeService courseTypeService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public CoursesController(
-            // IDeletableEntityRepository<Course> coursesRepository,
-            // IDeletableEntityRepository<CourseType> courseTypesRepository,
-            // IDeletableEntityRepository<ApplicationUser> usersRepository,
             ICourseService courseService,
             ITeachersService teachersService,
-            ICourseTypeService courseTypeService)
+            ICourseTypeService courseTypeService,
+            UserManager<ApplicationUser> userManager)
         {
-            // this.coursesRepository = coursesRepository;
-            // this.courseTypesRepository = courseTypesRepository;
-            // this.usersRepository = usersRepository;
             this.courseService = courseService;
             this.teachersService = teachersService;
             this.courseTypeService = courseTypeService;
+            this.userManager = userManager;
         }
 
         // GET: Administration/Courses
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int id = 1)
         {
-            var courses = this.courseService.AllCourses();
+            if (id < 1)
+            {
+                return this.NotFound();
+            }
 
-            return this.View(await courses.ToListAsync());
+            const int ItemsPerPage = 8;
+            var viewModel = new CourseListViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                CoursesCount = this.courseService.GetCount(),
+                Courses = this.courseService.GetAll<CourseInListViewModel>(id, ItemsPerPage),
+            };
+
+            return this.View(viewModel);
         }
 
         // GET: Administration/Courses/Create
         public IActionResult Create()
         {
-            var input = new CourseInputModel();
+            var viewModel = new CourseInputModel();
+            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
-            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
-
-            return this.View(input);
+            return this.View(viewModel);
         }
 
         // POST: Administration/Courses/Create
@@ -57,17 +64,29 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CourseInputModel input)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                await this.courseService.CreateCourseAsync(input);
+                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
-                return this.RedirectToAction(nameof(this.Index));
+                return this.View(input);
             }
 
-            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            var user = await this.userManager.GetUserAsync(this.User);
 
-            return this.View(input);
+            try
+            {
+                await this.courseService.CreateAsync(input, user.Id);
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                return this.View(input);
+            }
+
+            this.TempData["Message"] = "Course added successfully.";
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Administration/Courses/Details/5
@@ -78,7 +97,7 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseService.GetCourseViewModelByIdAsync(id);
+            var course = this.courseService.GetById<CourseViewModel>((int)id);
 
             if (course == null)
             {
@@ -96,57 +115,36 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseService.GetCourseByIdAsync((int)id);
+            var course = this.courseService.GetById<EditCourseInputModel>((int)id);
             if (course == null)
             {
                 return this.NotFound();
             }
 
-            var viewModel = await this.courseService.GetCourseViewModelByIdAsync(id);
-            //viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            //viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
-
-            // this.ViewData["CourseTypeItems"] = new SelectList(this.courseTypesRepository.All(), "Id", "Description", course.CourseTypeId);
-            // this.ViewData["TeacherItems"] = new SelectList(this.usersRepository.All(), "Id", "FullName", course.TeacherId);
-
+            var viewModel = this.courseService.GetById<EditCourseInputModel>((int)id);
+            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
             return this.View(viewModel);
         }
 
         // POST: Administration/Courses/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CourseInputModel input)
+        public async Task<IActionResult> Edit(int id, EditCourseInputModel input)
         {
             if (id != input.Id)
             {
                 return this.NotFound();
             }
 
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                try
-                {
-                    await this.courseService.EditCourseAsync(input);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (await this.courseService.GetCourseByIdAsync(id) == null)
-                    {
-                        return this.NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
-                return this.RedirectToAction(nameof(this.Details), new { Id = id });
+                return this.View(input);
             }
 
-            input.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
-
-            return this.View(input);
+            await this.courseService.UpdateAsync(id, input);
+            return this.RedirectToAction(nameof(this.Details), new { Id = id });
         }
 
         // GET: Administration/Courses/AddStudent/5
@@ -157,9 +155,9 @@
                 return this.NotFound();
             }
 
-            var students = this.courseService.AllStudents((int)id);
+            var students = this.courseService.AllStudents<CourseAddStudentViewModel>((int)id);
 
-            return this.View(await students.ToListAsync());
+            return this.View(students);
         }
 
         // POST: Administration/Courses/AddStudent
@@ -172,8 +170,8 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseService.GetCourseByIdAsync((int)input.CourseId);
-            var student = await this.courseService.GetUserByIdAsync(input.StudentId);
+            var course = this.courseService.GetById<Course>((int)input.CourseId);
+            var student = this.courseService.GetById<ApplicationUser>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();
@@ -198,8 +196,8 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseService.GetCourseByIdAsync((int)input.CourseId);
-            var student = await this.courseService.GetUserByIdAsync(input.StudentId);
+            var course = this.courseService.GetById<Course>((int)input.CourseId);
+            var student = this.courseService.GetById<ApplicationUser>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();
@@ -222,7 +220,7 @@
                 return this.NotFound();
             }
 
-            var course = await this.courseService.GetCourseViewModelByIdAsync(id);
+            var course = this.courseService.GetById<CourseViewModel>((int)id);
             if (course == null)
             {
                 return this.NotFound();
