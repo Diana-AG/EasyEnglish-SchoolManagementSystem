@@ -39,7 +39,7 @@
                 .Select(x => new ResourceViewModel
                 {
                     Id = x.Id,
-                    Description = x.Description,
+                    Description = x.Name,
                     Url = x.Url,
                 }).ToListAsync();
 

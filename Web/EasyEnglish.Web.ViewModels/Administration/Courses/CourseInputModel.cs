@@ -19,8 +19,10 @@
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 
-        [Range(typeof(decimal), "0.01", "10000000")]
-        public decimal Price { get; set; }
+        [Display(Name = "Training Form")]
+        public int TrainingFormId { get; set; }
+
+        public TrainingForm TrainingForm { get; set; }
 
         [Display(Name = "Language-Level")]
         public int CourseTypeId { get; set; }
@@ -33,5 +35,7 @@
         public string Description { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
+
+        public IEnumerable<KeyValuePair<string, string>> TrainingFormsItems { get; set; }
     }
 }

@@ -20,10 +20,11 @@
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
 
-        public decimal Price { get; set; }
-
         [Display(Name = "Teacher")]
-        public string TeacherFullName { get; set; }
+        public string TeacherName { get; set; }
+
+        [Display(Name = "Training Form")]
+        public string TrainingFormName { get; set; }
 
         [Display(Name = "Course Type")]
         public string CourseType { get; set; }

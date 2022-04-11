@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Edit Course";
     var courseTypesItems = this.Model.CourseTypeItems.Select(x => new SelectListItem(x.Value, x.Key));
+    var trainingFormsItems = this.Model.TrainingFormsItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 <h1>@this.ViewData["Title"]</h1>
@@ -22,13 +23,12 @@
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-             <div class="form-group">
                 <label asp-for="CourseTypeId" class="control-label"></label>
                 <select asp-for="CourseTypeId" class ="form-control" asp-items="courseTypesItems"></select>
+            </div>
+             <div class="form-group">
+                <label asp-for="TrainingFormId" class="control-label"></label>
+                <select asp-for="TrainingFormId" class ="form-control" asp-items="trainingFormsItems"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>

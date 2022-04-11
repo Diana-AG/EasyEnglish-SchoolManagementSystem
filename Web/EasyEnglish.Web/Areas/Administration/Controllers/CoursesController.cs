@@ -16,17 +16,20 @@
         private readonly ICourseService courseService;
         private readonly ITeachersService teachersService;
         private readonly ICourseTypeService courseTypeService;
+        private readonly ITrainingFormsService trainingFormsService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public CoursesController(
             ICourseService courseService,
             ITeachersService teachersService,
             ICourseTypeService courseTypeService,
+            ITrainingFormsService trainingFormsService,
             UserManager<ApplicationUser> userManager)
         {
             this.courseService = courseService;
             this.teachersService = teachersService;
             this.courseTypeService = courseTypeService;
+            this.trainingFormsService = trainingFormsService;
             this.userManager = userManager;
         }
 
@@ -55,6 +58,7 @@
         {
             var viewModel = new CourseInputModel();
             viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            viewModel.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
 
             return this.View(viewModel);
         }
@@ -67,6 +71,7 @@
             if (!this.ModelState.IsValid)
             {
                 input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                input.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
 
                 return this.View(input);
             }
@@ -81,6 +86,7 @@
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
                 input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                input.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
                 return this.View(input);
             }
 
@@ -123,6 +129,7 @@
 
             var viewModel = this.courseService.GetById<EditCourseInputModel>((int)id);
             viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            viewModel.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
             return this.View(viewModel);
         }
 
@@ -139,6 +146,7 @@
             if (!this.ModelState.IsValid)
             {
                 input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                input.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
 
                 return this.View(input);
             }

@@ -35,7 +35,7 @@ namespace EasyEnglish.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        public string FullName { get; set; }
+        public string Name { get; set; }
 
         public string AddressText { get; set; }
 

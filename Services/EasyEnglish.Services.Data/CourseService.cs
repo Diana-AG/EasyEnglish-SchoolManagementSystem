@@ -31,8 +31,8 @@
             {
                 StartDate = input.StartDate,
                 EndDate = input.EndDate,
-                Price = input.Price,
                 TeacherId = userId,
+                TrainingFormId = input.TrainingFormId,
                 CourseTypeId = input.CourseTypeId,
                 Description = input.Description,
             };
@@ -63,19 +63,19 @@
                 //    Price = c.Price,
                 //    Description = c.Description,
                 //    CourseType = $"{c.CourseType.Language.Name} - {c.CourseType.Level.Name}",
-                //    Teacher = c.Teacher.FullName,
+                //    Teacher = c.Teacher.Name,
                 //    Students = c.Students
-                //    .OrderBy(s => s.FullName)
+                //    .OrderBy(s => s.Name)
                 //    .Select(s => new StudentViewModel
                 //    {
                 //        Id = s.Id,
                 //        Email = s.Email,
-                //        Name = s.FullName,
+                //        Name = s.Name,
                 //        BirthDate = (DateTime)s.BirthDate,
                 //    }),
                 //    StudentsCount = c.Students.Count(),
                 // });
-                .OrderBy(x => x.Teacher.FullName)
+                .OrderBy(x => x.Teacher.Name)
                 .ThenBy(x => x.CourseType.Language.Name)
                 .ThenBy(x => x.CourseType.Level.Name)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
@@ -88,15 +88,16 @@
         {
             var students = this.usersRepository.All()
                 .Where(x => !x.StudentCourses.Any(sc => sc.Id == id))
-                .OrderBy(x => x.FullName)
-                 .Select(x => new CourseAddStudentViewModel
-                 {
-                     CourseId = id,
-                     StudentId = x.Id,
-                     StudentFullName = x.FullName,
-                     StudentEmail = x.Email,
-                 })
-                 .ToList();
+                .OrderBy(x => x.Name)
+                .Select(x => new CourseAddStudentViewModel
+                {
+                    CourseId = id,
+                    StudentId = x.Id,
+                    StudentName = x.Name,
+                    StudentEmail = x.Email,
+                })
+                .ToList();
+
             return students;
         }
 
@@ -156,7 +157,7 @@
             var course = this.coursesRepository.All().FirstOrDefault(x => x.Id == id);
             course.StartDate = input.StartDate;
             course.EndDate = input.EndDate;
-            course.Price = input.Price;
+            course.TrainingFormId = input.TrainingFormId;
             course.CourseTypeId = input.CourseTypeId;
             course.Description = input.Description;
 

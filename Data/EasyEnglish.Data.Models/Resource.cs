@@ -8,12 +8,18 @@
     {
         public Resource()
         {
+            this.Images = new HashSet<Image>();
+            this.Homeworks = new HashSet<Homework>();
             this.CourseTypes = new HashSet<ResourceCourseType>();
         }
 
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         public string Url { get; set; }
+
+        public virtual ICollection<Image> Images { get; set; }
+
+        public virtual ICollection<Homework> Homeworks { get; set; }
 
         public virtual ICollection<ResourceCourseType> CourseTypes { get; set; }
     }

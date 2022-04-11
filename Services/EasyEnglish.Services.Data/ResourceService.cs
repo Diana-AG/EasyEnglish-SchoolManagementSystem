@@ -28,7 +28,7 @@
                 .Select(x => new ResourceViewModel
                 {
                     Id = x.Id,
-                    Description = x.Description,
+                    Description = x.Name,
                     Url = x.Url,
                 });
 
@@ -39,7 +39,7 @@
         {
             var resource = new Resource
             {
-                Description = input.Description,
+                Name = input.Description,
                 Url = input.Url,
             };
 

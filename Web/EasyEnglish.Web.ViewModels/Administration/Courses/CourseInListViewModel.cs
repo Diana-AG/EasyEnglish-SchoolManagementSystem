@@ -13,10 +13,13 @@
         public int Id { get; set; }
 
         [Display(Name = "Teacher")]
-        public string TeacherFullName { get; set; }
+        public string TeacherName { get; set; }
 
         [Display(Name = "Course Type")]
         public string CourseType { get; set; }
+
+        [Display(Name = "Training Form")]
+        public string TrainingFormName { get; set; }
 
         [Display(Name = "Students")]
         public string Students { get; set; }
@@ -37,7 +40,7 @@
                   .ForMember(x => x.StudentsCount, options =>
                       options.MapFrom(x => x.Students.Count))
                   .ForMember(x => x.Students, options =>
-                      options.MapFrom(x => string.Join(", ", x.Students.Select(x => x.FullName))));
+                      options.MapFrom(x => string.Join(", ", x.Students.Select(x => x.Name))));
         }
     }
 }

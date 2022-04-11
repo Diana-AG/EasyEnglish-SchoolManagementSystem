@@ -32,6 +32,7 @@
                               new LevelsSeeder(),
                               new SettingsSeeder(),
                               new TownsSeeder(),
+                              new TrainingFormsSeeder(),
                           };
 
             foreach (var seeder in seeders)

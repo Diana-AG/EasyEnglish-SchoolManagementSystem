@@ -3,11 +3,11 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class TeacherViewModel 
+    public class TeacherViewModel
     {
         public string Id { get; set; }
 
         [Display(Name = "Teacher")]
-        public string FullName { get; set; }
+        public string Name { get; set; }
     }
 }

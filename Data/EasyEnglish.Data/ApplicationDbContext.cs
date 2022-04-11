@@ -36,6 +36,8 @@
 
         public DbSet<Currency> Currencies { get; set; }
 
+        public DbSet<Homework> Homeworks { get; set; }
+
         public DbSet<Image> Images { get; set; }
 
         public DbSet<Language> Languages { get; set; }
@@ -43,6 +45,8 @@
         public DbSet<Level> Levels { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<Price> Prices { get; set; }
 
         public DbSet<Resource> Resources { get; set; }
 
@@ -53,6 +57,8 @@
         public DbSet<TeacherRequest> TeacherRequests { get; set; }
 
         public DbSet<Town> Towns { get; set; }
+
+        public DbSet<TrainingForm> TrainingForms { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

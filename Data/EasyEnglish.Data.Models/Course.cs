@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     using EasyEnglish.Data.Common.Models;
 
@@ -10,17 +9,19 @@
     {
         public Course()
         {
-            this.Students = new HashSet<ApplicationUser>();
             this.Comments = new HashSet<Comment>();
             this.Payments = new HashSet<Payment>();
+            this.Homeworks = new HashSet<Homework>();
+            this.Students = new HashSet<ApplicationUser>();
         }
 
         public DateTime StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
+        public int TrainingFormId { get; set; }
+
+        public virtual TrainingForm TrainingForm { get; set; }
 
         public string TeacherId { get; set; }
 
@@ -32,10 +33,12 @@
 
         public string Description { get; set; }
 
-        public virtual ICollection<ApplicationUser> Students { get; set; }
-
         public virtual ICollection<Comment> Comments { get; set; }
 
         public virtual ICollection<Payment> Payments { get; set; }
+
+        public virtual ICollection<Homework> Homeworks { get; set; }
+
+        public virtual ICollection<ApplicationUser> Students { get; set; }
     }
 }

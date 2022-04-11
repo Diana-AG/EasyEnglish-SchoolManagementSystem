@@ -18,12 +18,12 @@
         public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
         {
             return this.teachersRepository.All()
-                .OrderBy(x => x.FullName)
+                .OrderBy(x => x.Name)
                 .Select(x => new
                 {
                     x.Id,
-                    x.FullName,
-                }).ToList().Select(x => new KeyValuePair<string, string>(x.Id, x.FullName));
+                    x.Name,
+                }).ToList().Select(x => new KeyValuePair<string, string>(x.Id, x.Name));
         }
     }
 }

@@ -8,6 +8,7 @@
     {
         public CourseType()
         {
+            this.Prices = new HashSet<Price>();
             this.Courses = new HashSet<Course>();
             this.Resources = new HashSet<ResourceCourseType>();
         }
@@ -22,6 +23,8 @@
         public virtual Level Level { get; set; }
 
         public string Description { get; set; }
+
+        public virtual ICollection<Price> Prices { get; set; }
 
         public virtual ICollection<Course> Courses { get; set; }
 

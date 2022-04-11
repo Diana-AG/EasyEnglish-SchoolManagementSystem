@@ -70,7 +70,7 @@
 
             [Display(Name = "Full name")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
-            public string FullName { get; set; }
+            public string Name { get; set; }
 
             [Required]
             [Display(Name = "Address")]
@@ -111,7 +111,7 @@
                 {
                     UserName = this.Input.Email,
                     Email = this.Input.Email,
-                    FullName = this.Input.FullName,
+                    Name = this.Input.Name,
                     AddressText = $"{this.Input.Address}, {this.Input.Town}, {this.Input.Country}",
                     Gender = this.Input.Gender,
                     BirthDate = this.Input.BirthDate,
