@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -8,27 +9,19 @@
 
     public interface IResourceService
     {
-        Task CreateAsync(ResourceInputModel input);
-
-        // string userId, string imagePath);
+        Task CreateAsync(ResourceInputModel input, string userId, string imagePath);
 
         // IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12);
 
         // IEnumerable<T> GetRandom<T>(int count);
 
-        // int GetCount();
+        int GetCount();
 
-        // T GetById<T>(int id);
-
-        // Task UpdateAsync(int id, EditRecipeInputModel input);
+        Task<T> GetByIdAsync<T>(int id);
 
         // IEnumerable<T> GetByIngredients<T>(IEnumerable<int> ingredientIds);
-        IQueryable<ResourceViewModel> AllResources();
+        ResourceViewModel AllResources();
 
         Task DeleteAsync(int id);
-
-        Task<Resource> GetResourceByIdAsync(int id);
-
-        Task<ResourceViewModel> GetResourceViewModelByIdAsync(int id);
     }
 }

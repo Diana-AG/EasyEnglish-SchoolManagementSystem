@@ -1,24 +1,25 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Resources
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
+    using Microsoft.AspNetCore.Http;
 
-    public class ResourceInputModel
+    public class ResourceInputModel : IMapTo<Resource>
     {
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         public string Url { get; set; }
 
+        [Display(Name = "Language-Level")]
+        public int CourseTypeIds { get; set; }
+
+        [DisplayName("")]
+        public IEnumerable<IFormFile> Images { get; set; }
+
         public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
-    }
-
-    public class ResourceCourseTypeInputModel
-    {
-        public int ID { get; set; }
-
-        public string Description { get; set; }
-
-        public bool Checked { get; set; }
     }
 }

@@ -65,6 +65,7 @@
                 await this._context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             this.ViewData["UserId"] = new SelectList(this._context.Users, "Id", "Id", teacherRequest.UserId);
             return this.View(teacherRequest);
         }
@@ -82,6 +83,7 @@
             {
                 return this.NotFound();
             }
+
             this.ViewData["UserId"] = new SelectList(this._context.Users, "Id", "Id", teacherRequest.UserId);
             return this.View(teacherRequest);
         }
@@ -116,8 +118,10 @@
                         throw;
                     }
                 }
+
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             this.ViewData["UserId"] = new SelectList(this._context.Users, "Id", "Id", teacherRequest.UserId);
             return this.View(teacherRequest);
         }

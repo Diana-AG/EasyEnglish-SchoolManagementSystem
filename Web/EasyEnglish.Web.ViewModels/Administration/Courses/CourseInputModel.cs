@@ -9,7 +9,6 @@
 
     public class CourseInputModel
     {
-        public int Id { get; set; }
 
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]

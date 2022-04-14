@@ -97,7 +97,7 @@
             }
 
             input.LevelsItems = this.levelsService.GetAllAsKeyValuePair();
-            input.LanguagesItems = this.languagesService.GetAllAsKeyValuePair(); 
+            input.LanguagesItems = this.languagesService.GetAllAsKeyValuePair();
             return this.View(input);
         }
 

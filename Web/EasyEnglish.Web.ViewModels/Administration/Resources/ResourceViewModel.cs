@@ -1,11 +1,17 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Resources
 {
-    public class ResourceViewModel
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
+    using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
+
+    public class ResourceViewModel : IMapFrom<Resource>
     {
-        public int Id { get; set; }
+        [Display(Name = "Remote Urls")]
+        public ICollection<ResourceUrlViewModel> ResourceUrls { get; set; }
 
-        public string Description { get; set; }
-
-        public string Url { get; set; }
+        [Display(Name = "Download Files")]
+        public ICollection<ResourceFileViewModel> ResourceFiles { get; set; }
     }
 }

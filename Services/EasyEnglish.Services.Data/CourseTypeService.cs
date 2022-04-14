@@ -30,7 +30,7 @@
                     Id = x.Id,
                     Language = x.Language.Name,
                     Level = x.Level.Name,
-                    Description = x.Description
+                    Description = x.Description,
                 });
 
             return courseTypes;

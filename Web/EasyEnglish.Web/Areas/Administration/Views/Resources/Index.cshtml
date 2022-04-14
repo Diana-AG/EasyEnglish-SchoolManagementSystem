@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Resources.ResourceViewModel>
+﻿@model EasyEnglish.Web.ViewModels.Administration.Resources.ResourceViewModel
 
 @{
     ViewData["Title"] = "Resources";
@@ -9,34 +9,53 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">Add Resource</a>
 </p>
+<hr />
+<h4>@Html.DisplayNameFor(Model => Model.ResourceUrls)</h4>
+<hr />
 <table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Url)
-            </th>            
-            <th></th>
-        </tr>
+    <thead>   
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.ResourceUrls)
         {
+            <form method="post">
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
+                    <a href="@item.Url" target="_blank">@item.Name</a>
+                </td>                
                 <td>
-                    @Html.DisplayFor(modelItem => item.Url)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <input type="text" hidden id="id" name="Id" value="@item.Id" />
+                    <div>
+                        <button type="submit" asp-action="Delete" class="btn btn-primary">Delete</button>
+                    </div>
                 </td>
             </tr>
+            </form>
+        }
+    </tbody>
+</table>
+<hr />
+<h4>@Html.DisplayNameFor(Model => Model.ResourceFiles)</h4>
+<hr />
+<table class="table table-hover table-striped">
+    <thead>   
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ResourceFiles)
+        {
+            <form method="post">
+            <tr>
+                <td>
+                    <a href="@item.Name">@item.Name</a>
+                </td>                
+                <td>
+                    <input type="text" hidden id="id" name="Id" value="@item.Id" />
+                    <div>
+                        <button type="submit" asp-action="Download" class="btn btn-primary">Download</button>
+                    </div>
+                </td>
+            </tr>
+            </form>
         }
     </tbody>
 </table>

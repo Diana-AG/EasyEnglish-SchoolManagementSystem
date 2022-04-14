@@ -66,13 +66,13 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetCountsService, GetCountsService>();
+            services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ILevelsService, LevelsService>();
+            services.AddTransient<IAddressService, AddressService>();
+            services.AddTransient<IResourceService, ResourceService>();
             services.AddTransient<ITeachersService, TeachersService>();
             services.AddTransient<ILanguagesService, LanguagesService>();
             services.AddTransient<ICurrenciesService, CurrenciesService>();
-            services.AddTransient<IAddressService, AddressService>();
-            services.AddTransient<IResourceService, ResourceService>();
-            services.AddTransient<ICourseService, CourseService>();
             services.AddTransient<ICourseTypeService, CourseTypeService>();
             services.AddTransient<ITrainingFormsService, TrainingFormsService>();
         }

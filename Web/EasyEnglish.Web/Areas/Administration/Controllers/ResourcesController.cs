@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -8,8 +9,11 @@
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Administration.Resources;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
@@ -17,17 +21,23 @@
     {
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly IDeletableEntityRepository<Resource> dataRepository;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IWebHostEnvironment environment;
         private readonly IResourceService resourceService;
         private readonly ICourseTypeService courseTypeService;
 
         public ResourcesController(
             IDeletableEntityRepository<CourseType> courseTypesRepository,
             IDeletableEntityRepository<Resource> dataRepository,
+            UserManager<ApplicationUser> userManager,
+            IWebHostEnvironment environment,
             IResourceService resourceService,
             ICourseTypeService courseTypeService)
         {
             this.courseTypesRepository = courseTypesRepository;
             this.dataRepository = dataRepository;
+            this.userManager = userManager;
+            this.environment = environment;
             this.resourceService = resourceService;
             this.courseTypeService = courseTypeService;
         }
@@ -35,142 +45,67 @@
         // GET: Administration/Resources
         public async Task<IActionResult> Index()
         {
-            var viewModels = await this.dataRepository.All()
-                .Select(x => new ResourceViewModel
-                {
-                    Id = x.Id,
-                    Description = x.Name,
-                    Url = x.Url,
-                }).ToListAsync();
+            var viewModel = this.resourceService.AllResources();
 
-            return this.View(viewModels);
-        }
-
-        // GET: Administration/Resources/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var resource = await this.resourceService.GetResourceByIdAsync((int)id);
-            if (resource == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View(resource);
+            return this.View(viewModel);
         }
 
         // GET: Administration/Resources/Create
         public IActionResult Create()
         {
-            var input = new ResourceInputModel();
-            input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            var viewModel = new ResourceInputModel();
+            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
-            return this.View(input);
+            return this.View(viewModel);
         }
 
         // POST: Administration/Resources/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ResourceInputModel input)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                await this.resourceService.CreateAsync(input);
-
-                return this.RedirectToAction(nameof(this.Index));
+                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                return this.View(input);
             }
 
-            return this.View(input);
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            try
+            {
+                await this.resourceService.CreateAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.View(input);
+            }
+
+            // TODO: Redirect to resource details page
+            return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/Resources/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var resource = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            if (resource == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View(resource);
-        }
-
-        // POST: Administration/Resources/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Description,Url,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Resource resource)
+        public FileResult Download(int id)
         {
-            if (id != resource.Id)
-            {
-                return this.NotFound();
-            }
+            var resource = this.dataRepository.All().Include(x => x.Images).FirstOrDefault(x => x.Id == id);
+            var image = resource.Images.FirstOrDefault();
 
-            if (this.ModelState.IsValid)
-            {
-                try
-                {
-                    this.dataRepository.Update(resource);
-                    await this.dataRepository.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!this.ResourceExists(resource.Id))
-                    {
-                        return this.NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            return this.View(resource);
-        }
-
-        // GET: Administration/Resources/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var resourceViewModel = await this.resourceService.GetResourceViewModelByIdAsync((int)id);
-            if (resourceViewModel == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View(resourceViewModel);
+            string fileName = $"{image.Id}.{image.Extension}";
+            string phisicalPath = $"{this.environment.WebRootPath}/images/resources/{fileName}";
+            string contentType;
+            new FileExtensionContentTypeProvider().TryGetContentType(fileName, out contentType);
+            return this.PhysicalFile(phisicalPath, contentType, $"{resource.Name}.{image.Extension}");
         }
 
         // POST: Administration/Resources/Delete/5
         [HttpPost]
-        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             await this.resourceService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
-        }
-
-        private bool ResourceExists(int id)
-        {
-            return this.dataRepository.All().Any(x => x.Id == id);
         }
     }
 }
