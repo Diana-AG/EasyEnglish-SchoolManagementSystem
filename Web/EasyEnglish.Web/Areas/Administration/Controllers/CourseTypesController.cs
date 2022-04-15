@@ -9,6 +9,7 @@
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Areas.Administration.ViewModels;
     using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
+    using EasyEnglish.Web.ViewModels.Administration.Languages;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -76,7 +77,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CourseTypeInputModel input)
         {
-            var language = await this.languagesService.GetLanguageByIdAsync(input.LanguageId);
+            var language = await this.languagesService.GetByIdAsync<LanguageViewModel>(input.LanguageId);
             var level = await this.levelsService.GetLevelByIdAsync(input.LevelId);
             if (language == null || level == null)
             {

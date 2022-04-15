@@ -51,8 +51,6 @@
                 Courses = this.courseService.GetAll<CourseInListViewModel>(id, ItemsPerPage),
             };
 
-            // this.ViewData[MessageConstant.SuccessMessage] = "Hello!";
-
             return this.View(viewModel);
         }
 

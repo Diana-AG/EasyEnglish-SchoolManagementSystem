@@ -48,33 +48,12 @@
             await this.coursesRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12)
+        public IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 8)
         {
             var courses = this.coursesRepository.AllAsNoTracking()
                 .Include(c => c.CourseType)
                 .Include(c => c.Teacher)
                 .Include(c => c.Students)
-
-                // .Select(c => new CourseInListViewModel
-                // {
-                //    Id = c.Id,
-                //    StartDate = c.StartDate,
-                //    EndDate = c.EndDate,
-                //    Price = c.Price,
-                //    Description = c.Description,
-                //    CourseType = $"{c.CourseType.Language.Name} - {c.CourseType.Level.Name}",
-                //    Teacher = c.Teacher.Name,
-                //    Students = c.Students
-                //    .OrderBy(s => s.Name)
-                //    .Select(s => new StudentViewModel
-                //    {
-                //        Id = s.Id,
-                //        Email = s.Email,
-                //        Name = s.Name,
-                //        BirthDate = (DateTime)s.BirthDate,
-                //    }),
-                //    StudentsCount = c.Students.Count(),
-                // });
                 .OrderBy(x => x.Teacher.Name)
                 .ThenBy(x => x.CourseType.Language.Name)
                 .ThenBy(x => x.CourseType.Level.Name)

@@ -19,33 +19,11 @@
             this.languagesRepository = languagesRepository;
         }
 
-        public async Task CreateLanguageAsync(LanguageInputModel input)
-        {
-            var language = new Language { Name = input.Name };
-
-            await this.languagesRepository.AddAsync(language);
-            await this.languagesRepository.SaveChangesAsync();
-        }
-
         public async Task DeleteAsync(int id)
         {
-            var language = await this.GetLanguageByIdAsync(id);
+            var language = await this.languagesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
             this.languagesRepository.Delete(language);
             await this.languagesRepository.SaveChangesAsync();
-        }
-
-        public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
-        {
-            return this.languagesRepository.All().Select(x => new
-            {
-                x.Id,
-                x.Name,
-            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
-        }
-
-        public async Task<Language> GetLanguageByIdAsync(int id)
-        {
-            return await this.languagesRepository.All().Include(x => x.Teachers).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<T> GetByIdAsync<T>(int id)
@@ -57,13 +35,38 @@
             return language;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public async Task<IEnumerable<T>> GetAllAsync<T>()
         {
-            var languages = this.languagesRepository.All()
+            var languages = await this.languagesRepository.All()
                 .OrderBy(x => x.Name)
-                .To<T>().ToList();
+                .To<T>().ToListAsync();
 
             return languages;
+        }
+
+        public async Task CreateAsync(LanguageInputModel input)
+        {
+            var language = new Language { Name = input.Name };
+
+            await this.languagesRepository.AddAsync(language);
+            await this.languagesRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(int id, EditLanguageInputModel input)
+        {
+            var language = this.languagesRepository.All().FirstOrDefault(x => x.Id == id);
+            language.Name = input.Name;
+
+            await this.languagesRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
+        {
+            return this.languagesRepository.All().Select(x => new
+            {
+                x.Id,
+                x.Name,
+            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
     }
 }

@@ -4,8 +4,6 @@
 
     public class CourseTypeInputModel
     {
-        public int Id { get; set; }
-
         public int LanguageId { get; set; }
 
         public int LevelId { get; set; }

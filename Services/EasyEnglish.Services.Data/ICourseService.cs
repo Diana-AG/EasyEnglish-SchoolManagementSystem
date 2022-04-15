@@ -11,7 +11,7 @@
     {
         Task CreateAsync(CourseInputModel input, string userId);
 
-        IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12);
+        IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 8);
 
         int GetCount();
 

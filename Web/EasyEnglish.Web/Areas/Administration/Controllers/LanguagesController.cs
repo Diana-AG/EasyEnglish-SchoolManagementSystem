@@ -6,6 +6,7 @@
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
+    using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.Languages;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -13,21 +14,18 @@
     [Area("Administration")]
     public class LanguagesController : AdministratorController
     {
-        private readonly IDeletableEntityRepository<Language> dataRepository;
         private readonly ILanguagesService languagesService;
 
         public LanguagesController(
-            IDeletableEntityRepository<Language> dataRepository,
             ILanguagesService languagesService)
         {
-            this.dataRepository = dataRepository;
             this.languagesService = languagesService;
         }
 
         // GET: Administration/Languages
         public async Task<IActionResult> Index()
         {
-            var languageViewModels = this.languagesService.GetAll<LanguageViewModel>();
+            var languageViewModels = await this.languagesService.GetAllAsync<LanguageViewModel>();
 
             return this.View(languageViewModels);
         }
@@ -40,27 +38,21 @@
 
         // POST: Administration/Languages/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LanguageInputModel input)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                await this.languagesService.CreateLanguageAsync(input);
-                return this.RedirectToAction(nameof(this.Index));
+                return this.View(input);
             }
 
-            return this.View(input);
+            await this.languagesService.CreateAsync(input);
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Administration/Languages/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var language = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            var language = await this.languagesService.GetByIdAsync<EditLanguageInputModel>(id);
             if (language == null)
             {
                 return this.NotFound();
@@ -71,69 +63,43 @@
 
         // POST: Administration/Languages/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Language language)
+        public async Task<IActionResult> Edit(int id, EditLanguageInputModel input)
         {
-            if (id != language.Id)
+            if (id != input.Id)
             {
                 return this.NotFound();
             }
 
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                try
-                {
-                    this.dataRepository.Update(language);
-                    await this.dataRepository.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!this.LanguageExists(language.Id))
-                    {
-                        return this.NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return this.RedirectToAction(nameof(this.Index));
+                return this.View(input);
             }
 
-            return this.View(language);
+            await this.languagesService.UpdateAsync(id, input);
+            return this.RedirectToAction(nameof(this.Index), new { Id = id });
         }
 
         // GET: Administration/Languages/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            var language = await this.languagesService.GetByIdAsync<LanguageViewModel>(id);
+            if (language == null)
             {
                 return this.NotFound();
             }
 
-            var languageViewModel = await this.languagesService.GetByIdAsync<LanguageViewModel>((int)id);
-            if (languageViewModel == null)
-            {
-                return this.NotFound();
-            }
+            this.ViewData[MessageConstant.WarningMessage] = "Please, be careful! Deletion may result in data loss";
 
-            return this.View(languageViewModel);
+            return this.View(language);
         }
 
         // POST: Administration/Languages/Delete/5
         [HttpPost]
         [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await this.languagesService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
-        }
-
-        private bool LanguageExists(int id)
-        {
-            return this.dataRepository.All().Any(x => x.Id == id);
         }
     }
 }
