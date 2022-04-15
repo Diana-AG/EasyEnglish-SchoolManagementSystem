@@ -58,6 +58,13 @@
         "css/all.css",
         "css/all.min.css"
       ]
+    },
+    {
+      "library": "toastr@2.1.4",
+      "destination": "wwwroot/lib/toastr/",
+      "files": [
+        
+      ]
     }
   ]
 }
