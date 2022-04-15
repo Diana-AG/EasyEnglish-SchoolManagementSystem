@@ -17,7 +17,8 @@
         "dist/css/bootstrap.css",
         "dist/css/bootstrap.min.css",
         "dist/js/bootstrap.js",
-        "dist/js/bootstrap.min.js"
+        "dist/js/bootstrap.min.js",
+        "dist/js/bootstrap.bundle.min.js"
       ]
     },
     {
@@ -63,7 +64,10 @@
       "library": "toastr@2.1.4",
       "destination": "wwwroot/lib/toastr/",
       "files": [
-        
+        "build/toastr.css",
+        "build/toastr.min.css",
+        "build/toastr.min.js",
+        "build/toastr.js.map"
       ]
     }
   ]

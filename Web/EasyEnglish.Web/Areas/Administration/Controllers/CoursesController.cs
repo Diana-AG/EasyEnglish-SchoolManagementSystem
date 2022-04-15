@@ -5,6 +5,7 @@
 
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
+    using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,8 @@
                 Courses = this.courseService.GetAll<CourseInListViewModel>(id, ItemsPerPage),
             };
 
+            // this.ViewData[MessageConstant.SuccessMessage] = "Hello!";
+
             return this.View(viewModel);
         }
 
@@ -90,7 +93,7 @@
                 return this.View(input);
             }
 
-            this.TempData["Message"] = "Course added successfully.";
+            this.ViewData[MessageConstant.SuccessMessage] = "Course added successfully.";
 
             return this.RedirectToAction(nameof(this.Index));
         }

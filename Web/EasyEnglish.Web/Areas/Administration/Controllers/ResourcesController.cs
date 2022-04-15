@@ -8,6 +8,7 @@
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
+    using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.Resources;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -81,6 +82,8 @@
                 this.ModelState.AddModelError(string.Empty, ex.Message);
                 return this.View(input);
             }
+
+            this.ViewData[MessageConstant.SuccessMessage] = "Resource added successfully.";
 
             // TODO: Redirect to resource details page
             return this.RedirectToAction(nameof(this.Index));
