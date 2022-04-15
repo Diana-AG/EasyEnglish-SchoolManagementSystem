@@ -19,30 +19,11 @@
             this.levelsRepository = levelsRepository;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public async Task DeleteAsync(int id)
         {
-            var levels = this.levelsRepository.All()
-                .OrderBy(x => x.Name)
-                .To<T>().ToList();
-
-            return levels;
-        }
-
-        public async Task CreateLevelAsync(LevelInputModel input)
-        {
-            var level = new Level { Name = input.Name };
-
-            await this.levelsRepository.AddAsync(level);
+            var level = await this.levelsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            this.levelsRepository.Delete(level);
             await this.levelsRepository.SaveChangesAsync();
-        }
-
-        public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
-        {
-            return this.levelsRepository.All().Select(x => new
-            {
-                x.Id,
-                x.Name,
-            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
         public async Task<T> GetByIdAsync<T>(int id)
@@ -54,16 +35,38 @@
             return level;
         }
 
-        public async Task<Level> GetLevelByIdAsync(int id)
+        public async Task<IEnumerable<T>> GetAllAsync<T>()
         {
-            return await this.levelsRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            var levels = await this.levelsRepository.AllAsNoTracking()
+                .OrderBy(x => x.Name)
+                .To<T>().ToListAsync();
+
+            return levels;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task CreateAsync(LevelInputModel input)
         {
-            var level = await this.GetLevelByIdAsync(id);
-            this.levelsRepository.Delete(level);
+            var level = new Level { Name = input.Name };
+
+            await this.levelsRepository.AddAsync(level);
             await this.levelsRepository.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(int id, EditLevelInputModel input)
+        {
+            var level = this.levelsRepository.All().FirstOrDefault(x => x.Id == id);
+            level.Name = input.Name;
+
+            await this.levelsRepository.SaveChangesAsync();
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair()
+        {
+            return this.levelsRepository.All().Select(x => new
+            {
+                x.Id,
+                x.Name,
+            }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
     }
 }

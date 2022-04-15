@@ -76,7 +76,7 @@
             }
 
             await this.languagesService.UpdateAsync(id, input);
-            return this.RedirectToAction(nameof(this.Index), new { Id = id });
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Administration/Languages/Delete/5

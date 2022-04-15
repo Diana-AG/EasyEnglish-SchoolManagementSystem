@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     public class CourseTypeInputModel
-    {
+    { 
         public int LanguageId { get; set; }
 
         public int LevelId { get; set; }

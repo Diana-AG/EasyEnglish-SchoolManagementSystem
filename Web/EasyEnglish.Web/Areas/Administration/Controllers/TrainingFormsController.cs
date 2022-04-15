@@ -71,7 +71,7 @@
             }
 
             await this.trainingFormsService.UpdateAsync(id, input);
-            return this.RedirectToAction(nameof(this.Index), new { Id = id });
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Administration/TrainingForms/Delete/5

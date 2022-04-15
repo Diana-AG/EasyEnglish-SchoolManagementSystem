@@ -6,6 +6,7 @@
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
+    using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.Levels;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -13,21 +14,18 @@
     [Area("Administration")]
     public class LevelsController : AdministratorController
     {
-        private readonly IDeletableEntityRepository<Level> dataRepository;
-        private readonly ILevelsService levelService;
+        private readonly ILevelsService levelsService;
 
         public LevelsController(
-            IDeletableEntityRepository<Level> dataRepository,
-            ILevelsService levelService)
+            ILevelsService levelsService)
         {
-            this.dataRepository = dataRepository;
-            this.levelService = levelService;
+            this.levelsService = levelsService;
         }
 
         // GET: Administration/Levels
         public async Task<IActionResult> Index()
         {
-            var levelViewModels = this.levelService.GetAll<LevelViewModel>();
+            var levelViewModels = await this.levelsService.GetAllAsync<LevelViewModel>();
 
             return this.View(levelViewModels);
         }
@@ -40,27 +38,21 @@
 
         // POST: Administration/Levels/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LevelInputModel input)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                await this.levelService.CreateLevelAsync(input);
-                return this.RedirectToAction(nameof(this.Index));
+                return this.View(input);
             }
 
-            return this.View(input);
+            await this.levelsService.CreateAsync(input);
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Administration/Levels/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var level = await this.dataRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            var level = await this.levelsService.GetByIdAsync<EditLevelInputModel>(id);
             if (level == null)
             {
                 return this.NotFound();
@@ -70,72 +62,44 @@
         }
 
         // POST: Administration/Levels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,IsDeleted,DeletedOn,Id,CreatedOn,ModifiedOn")] Level level)
+        public async Task<IActionResult> Edit(int id, EditLevelInputModel input)
         {
-            if (id != level.Id)
+            if (id != input.Id)
             {
                 return this.NotFound();
             }
 
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                try
-                {
-                    this.dataRepository.Update(level);
-                    await this.dataRepository.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!this.LevelExists(level.Id))
-                    {
-                        return this.NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return this.RedirectToAction(nameof(this.Index));
+                return this.View(input);
             }
 
-            return this.View(level);
+            await this.levelsService.UpdateAsync(id, input);
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Administration/Levels/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            var level = await this.levelsService.GetByIdAsync<LevelViewModel>(id);
+            if (level == null)
             {
                 return this.NotFound();
             }
 
-            var levelViewModel = await this.levelService.GetByIdAsync<LevelViewModel>((int)id);
-            if (levelViewModel == null)
-            {
-                return this.NotFound();
-            }
+            this.ViewData[MessageConstant.WarningMessage] = "Please, be careful! Deletion may result in data loss";
 
-            return this.View(levelViewModel);
+            return this.View(level);
         }
 
         // POST: Administration/Levels/Delete/5
         [HttpPost]
         [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await this.levelService.DeleteAsync(id);
+            await this.levelsService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
-        }
-
-        private bool LevelExists(int id)
-        {
-            return this.dataRepository.All().Any(x => x.Id == id);
         }
     }
 }
