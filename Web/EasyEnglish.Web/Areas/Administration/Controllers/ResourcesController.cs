@@ -62,7 +62,6 @@
 
         // POST: Administration/Resources/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ResourceInputModel input)
         {
             if (!this.ModelState.IsValid)

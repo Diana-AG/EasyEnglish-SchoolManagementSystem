@@ -9,7 +9,6 @@
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
     public class CoursesController : AdministratorController
@@ -115,20 +114,15 @@
         }
 
         // GET: Administration/Courses/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var course = this.courseService.GetById<EditCourseInputModel>((int)id);
+            var course = this.courseService.GetById<EditCourseInputModel>(id);
             if (course == null)
             {
                 return this.NotFound();
             }
 
-            var viewModel = this.courseService.GetById<EditCourseInputModel>((int)id);
+            var viewModel = this.courseService.GetById<EditCourseInputModel>(id);
             viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
             viewModel.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
             return this.View(viewModel);
@@ -136,7 +130,6 @@
 
         // POST: Administration/Courses/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditCourseInputModel input)
         {
             if (id != input.Id)
@@ -171,7 +164,6 @@
 
         // POST: Administration/Courses/AddStudent
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddStudent(CourseStudentInputModel input)
         {
             if (input.CourseId == null || input.StudentId == null)
@@ -197,7 +189,6 @@
 
         // POST: Administration/Courses/RemoveStudent
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveStudent(CourseStudentInputModel input)
         {
             if (input.CourseId == null || input.StudentId == null)
@@ -241,7 +232,6 @@
         // POST: Administration/Courses/Delete/5
         [HttpPost]
         [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await this.courseService.DeleteAsync(id);

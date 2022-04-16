@@ -6,6 +6,7 @@
 
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
     using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
     using Microsoft.EntityFrameworkCore;
 
@@ -18,25 +19,35 @@
             this.courseTypesRepository = courseTypesRepository;
         }
 
-        public IQueryable<CourseTypeViewModel> AllCourseTypes()
+        public async Task DeleteAsync(int id)
         {
-            var courseTypes = this.courseTypesRepository.All()
+            var courseType = await this.courseTypesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            this.courseTypesRepository.Delete(courseType);
+            await this.courseTypesRepository.SaveChangesAsync();
+        }
+
+        public async Task<T> GetByIdAsync<T>(int id)
+        {
+            var courseType = await this.courseTypesRepository.AllAsNoTracking()
+                           .Where(x => x.Id == id)
+                           .To<T>().FirstOrDefaultAsync();
+
+            return courseType;
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync<T>()
+        {
+            var courseTypes = await this.courseTypesRepository.AllAsNoTracking()
                 .Include(x => x.Language)
                 .Include(x => x.Level)
                 .OrderBy(x => x.Language.Name)
                 .ThenBy(x => x.Level.Name)
-                .Select(x => new CourseTypeViewModel
-                {
-                    Id = x.Id,
-                    Language = x.Language.Name,
-                    Level = x.Level.Name,
-                    Description = x.Description,
-                });
+                .To<T>().ToListAsync();
 
             return courseTypes;
         }
 
-        public async Task CreateCourseAsync(CourseTypeInputModel input)
+        public async Task CreateAsync(CourseTypeInputModel input)
         {
             var courseType = new CourseType
             {
@@ -61,27 +72,13 @@
                 }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name));
         }
 
-        public async Task<CourseType> GetCourseTypeByIdAsync(int? id)
+        public async Task UpdateAsync(int id, EditCourseTypeInputModel input)
         {
-            return await this.courseTypesRepository.All().Include(x => x.Language).Include(x => x.Level).FirstOrDefaultAsync(x => x.Id == id);
-        }
+            var courseType = this.courseTypesRepository.All().FirstOrDefault(x => x.Id == id);
+            courseType.LanguageId = input.LanguageId;
+            courseType.LevelId = input.LevelId;
+            courseType.Description = input.Description;
 
-        public bool CourseTypeExists(int languageId, int levelId)
-        {
-            return this.courseTypesRepository.All().Any(x => x.LanguageId == languageId && x.LevelId == levelId);
-        }
-
-        public async Task<CourseTypeViewModel> GetCourseTypeViewModelByIdAsync(int id)
-        {
-            var course = await this.AllCourseTypes().FirstOrDefaultAsync(x => x.Id == id);
-
-            return course;
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var courseType = await this.GetCourseTypeByIdAsync(id);
-            this.courseTypesRepository.Delete(courseType);
             await this.courseTypesRepository.SaveChangesAsync();
         }
     }

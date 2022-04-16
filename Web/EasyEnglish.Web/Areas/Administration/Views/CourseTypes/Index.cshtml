@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Language)
+                @Html.DisplayNameFor(model => model.LanguageName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Level)
+                @Html.DisplayNameFor(model => model.LevelName)
             </th>
             <th></th>
         </tr>
@@ -26,10 +26,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Language)
+                    @Html.DisplayFor(modelItem => item.LanguageName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Level)
+                    @Html.DisplayFor(modelItem => item.LevelName)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

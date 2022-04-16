@@ -1,6 +1,5 @@
 ﻿namespace EasyEnglish.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -9,7 +8,6 @@
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Mapping;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
-    using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
     using Microsoft.EntityFrameworkCore;
 
     public class CourseService : ICourseService

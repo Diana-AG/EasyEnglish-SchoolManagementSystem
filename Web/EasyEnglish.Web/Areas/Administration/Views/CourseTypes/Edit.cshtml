@@ -1,7 +1,9 @@
-﻿@model EasyEnglish.Data.Models.CourseType
+﻿@model EasyEnglish.Web.ViewModels.Administration.CourseTypes.EditCourseTypeInputModel
 
 @{
     ViewData["Title"] = "Edit Course Type";
+    var levelsItems = this.Model.LevelsItems.Select(x => new SelectListItem(x.Value, x.Key));
+    var languagesItems = this.Model.LanguagesItems.Select(x => new SelectListItem(x.Value, x.Key));
 }
 
 <h1>@this.ViewData["Title"]</h1>
@@ -12,12 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="LanguageId" class="control-label"></label>
-                <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId"></select>
+                <select asp-for="LanguageId" class="form-control" asp-items="languagesItems"></select>
                 <span asp-validation-for="LanguageId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LevelId" class="control-label"></label>
-                <select asp-for="LevelId" class="form-control" asp-items="ViewBag.LevelId"></select>
+                <select asp-for="LevelId" class="form-control" asp-items="levelsItems"></select>
                 <span asp-validation-for="LevelId" class="text-danger"></span>
             </div>
             <div class="form-group">

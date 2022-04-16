@@ -83,7 +83,7 @@
                     var extension = Path.GetExtension(image.FileName).TrimStart('.');
                     if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
                     {
-                        throw new Exception($"Invalid image extension {extension}");
+                        throw new Exception($"Invalid file extension {extension}");
                     }
 
                     var dbImage = new Image

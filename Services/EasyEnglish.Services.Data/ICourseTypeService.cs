@@ -1,26 +1,22 @@
 ﻿namespace EasyEnglish.Services.Data
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
-    using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
 
     public interface ICourseTypeService
     {
-        IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair();
-
-        IQueryable<CourseTypeViewModel> AllCourseTypes();
-
-        Task<CourseTypeViewModel> GetCourseTypeViewModelByIdAsync(int id);
-
-        Task CreateCourseAsync(CourseTypeInputModel input);
-
         Task DeleteAsync(int id);
 
-        Task<CourseType> GetCourseTypeByIdAsync(int? id);
+        Task<T> GetByIdAsync<T>(int id);
 
-        bool CourseTypeExists(int languageId, int levelId);
+        Task<IEnumerable<T>> GetAllAsync<T>();
+
+        Task CreateAsync(CourseTypeInputModel input);
+
+        Task UpdateAsync(int id, EditCourseTypeInputModel input);
+
+        IEnumerable<KeyValuePair<string, string>> GetAllAsKeyValuePair();
     }
 }
