@@ -8,11 +8,10 @@
     using EasyEnglish.Services.Mapping;
     using Microsoft.AspNetCore.Http;
 
-    public class ResourceInputModel : IMapTo<Resource>
+    public class ResourceUploadFileInputModel : IMapTo<Resource>
     {
         public string Name { get; set; }
 
-        public string Url { get; set; }
 
         [Display(Name = "Language-Level")]
         public int CourseTypeId { get; set; }

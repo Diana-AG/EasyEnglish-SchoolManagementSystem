@@ -7,7 +7,10 @@
 <h1>@this.ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Add Resource</a>
+    <a asp-action="AddRemoteUrl" class="btn btn-primary">Add Remote Url</a>
+</p>
+<p>
+    <a asp-action="UploadFile" class="btn btn-primary">Upload File</a>
 </p>
 <hr />
 <h4>@Html.DisplayNameFor(Model => Model.ResourceUrls)</h4>
@@ -52,6 +55,12 @@
                     <input type="text" hidden id="id" name="Id" value="@item.Id" />
                     <div>
                         <button type="submit" asp-action="Download" class="btn btn-primary">Download</button>
+                    </div>                    
+                </td>
+                <td>
+                    <input type="text" hidden id="id" name="Id" value="@item.Id" />
+                    <div>
+                        <button type="submit" asp-action="Delete" class="btn btn-primary">Delete</button>
                     </div>
                 </td>
             </tr>

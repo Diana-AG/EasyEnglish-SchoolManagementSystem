@@ -1,15 +1,14 @@
 ﻿namespace EasyEnglish.Services.Data
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
-    using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Resources;
 
     public interface IResourceService
     {
-        Task CreateAsync(ResourceInputModel input, string userId, string imagePath);
+        Task AddRemoteUrlAsync(ResourceUrlInputModel input);
+
+        Task UploadFileAsync(ResourceUploadFileInputModel input, string userId, string imagePath);
 
         // IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12);
 

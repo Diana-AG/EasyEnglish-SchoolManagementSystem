@@ -15,13 +15,16 @@
     public class ResourceService : IResourceService
     {
         private readonly string[] allowedExtensions = new[] { "pdf", "doc", "docx", "docm", "ppt", "pptx", "jpg", "png" };
+        private readonly IDeletableEntityRepository<Image> imagesRespository;
         private readonly IDeletableEntityRepository<Resource> resourcesRepository;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRespository;
 
         public ResourceService(
+            IDeletableEntityRepository<Image> imagesRespository,
             IDeletableEntityRepository<Resource> resourcesRepository,
             IDeletableEntityRepository<CourseType> courseTypesRespository)
         {
+            this.imagesRespository = imagesRespository;
             this.resourcesRepository = resourcesRepository;
             this.courseTypesRespository = courseTypesRespository;
         }
@@ -58,12 +61,53 @@
             return resources;
         }
 
-        public async Task CreateAsync(ResourceInputModel input, string userId, string imagePath)
+        public async Task AddRemoteUrlAsync(ResourceUrlInputModel input)
         {
             var resource = new Resource
             {
                 Name = input.Name,
                 Url = input.Url,
+            };
+
+            resource.CourseTypes.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = input.CourseTypeId });
+
+            await this.resourcesRepository.AddAsync(resource);
+            await this.resourcesRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var resource = await this.resourcesRepository.All().Include(x => x.Images).FirstOrDefaultAsync(x => x.Id == id);
+            var image = resource.Images.FirstOrDefault();
+            if (image != null)
+            {
+                this.imagesRespository.Delete(image);
+                await this.imagesRespository.SaveChangesAsync();
+            }
+
+            this.resourcesRepository.Delete(resource);
+            await this.resourcesRepository.SaveChangesAsync();
+        }
+
+        public async Task<T> GetByIdAsync<T>(int id)
+        {
+            var resource = await this.resourcesRepository.AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .To<T>().FirstOrDefaultAsync();
+
+            return resource;
+        }
+
+        public int GetCount()
+        {
+            return this.resourcesRepository.All().Count();
+        }
+
+        public async Task UploadFileAsync(ResourceUploadFileInputModel input, string userId, string imagePath)
+        {
+            var resource = new Resource
+            {
+                Name = input.Name,
             };
 
             resource.CourseTypes.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = input.CourseTypeId });
@@ -98,27 +142,6 @@
 
             await this.resourcesRepository.AddAsync(resource);
             await this.resourcesRepository.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var resource = await this.resourcesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-            this.resourcesRepository.Delete(resource);
-            await this.resourcesRepository.SaveChangesAsync();
-        }
-
-        public async Task<T> GetByIdAsync<T>(int id)
-        {
-            var resource = await this.resourcesRepository.AllAsNoTracking()
-                .Where(x => x.Id == id)
-                .To<T>().FirstOrDefaultAsync();
-
-            return resource;
-        }
-
-        public int GetCount()
-        {
-            return this.resourcesRepository.All().Count();
         }
     }
 }

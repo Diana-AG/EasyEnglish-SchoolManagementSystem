@@ -52,9 +52,9 @@
         }
 
         // GET: Administration/Resources/Create
-        public IActionResult Create()
+        public IActionResult AddRemoteUrl()
         {
-            var viewModel = new ResourceInputModel();
+            var viewModel = new ResourceUrlInputModel();
             viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
 
             return this.View(viewModel);
@@ -62,7 +62,34 @@
 
         // POST: Administration/Resources/Create
         [HttpPost]
-        public async Task<IActionResult> Create(ResourceInputModel input)
+        public async Task<IActionResult> AddRemoteUrl(ResourceUrlInputModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                return this.View(input);
+            }
+
+            await this.resourceService.AddRemoteUrlAsync(input);
+
+            this.ViewData[MessageConstant.SuccessMessage] = "Resource added successfully.";
+
+            // TODO: Redirect to resource details page
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        // GET: Administration/Resources/Create
+        public IActionResult UploadFile()
+        {
+            var viewModel = new ResourceUploadFileInputModel();
+            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+
+            return this.View(viewModel);
+        }
+
+        // POST: Administration/Resources/Create
+        [HttpPost]
+        public async Task<IActionResult> UploadFile(ResourceUploadFileInputModel input)
         {
             if (!this.ModelState.IsValid)
             {
@@ -74,7 +101,7 @@
 
             try
             {
-                await this.resourceService.CreateAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
+                await this.resourceService.UploadFileAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
             }
             catch (Exception ex)
             {

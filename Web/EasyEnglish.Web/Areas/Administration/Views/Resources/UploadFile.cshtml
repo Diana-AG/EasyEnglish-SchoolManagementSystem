@@ -1,0 +1,41 @@
+﻿@model EasyEnglish.Web.ViewModels.Administration.Resources.ResourceUploadFileInputModel
+
+@{
+    ViewData["Title"] = "Create Resourse";
+    var courseTypesItems = this.Model.CourseTypeItems.Select(x => new SelectListItem(x.Value, x.Key));
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UploadFile" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Images"></label>
+                <input asp-for="Images" class="form-control" />
+                <span asp-validation-for="Images" class="text-danger"></span>
+            </div>
+           <div class="form-group">
+                <label asp-for="CourseTypeId" class="control-label"></label>
+                <select asp-for="CourseTypeId" class ="form-control" asp-items="courseTypesItems"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to All Resources</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
