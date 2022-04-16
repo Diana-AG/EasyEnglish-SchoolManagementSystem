@@ -66,13 +66,8 @@
                 Url = input.Url,
             };
 
-            // foreach (var inputCourseTypes in input.CourseTypes)
-            // {
-            //    var courseType = this.courseTypesRespository.All().FirstOrDefault(x => x.Description == inputCourseTypes.Description);
+            resource.CourseTypes.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = input.CourseTypeId });
 
-            // //Add logic when courseType doesnt exist
-            //    resource.CourseTypes.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = courseType.Id });
-            // }
 
             // /wwwroot/images/recipes/jhdsi-343g3h453-=g34g.jpg
             if (input.Images != null)
@@ -91,6 +86,7 @@
                         UserId = userId,
                         ResourceId = resource.Id,
                         Extension = extension,
+                        ContentType = image.ContentType,
                     };
                     resource.Images.Add(dbImage);
 

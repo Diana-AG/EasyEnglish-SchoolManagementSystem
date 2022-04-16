@@ -79,6 +79,7 @@
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
+                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
                 return this.View(input);
             }
 
@@ -96,8 +97,8 @@
 
             string fileName = $"{image.Id}.{image.Extension}";
             string phisicalPath = $"{this.environment.WebRootPath}/images/resources/{fileName}";
-            string contentType;
-            new FileExtensionContentTypeProvider().TryGetContentType(fileName, out contentType);
+            string contentType = image.ContentType;
+            // new FileExtensionContentTypeProvider().TryGetContentType(fileName, out contentType);
             return this.PhysicalFile(phisicalPath, contentType, $"{resource.Name}.{image.Extension}");
         }
 

@@ -15,7 +15,9 @@
         public string Url { get; set; }
 
         [Display(Name = "Language-Level")]
-        public int CourseTypeIds { get; set; }
+        public int CourseTypeId { get; set; }
+
+        public CourseType CourseType { get; set; }
 
         [DisplayName("")]
         public IEnumerable<IFormFile> Images { get; set; }

@@ -20,5 +20,7 @@
         public virtual Resource Resource { get; set; }
 
         public string Extension { get; set; }
+
+        public string ContentType { get; set; }
     }
 }
