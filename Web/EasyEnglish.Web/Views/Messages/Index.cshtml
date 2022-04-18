@@ -1,0 +1,13 @@
+﻿@model EasyEnglish.Web.ViewModels.Messages.MessageListViewModel
+
+@{
+    this.ViewData["Title"] = "Messages";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+
+@foreach (var message in this.Model.Messages)
+{
+    <div>@message.Description</div>
+}
+

@@ -1,6 +1,7 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
     using System.Threading.Tasks;
+
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Administration.Messages;
     using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,12 @@
         public MessagesController(IMessagesService messagesService)
         {
             this.messagesService = messagesService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var viewModel = await this.messagesService.GetAllAsync<MessageViewModel>();
+            return this.View(viewModel);
         }
 
         public IActionResult Add()
@@ -30,7 +37,14 @@
 
             await this.messagesService.AddAsync(input);
 
-            return this.View();
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.messagesService.DeleteAsync(id);
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

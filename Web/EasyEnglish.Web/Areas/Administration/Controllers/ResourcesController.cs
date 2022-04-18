@@ -128,7 +128,6 @@
 
         // POST: Administration/Resources/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             await this.resourceService.DeleteAsync(id);

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<EasyEnglish.Web.ViewModels.Administration.Messages.MessageViewModel>
+
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Add" class="btn btn-primary">Add Message</a>
+</p>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <form method="post">
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    <input type="text" hidden id="id" name="Id" value="@item.Id" />
+                    <div>
+                        <button type="submit" asp-action="Delete" class="btn btn-primary">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            </form>
+        }
+    </tbody>
+</table>
