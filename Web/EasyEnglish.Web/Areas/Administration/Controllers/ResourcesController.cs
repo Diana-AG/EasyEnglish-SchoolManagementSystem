@@ -46,7 +46,7 @@
         // GET: Administration/Resources
         public async Task<IActionResult> Index()
         {
-            var viewModel = this.resourceService.AllResources();
+            var viewModel = this.resourceService.GetAll();
 
             return this.View(viewModel);
         }
@@ -91,6 +91,7 @@
         [HttpPost]
         public async Task<IActionResult> UploadFile(ResourceUploadFileInputModel input)
         {
+
             if (!this.ModelState.IsValid)
             {
                 input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
@@ -132,6 +133,17 @@
         {
             await this.resourceService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult VerifyName(string name)
+        {
+            if (this.resourceService.NameExists(name))
+            {
+                return this.Json($"Resource {name} already exists.");
+            }
+
+            return this.Json(true);
         }
     }
 }

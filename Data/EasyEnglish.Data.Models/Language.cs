@@ -3,8 +3,9 @@
     using System.Collections.Generic;
 
     using EasyEnglish.Data.Common.Models;
+    using EasyEnglish.Services.Mapping;
 
-    public class Language : BaseDeletableModel<int>
+    public class Language : BaseDeletableModel<int>, IMapFrom<Resource>
     {
         public Language()
         {

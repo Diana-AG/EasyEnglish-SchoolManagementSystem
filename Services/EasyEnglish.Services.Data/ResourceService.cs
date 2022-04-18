@@ -15,21 +15,18 @@
     public class ResourceService : IResourceService
     {
         private readonly string[] allowedExtensions = new[] { "pdf", "doc", "docx", "docm", "ppt", "pptx", "jpg", "png" };
-        private readonly IDeletableEntityRepository<Image> imagesRespository;
         private readonly IDeletableEntityRepository<Resource> resourcesRepository;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRespository;
 
         public ResourceService(
-            IDeletableEntityRepository<Image> imagesRespository,
             IDeletableEntityRepository<Resource> resourcesRepository,
             IDeletableEntityRepository<CourseType> courseTypesRespository)
         {
-            this.imagesRespository = imagesRespository;
             this.resourcesRepository = resourcesRepository;
             this.courseTypesRespository = courseTypesRespository;
         }
 
-        public ResourceViewModel AllResources()
+        public ResourceViewModel GetAll()
         {
             var urlResources = this.resourcesRepository.All()
                 .Include(x => x.CourseTypes)
@@ -92,6 +89,15 @@
             return resource;
         }
 
+        public async Task<T> GetByNameAsync<T>(string name)
+        {
+            var resource = await this.resourcesRepository.AllAsNoTracking()
+                .Where(x => x.Name == name)
+                .To<T>().FirstOrDefaultAsync();
+
+            return resource;
+        }
+
         public int GetCount()
         {
             return this.resourcesRepository.All().Count();
@@ -99,13 +105,19 @@
 
         public async Task UploadFileAsync(ResourceUploadFileInputModel input, string resourcePath)
         {
+            var resource = await this.resourcesRepository.All().FirstOrDefaultAsync(x => x.Name == input.Name);
+            if (resource != null)
+            {
+                throw new Exception($"Resource with name {input.Name} already exists");
+            }
+
             var extension = Path.GetExtension(input.Image.FileName).TrimStart('.');
             if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
             {
                 throw new Exception($"Invalid file extension {extension}");
             }
 
-            var resource = new Resource
+            resource = new Resource
             {
                 Name = input.Name,
                 Extension = extension,
@@ -125,6 +137,11 @@
             var physicalPath = $"{resourcePath}/{resource.Id}.{extension}";
             using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
             await input.Image.CopyToAsync(fileStream);
+        }
+
+        public bool NameExists(string name)
+        {
+            return this.resourcesRepository.All().Any(x => x.Name == name);
         }
     }
 }

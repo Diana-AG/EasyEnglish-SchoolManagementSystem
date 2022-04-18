@@ -11,13 +11,13 @@
     {
         Task CreateAsync(CourseInputModel input, string userId);
 
-        IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 8);
+        Task<IEnumerable<T>> GetAll<T>(int page, int itemsPerPage = 8);
 
         int GetCount();
 
-        T GetById<T>(int id);
+        Task<T> GetByIdAsync<T>(int id);
 
-        T GetById<T>(string id);
+        Task<T> GetById<T>(string id);
 
         Task DeleteAsync(int id);
 
@@ -27,6 +27,6 @@
 
         Task RemoveStudentAsync(CourseStudentInputModel input);
 
-        IEnumerable<CourseAddStudentViewModel> AllStudents(int id);
+        Task<IEnumerable<CourseAddStudentViewModel>> GetAvailableStudents(int id);
     }
 }

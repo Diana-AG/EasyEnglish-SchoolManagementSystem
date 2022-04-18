@@ -18,9 +18,13 @@
 
         Task<T> GetByIdAsync<T>(int id);
 
+        Task<T> GetByNameAsync<T>(string name);
+
         // IEnumerable<T> GetByIngredients<T>(IEnumerable<int> ingredientIds);
-        ResourceViewModel AllResources();
+        ResourceViewModel GetAll();
 
         Task DeleteAsync(int id);
+
+        bool NameExists(string name);
     }
 }

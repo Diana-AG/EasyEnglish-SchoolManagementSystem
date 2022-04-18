@@ -1,6 +1,9 @@
 ﻿namespace EasyEnglish.Web.ViewModels.Administration.Resources
 {
-    public class ResourceUrlViewModel
+    using EasyEnglish.Data.Models;
+    using EasyEnglish.Services.Mapping;
+
+    public class ResourceUrlViewModel : IMapFrom<Resource>
     {
         public int Id { get; set; }
 

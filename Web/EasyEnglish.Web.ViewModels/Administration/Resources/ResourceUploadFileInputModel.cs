@@ -3,15 +3,15 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
 
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Mapping;
     using Microsoft.AspNetCore.Http;
 
-    public class ResourceUploadFileInputModel : IMapTo<Resource>
+    public class ResourceUploadFileInputModel : IMapTo<Resource>, IValidatableObject
     {
-        public string Name { get; set; }
-
+        public string Name { get; set; } = null;
 
         [Display(Name = "Language-Level")]
         public int CourseTypeId { get; set; }
@@ -22,5 +22,15 @@
         public IFormFile Image { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.Image == null)
+            {
+                yield return new ValidationResult(
+                $"There is need to choose a file.",
+                new[] { nameof(this.Image) });
+            }
+        }
     }
 }

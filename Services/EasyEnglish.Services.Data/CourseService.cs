@@ -46,9 +46,9 @@
             await this.coursesRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 8)
+        public async Task<IEnumerable<T>> GetAll<T>(int page, int itemsPerPage = 8)
         {
-            var courses = this.coursesRepository.AllAsNoTracking()
+            var courses = await this.coursesRepository.AllAsNoTracking()
                 .Include(c => c.CourseType)
                 .Include(c => c.Teacher)
                 .Include(c => c.Students)
@@ -56,14 +56,14 @@
                 .ThenBy(x => x.CourseType.Language.Name)
                 .ThenBy(x => x.CourseType.Level.Name)
                 .Skip((page - 1) * itemsPerPage).Take(itemsPerPage)
-                .To<T>().ToList();
+                .To<T>().ToListAsync();
 
             return courses;
         }
 
-        public IEnumerable<CourseAddStudentViewModel> AllStudents(int id)
+        public async Task<IEnumerable<CourseAddStudentViewModel>> GetAvailableStudents(int id)
         {
-            var students = this.usersRepository.All()
+            var students = await this.usersRepository.All()
                 .Where(x => !x.StudentCourses.Any(sc => sc.Id == id))
                 .OrderBy(x => x.Name)
                 .Select(x => new CourseAddStudentViewModel
@@ -73,25 +73,25 @@
                     StudentName = x.Name,
                     StudentEmail = x.Email,
                 })
-                .ToList();
+                .ToListAsync();
 
             return students;
         }
 
-        public T GetById<T>(int id)
+        public async Task<T> GetByIdAsync<T>(int id)
         {
-            var course = this.coursesRepository.AllAsNoTracking()
+            var course = await this.coursesRepository.AllAsNoTracking()
                 .Where(x => x.Id == id)
-                .To<T>().FirstOrDefault();
+                .To<T>().FirstOrDefaultAsync();
 
             return course;
         }
 
-        public T GetById<T>(string id)
+        public async Task<T> GetById<T>(string id)
         {
-            var student = this.usersRepository.AllAsNoTracking()
+            var student = await this.usersRepository.AllAsNoTracking()
                 .Where(x => x.Id == id)
-                .To<T>().FirstOrDefault();
+                .To<T>().FirstOrDefaultAsync();
 
             return student;
         }
