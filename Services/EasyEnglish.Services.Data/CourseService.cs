@@ -87,7 +87,7 @@
             return course;
         }
 
-        public async Task<T> GetById<T>(string id)
+        public async Task<T> GetByIdAsync<T>(string id)
         {
             var student = await this.usersRepository.AllAsNoTracking()
                 .Where(x => x.Id == id)

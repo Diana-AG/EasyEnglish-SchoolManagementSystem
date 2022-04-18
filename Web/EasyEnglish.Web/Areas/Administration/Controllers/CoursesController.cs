@@ -96,14 +96,9 @@
         }
 
         // GET: Administration/Courses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return this.NotFound();
-            }
-
-            var course = this.courseService.GetByIdAsync<CourseViewModel>((int)id);
+            var course = await this.courseService.GetByIdAsync<CourseViewModel>(id);
 
             if (course == null)
             {
@@ -116,13 +111,11 @@
         // GET: Administration/Courses/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var course = this.courseService.GetByIdAsync<EditCourseInputModel>(id);
-            if (course == null)
+            var viewModel = await this.courseService.GetByIdAsync<EditCourseInputModel>(id);
+            if (viewModel == null)
             {
                 return this.NotFound();
             }
-
-            var viewModel = await this.courseService.GetByIdAsync<EditCourseInputModel>(id);
 
             viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
             viewModel.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
@@ -162,13 +155,8 @@
         [HttpPost]
         public async Task<IActionResult> AddStudent(CourseStudentInputModel input)
         {
-            if (input.CourseId == null || input.StudentId == null)
-            {
-                return this.NotFound();
-            }
-
-            var course = this.courseService.GetByIdAsync<CourseViewModel>((int)input.CourseId);
-            var student = this.courseService.GetById<StudentViewModel>(input.StudentId);
+            var course = await this.courseService.GetByIdAsync<CourseViewModel>(input.CourseId);
+            var student = await this.courseService.GetByIdAsync<StudentViewModel>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();
@@ -187,13 +175,8 @@
         [HttpPost]
         public async Task<IActionResult> RemoveStudent(CourseStudentInputModel input)
         {
-            if (input.CourseId == null || input.StudentId == null)
-            {
-                return this.NotFound();
-            }
-
-            var course = this.courseService.GetByIdAsync<CourseViewModel>((int)input.CourseId);
-            var student = this.courseService.GetById<StudentViewModel>(input.StudentId);
+            var course = await this.courseService.GetByIdAsync<CourseViewModel>(input.CourseId);
+            var student = await this.courseService.GetByIdAsync<StudentViewModel>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();

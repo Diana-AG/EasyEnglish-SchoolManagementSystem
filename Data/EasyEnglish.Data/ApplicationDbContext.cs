@@ -26,8 +26,6 @@
 
         public DbSet<Address> Addresses { get; set; }
 
-        public DbSet<Comment> Comments { get; set; }
-
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Course> Courses { get; set; }
@@ -43,6 +41,10 @@
         public DbSet<Language> Languages { get; set; }
 
         public DbSet<Level> Levels { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Note> Notes { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
 

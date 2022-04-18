@@ -17,7 +17,7 @@
 
         Task<T> GetByIdAsync<T>(int id);
 
-        Task<T> GetById<T>(string id);
+        Task<T> GetByIdAsync<T>(string id);
 
         Task DeleteAsync(int id);
 

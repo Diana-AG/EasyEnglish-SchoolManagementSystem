@@ -1,0 +1,42 @@
+﻿@model EasyEnglish.Web.ViewModels.Administration.Messages.MessageInputModel
+
+@{
+    ViewData["Title"] = "Add Message";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea rows="4" asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="small text-danger"></span>
+            </div>
+                <div class="form-group">
+                <label asp-for="StartDate"></label>
+                <input asp-for="StartDate" class="form-control" placeholder="@DateTime.UtcNow.Date">
+                <span asp-validation-for="StartDate" class="small text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EndDate"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Add" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to All Levels</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

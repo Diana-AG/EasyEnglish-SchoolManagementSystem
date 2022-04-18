@@ -75,6 +75,7 @@
             services.AddTransient<ICurrenciesService, CurrenciesService>();
             services.AddTransient<ICourseTypeService, CourseTypeService>();
             services.AddTransient<ITrainingFormsService, TrainingFormsService>();
+            services.AddTransient<IMessagesService, MessagesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

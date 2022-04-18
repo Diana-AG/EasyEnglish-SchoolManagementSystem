@@ -9,7 +9,7 @@
     {
         public Course()
         {
-            this.Comments = new HashSet<Comment>();
+            this.Comments = new HashSet<Note>();
             this.Payments = new HashSet<Payment>();
             this.Homeworks = new HashSet<Homework>();
             this.Students = new HashSet<ApplicationUser>();
@@ -33,7 +33,7 @@
 
         public string Description { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Note> Comments { get; set; }
 
         public virtual ICollection<Payment> Payments { get; set; }
 
