@@ -8,7 +8,7 @@
     {
         Task AddRemoteUrlAsync(ResourceUrlInputModel input);
 
-        Task UploadFileAsync(ResourceUploadFileInputModel input, string userId, string imagePath);
+        Task UploadFileAsync(ResourceUploadFileInputModel input, string imagePath);
 
         // IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12);
 

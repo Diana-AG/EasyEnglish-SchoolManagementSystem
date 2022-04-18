@@ -97,11 +97,9 @@
                 return this.View(input);
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-
             try
             {
-                await this.resourceService.UploadFileAsync(input, user.Id, $"{this.environment.WebRootPath}/images");
+                await this.resourceService.UploadFileAsync(input, $"{this.environment.WebRootPath}/resources");
             }
             catch (Exception ex)
             {
@@ -119,14 +117,12 @@
         [HttpPost]
         public FileResult Download(int id)
         {
-            var resource = this.dataRepository.All().Include(x => x.Images).FirstOrDefault(x => x.Id == id);
-            var image = resource.Images.FirstOrDefault();
+            var resource = this.dataRepository.All().FirstOrDefault(x => x.Id == id);
 
-            string fileName = $"{image.Id}.{image.Extension}";
-            string phisicalPath = $"{this.environment.WebRootPath}/images/resources/{fileName}";
-            string contentType = image.ContentType;
-            // new FileExtensionContentTypeProvider().TryGetContentType(fileName, out contentType);
-            return this.PhysicalFile(phisicalPath, contentType, $"{resource.Name}.{image.Extension}");
+            string fileName = $"{resource.Id}.{resource.Extension}";
+            string phisicalPath = $"{this.environment.WebRootPath}/resources/{fileName}";
+            string contentType = resource.ContentType;
+            return this.PhysicalFile(phisicalPath, contentType, $"{resource.Name}.{resource.Extension}");
         }
 
         // POST: Administration/Resources/Delete/5

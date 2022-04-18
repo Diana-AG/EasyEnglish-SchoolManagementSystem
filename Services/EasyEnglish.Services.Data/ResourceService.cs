@@ -77,13 +77,7 @@
 
         public async Task DeleteAsync(int id)
         {
-            var resource = await this.resourcesRepository.All().Include(x => x.Images).FirstOrDefaultAsync(x => x.Id == id);
-            var image = resource.Images.FirstOrDefault();
-            if (image != null)
-            {
-                this.imagesRespository.Delete(image);
-                await this.imagesRespository.SaveChangesAsync();
-            }
+            var resource = await this.resourcesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
 
             this.resourcesRepository.Delete(resource);
             await this.resourcesRepository.SaveChangesAsync();
@@ -103,45 +97,34 @@
             return this.resourcesRepository.All().Count();
         }
 
-        public async Task UploadFileAsync(ResourceUploadFileInputModel input, string userId, string imagePath)
+        public async Task UploadFileAsync(ResourceUploadFileInputModel input, string resourcePath)
         {
+            var extension = Path.GetExtension(input.Image.FileName).TrimStart('.');
+            if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
+            {
+                throw new Exception($"Invalid file extension {extension}");
+            }
+
             var resource = new Resource
             {
                 Name = input.Name,
+                Extension = extension,
+                ContentType = input.Image.ContentType,
             };
 
-            resource.CourseTypes.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = input.CourseTypeId });
-
-
-            // /wwwroot/images/recipes/jhdsi-343g3h453-=g34g.jpg
-            if (input.Images != null)
+            resource.CourseTypes.Add(new ResourceCourseType
             {
-                Directory.CreateDirectory($"{imagePath}/resources/");
-                foreach (var image in input.Images)
-                {
-                    var extension = Path.GetExtension(image.FileName).TrimStart('.');
-                    if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
-                    {
-                        throw new Exception($"Invalid file extension {extension}");
-                    }
-
-                    var dbImage = new Image
-                    {
-                        UserId = userId,
-                        ResourceId = resource.Id,
-                        Extension = extension,
-                        ContentType = image.ContentType,
-                    };
-                    resource.Images.Add(dbImage);
-
-                    var physicalPath = $"{imagePath}/resources/{dbImage.Id}.{extension}";
-                    using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
-                    await image.CopyToAsync(fileStream);
-                }
-            }
+                ResourceId = resource.Id,
+                CourseTypeId = input.CourseTypeId,
+            });
 
             await this.resourcesRepository.AddAsync(resource);
             await this.resourcesRepository.SaveChangesAsync();
+
+            Directory.CreateDirectory($"{resourcePath}");
+            var physicalPath = $"{resourcePath}/{resource.Id}.{extension}";
+            using Stream fileStream = new FileStream(physicalPath, FileMode.Create);
+            await input.Image.CopyToAsync(fileStream);
         }
     }
 }

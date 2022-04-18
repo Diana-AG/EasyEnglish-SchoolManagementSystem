@@ -19,7 +19,7 @@
         public CourseType CourseType { get; set; }
 
         [DisplayName("")]
-        public IEnumerable<IFormFile> Images { get; set; }
+        public IFormFile Image { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
     }

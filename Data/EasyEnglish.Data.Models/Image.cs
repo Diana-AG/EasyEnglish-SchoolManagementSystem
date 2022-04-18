@@ -15,10 +15,6 @@
 
         public virtual ApplicationUser User { get; set; }
 
-        public int? ResourceId { get; set; }
-
-        public virtual Resource Resource { get; set; }
-
         public string Extension { get; set; }
 
         public string ContentType { get; set; }
