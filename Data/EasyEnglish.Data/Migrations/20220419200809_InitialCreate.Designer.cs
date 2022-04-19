@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EasyEnglish.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220411123031_AddEntities")]
-    partial class AddEntities
+    [Migration("20220419200809_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -239,44 +239,6 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("EasyEnglish.Data.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("MyProperty")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("EasyEnglish.Data.Models.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -474,6 +436,9 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -489,17 +454,12 @@ namespace EasyEnglish.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ResourceId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
-
-                    b.HasIndex("ResourceId");
 
                     b.HasIndex("UserId");
 
@@ -564,6 +524,91 @@ namespace EasyEnglish.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Levels");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AddedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddedByUserId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Payment", b =>
@@ -674,11 +719,17 @@ namespace EasyEnglish.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -866,6 +917,38 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("TrainingForms");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte>("Value")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("HomeworkResource", b =>
                 {
                     b.Property<int>("HomeworksId")
@@ -1049,17 +1132,6 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Town");
                 });
 
-            modelBuilder.Entity("EasyEnglish.Data.Models.Comment", b =>
-                {
-                    b.HasOne("EasyEnglish.Data.Models.Course", "Course")
-                        .WithMany("Comments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-                });
-
             modelBuilder.Entity("EasyEnglish.Data.Models.Course", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.CourseType", "CourseType")
@@ -1117,17 +1189,31 @@ namespace EasyEnglish.Data.Migrations
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Image", b =>
                 {
-                    b.HasOne("EasyEnglish.Data.Models.Resource", "Resource")
-                        .WithMany("Images")
-                        .HasForeignKey("ResourceId");
-
                     b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "User")
                         .WithMany("Images")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Resource");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Message", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "AddedByUser")
+                        .WithMany("Messages")
+                        .HasForeignKey("AddedByUserId");
+
+                    b.Navigation("AddedByUser");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Note", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Course", "Course")
+                        .WithMany("Comments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Payment", b =>
@@ -1211,6 +1297,21 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.Vote", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Message", "Message")
+                        .WithMany("Votes")
+                        .HasForeignKey("MessageId");
+
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Message");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HomeworkResource", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.Homework", null)
@@ -1285,6 +1386,8 @@ namespace EasyEnglish.Data.Migrations
 
                     b.Navigation("Logins");
 
+                    b.Navigation("Messages");
+
                     b.Navigation("Payments");
 
                     b.Navigation("Roles");
@@ -1292,6 +1395,8 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("TeacherCourses");
 
                     b.Navigation("TeacherRequests");
+
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Country", b =>
@@ -1332,11 +1437,14 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Languages");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.Message", b =>
+                {
+                    b.Navigation("Votes");
+                });
+
             modelBuilder.Entity("EasyEnglish.Data.Models.Resource", b =>
                 {
                     b.Navigation("CourseTypes");
-
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Town", b =>

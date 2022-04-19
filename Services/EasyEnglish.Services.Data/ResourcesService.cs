@@ -12,13 +12,13 @@
     using EasyEnglish.Web.ViewModels.Administration.Resources;
     using Microsoft.EntityFrameworkCore;
 
-    public class ResourceService : IResourceService
+    public class ResourcesService : IResourcesService
     {
         private readonly string[] allowedExtensions = new[] { "pdf", "doc", "docx", "docm", "ppt", "pptx", "jpg", "png" };
         private readonly IDeletableEntityRepository<Resource> resourcesRepository;
         private readonly IDeletableEntityRepository<CourseType> courseTypesRespository;
 
-        public ResourceService(
+        public ResourcesService(
             IDeletableEntityRepository<Resource> resourcesRepository,
             IDeletableEntityRepository<CourseType> courseTypesRespository)
         {

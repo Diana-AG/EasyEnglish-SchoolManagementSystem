@@ -5,9 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/materialize.min.css" asp-append-version="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
     <header>
@@ -22,9 +25,9 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Create">Create Course</a>
                         </li>
                         <li class="nav-item">
@@ -32,8 +35,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        </li>*@
+                        @*@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Administration" asp-controller="Languages" asp-action="Index">Languages</a>
@@ -50,7 +53,7 @@
                             <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Administration" asp-controller="Resources" asp-action="Index">Resources</a>
                             </li>
-                        }
+                        }*@
                     </ul>
                 </div>
             </div>
@@ -78,6 +81,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/js/materialize.min.js" asp-append-version="true"></script>
     @await this.RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

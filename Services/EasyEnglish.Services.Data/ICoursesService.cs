@@ -7,7 +7,7 @@
     using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
 
-    public interface ICourseService
+    public interface ICoursesService
     {
         Task CreateAsync(CourseInputModel input, string userId);
 

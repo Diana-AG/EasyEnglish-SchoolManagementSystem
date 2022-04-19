@@ -4,7 +4,7 @@
 
     using EasyEnglish.Web.ViewModels.Administration.Resources;
 
-    public interface IResourceService
+    public interface IResourcesService
     {
         Task AddRemoteUrlAsync(ResourceUrlInputModel input);
 

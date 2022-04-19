@@ -27,14 +27,14 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
-        private readonly IAddressService addressService;
+        private readonly IAddressesService addressService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IAddressService addressService)
+            IAddressesService addressService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

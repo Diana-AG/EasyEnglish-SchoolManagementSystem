@@ -13,16 +13,16 @@
     [Area("Administration")]
     public class CoursesController : AdministratorController
     {
-        private readonly ICourseService courseService;
+        private readonly ICoursesService courseService;
         private readonly ITeachersService teachersService;
-        private readonly ICourseTypeService courseTypeService;
+        private readonly ICourseTypesService courseTypeService;
         private readonly ITrainingFormsService trainingFormsService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public CoursesController(
-            ICourseService courseService,
+            ICoursesService courseService,
             ITeachersService teachersService,
-            ICourseTypeService courseTypeService,
+            ICourseTypesService courseTypeService,
             ITrainingFormsService trainingFormsService,
             UserManager<ApplicationUser> userManager)
         {

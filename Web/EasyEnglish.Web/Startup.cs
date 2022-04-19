@@ -66,16 +66,17 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetCountsService, GetCountsService>();
-            services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<IVoltesService, VoltesService>();
+            services.AddTransient<ICoursesService, CoursesService>();
             services.AddTransient<ILevelsService, LevelsService>();
-            services.AddTransient<IAddressService, AddressService>();
-            services.AddTransient<IResourceService, ResourceService>();
+            services.AddTransient<IMessagesService, MessagesService>();
             services.AddTransient<ITeachersService, TeachersService>();
+            services.AddTransient<IAddressesService, AddressesService>();
+            services.AddTransient<IResourcesService, ResourcesService>();
             services.AddTransient<ILanguagesService, LanguagesService>();
             services.AddTransient<ICurrenciesService, CurrenciesService>();
-            services.AddTransient<ICourseTypeService, CourseTypeService>();
+            services.AddTransient<ICourseTypesService, CourseTypesService>();
             services.AddTransient<ITrainingFormsService, TrainingFormsService>();
-            services.AddTransient<IMessagesService, MessagesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

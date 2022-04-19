@@ -24,16 +24,16 @@
         private readonly IDeletableEntityRepository<Resource> dataRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWebHostEnvironment environment;
-        private readonly IResourceService resourceService;
-        private readonly ICourseTypeService courseTypeService;
+        private readonly IResourcesService resourceService;
+        private readonly ICourseTypesService courseTypeService;
 
         public ResourcesController(
             IDeletableEntityRepository<CourseType> courseTypesRepository,
             IDeletableEntityRepository<Resource> dataRepository,
             UserManager<ApplicationUser> userManager,
             IWebHostEnvironment environment,
-            IResourceService resourceService,
-            ICourseTypeService courseTypeService)
+            IResourcesService resourceService,
+            ICourseTypesService courseTypeService)
         {
             this.courseTypesRepository = courseTypesRepository;
             this.dataRepository = dataRepository;

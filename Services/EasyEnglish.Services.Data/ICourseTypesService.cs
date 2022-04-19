@@ -5,7 +5,7 @@
 
     using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
 
-    public interface ICourseTypeService
+    public interface ICourseTypesService
     {
         Task DeleteAsync(int id);
 

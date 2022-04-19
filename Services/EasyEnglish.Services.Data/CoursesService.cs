@@ -10,12 +10,12 @@
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.EntityFrameworkCore;
 
-    public class CourseService : ICourseService
+    public class CoursesService : ICoursesService
     {
         private readonly IDeletableEntityRepository<Course> coursesRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
 
-        public CourseService(
+        public CoursesService(
             IDeletableEntityRepository<Course> coursesRepository,
             IDeletableEntityRepository<ApplicationUser> usersRepository)
         {

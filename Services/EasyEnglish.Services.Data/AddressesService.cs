@@ -6,13 +6,13 @@
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
 
-    public class AddressService : IAddressService
+    public class AddressesService : IAddressesService
     {
         private readonly IDeletableEntityRepository<Country> countriesRepository;
         private readonly IDeletableEntityRepository<Town> townsRepository;
         private readonly IDeletableEntityRepository<Address> addressesRepository;
 
-        public AddressService(
+        public AddressesService(
             IDeletableEntityRepository<Country> countriesRepository,
             IDeletableEntityRepository<Town> townsRepository,
             IDeletableEntityRepository<Address> addressesRepository)

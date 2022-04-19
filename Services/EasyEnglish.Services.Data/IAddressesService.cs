@@ -4,7 +4,7 @@
 
     using EasyEnglish.Data.Models;
 
-    public interface IAddressService
+    public interface IAddressesService
     {
         Task<Country> SetCountry(string countryName);
 

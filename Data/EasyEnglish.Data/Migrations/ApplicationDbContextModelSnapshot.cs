@@ -532,6 +532,9 @@ namespace EasyEnglish.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AddedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -554,6 +557,8 @@ namespace EasyEnglish.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddedByUserId");
 
                     b.HasIndex("IsDeleted");
 
@@ -910,6 +915,38 @@ namespace EasyEnglish.Data.Migrations
                     b.ToTable("TrainingForms");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MessageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte>("Value")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("HomeworkResource", b =>
                 {
                     b.Property<int>("HomeworksId")
@@ -1157,6 +1194,15 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.Message", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "AddedByUser")
+                        .WithMany("Messages")
+                        .HasForeignKey("AddedByUserId");
+
+                    b.Navigation("AddedByUser");
+                });
+
             modelBuilder.Entity("EasyEnglish.Data.Models.Note", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.Course", "Course")
@@ -1249,6 +1295,21 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("EasyEnglish.Data.Models.Vote", b =>
+                {
+                    b.HasOne("EasyEnglish.Data.Models.Message", "Message")
+                        .WithMany("Votes")
+                        .HasForeignKey("MessageId");
+
+                    b.HasOne("EasyEnglish.Data.Models.ApplicationUser", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Message");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HomeworkResource", b =>
                 {
                     b.HasOne("EasyEnglish.Data.Models.Homework", null)
@@ -1323,6 +1384,8 @@ namespace EasyEnglish.Data.Migrations
 
                     b.Navigation("Logins");
 
+                    b.Navigation("Messages");
+
                     b.Navigation("Payments");
 
                     b.Navigation("Roles");
@@ -1330,6 +1393,8 @@ namespace EasyEnglish.Data.Migrations
                     b.Navigation("TeacherCourses");
 
                     b.Navigation("TeacherRequests");
+
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Country", b =>
@@ -1368,6 +1433,11 @@ namespace EasyEnglish.Data.Migrations
             modelBuilder.Entity("EasyEnglish.Data.Models.Level", b =>
                 {
                     b.Navigation("Languages");
+                });
+
+            modelBuilder.Entity("EasyEnglish.Data.Models.Message", b =>
+                {
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("EasyEnglish.Data.Models.Resource", b =>

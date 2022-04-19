@@ -9,6 +9,10 @@
     {
         public int Id { get; set; }
 
+        public string AddedByUserId { get; set; }
+
+        public ApplicationUser AddedByUser { get; set; }
+
         public string Description { get; set; }
 
         public DateTime StartDate { get; set; }

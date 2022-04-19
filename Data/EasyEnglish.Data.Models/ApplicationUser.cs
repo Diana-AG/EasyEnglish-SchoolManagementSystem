@@ -14,6 +14,7 @@ namespace EasyEnglish.Data.Models
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
+            this.Votes = new HashSet<Vote>();
             this.Images = new HashSet<Image>();
             this.Payments = new HashSet<Payment>();
             this.Languages = new HashSet<Language>();
@@ -63,12 +64,16 @@ namespace EasyEnglish.Data.Models
 
         public virtual ICollection<Language> Languages { get; set; }
 
+        public virtual ICollection<Message> Messages { get; set; }
+
         public virtual ICollection<Course> StudentCourses { get; set; }
 
         [InverseProperty(nameof(Course.Teacher))]
         public virtual ICollection<Course> TeacherCourses { get; set; }
 
         public virtual ICollection<TeacherRequest> TeacherRequests { get; set; }
+
+        public virtual ICollection<Vote> Votes { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

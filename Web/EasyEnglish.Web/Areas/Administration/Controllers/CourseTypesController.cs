@@ -15,12 +15,12 @@
     [Area("Administration")]
     public class CourseTypesController : AdministratorController
     {
-        private readonly ICourseTypeService courseTypeService;
+        private readonly ICourseTypesService courseTypeService;
         private readonly ILanguagesService languagesService;
         private readonly ILevelsService levelsService;
 
         public CourseTypesController(
-            ICourseTypeService courseTypeService,
+            ICourseTypesService courseTypeService,
             ILanguagesService languagesService,
             ILevelsService levelsService)
         {

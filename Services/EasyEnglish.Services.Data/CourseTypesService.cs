@@ -10,11 +10,11 @@
     using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
     using Microsoft.EntityFrameworkCore;
 
-    public class CourseTypeService : ICourseTypeService
+    public class CourseTypesService : ICourseTypesService
     {
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
 
-        public CourseTypeService(IDeletableEntityRepository<CourseType> courseTypesRepository)
+        public CourseTypesService(IDeletableEntityRepository<CourseType> courseTypesRepository)
         {
             this.courseTypesRepository = courseTypesRepository;
         }
