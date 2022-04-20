@@ -1,13 +1,18 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
+    using EasyEnglish.Common;
     using EasyEnglish.Services.Data;
+    using EasyEnglish.Web.Controllers;
     using EasyEnglish.Web.ViewModels.Administration.Messages;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Area("Administration")]
-    public class MessagesController : AdministratorController
+    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
+    public class MessagesController : BaseController
     {
         private readonly IMessagesService messagesService;
 
@@ -35,7 +40,9 @@
                 return this.View();
             }
 
-            await this.messagesService.AddAsync(input);
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            await this.messagesService.AddAsync(input, userId);
 
             return this.RedirectToAction(nameof(this.Index));
         }

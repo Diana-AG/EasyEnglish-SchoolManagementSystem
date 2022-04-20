@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using EasyEnglish.Data.Seeding.CustomSeeders;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
@@ -33,6 +33,7 @@
                               new SettingsSeeder(),
                               new TownsSeeder(),
                               new TrainingFormsSeeder(),
+                              new AcountsSeeder(),
                           };
 
             foreach (var seeder in seeders)

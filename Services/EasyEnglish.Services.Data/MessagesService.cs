@@ -18,11 +18,12 @@
             this.messagesRepository = messagesRepository;
         }
 
-        public async Task AddAsync(MessageInputModel input)
+        public async Task AddAsync(MessageInputModel input, string userId)
         {
             var message = new Message
             {
                 Description = input.Description,
+                AddedByUserId = userId,
                 StartDate = input.StartDate,
                 EndDate = input.EndDate,
             };
@@ -41,7 +42,7 @@
 
         public async Task<IEnumerable<T>> GetAllAsync<T>()
         {
-            return await this.messagesRepository.All().To<T>().ToListAsync();
+            return await this.messagesRepository.All().Include(x => x.AddedByUser).To<T>().ToListAsync();
         }
     }
 }
