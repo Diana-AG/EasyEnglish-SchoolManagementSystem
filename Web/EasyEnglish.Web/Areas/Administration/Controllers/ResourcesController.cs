@@ -4,12 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using EasyEnglish.Common;
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.Resources;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
+    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
     public class ResourcesController : AdministratorController
     {
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;

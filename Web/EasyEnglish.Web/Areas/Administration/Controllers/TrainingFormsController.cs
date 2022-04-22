@@ -1,12 +1,14 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
     using System.Threading.Tasks;
-
+    using EasyEnglish.Common;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.TrainingForms;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
     public class TrainingFormsController : AdministratorController
     {
         private readonly ITrainingFormsService trainingFormsService;

@@ -61,9 +61,6 @@
     <Content Update="wwwroot\images\profilPictures\student2.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\images\profilPictures\student3.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\images\profilPictures\student4.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
