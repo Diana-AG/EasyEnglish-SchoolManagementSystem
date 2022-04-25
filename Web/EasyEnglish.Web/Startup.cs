@@ -1,7 +1,7 @@
 ﻿namespace EasyEnglish.Web
 {
     using System.Reflection;
-
+    using CloudinaryDotNet;
     using EasyEnglish.Data;
     using EasyEnglish.Data.Common;
     using EasyEnglish.Data.Common.Repositories;
@@ -63,7 +63,13 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
+            Cloudinary cloudinary = new Cloudinary(new Account(
+                this.configuration["Cloudinary:ApiName"],
+                this.configuration["Cloudinary:ApiKey"],
+                this.configuration["Cloudinary:ApiSecret"]));
+            services.AddSingleton(cloudinary);
+
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration["SendGrid:ApiKey"]));
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IGetCountsService, GetCountsService>();
             services.AddTransient<IVoltesService, VoltesService>();

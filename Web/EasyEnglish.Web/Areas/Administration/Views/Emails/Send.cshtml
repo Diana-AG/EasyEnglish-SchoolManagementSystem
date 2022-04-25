@@ -1,0 +1,37 @@
+﻿@model EasyEnglish.Web.ViewModels.Administration.Emails.EmailViewModel
+
+@{
+    ViewData["Title"] = "Send email";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Send" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Subject" class="control-label"></label>
+                <input asp-for="Subject" class="form-control" />
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content"></label>
+                <textarea rows="8" asp-for="Content" class="form-control"></textarea>
+                <span asp-validation-for="Content" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Attachments"></label>
+                <input asp-for="Attachments" class="form-control" />
+                <span asp-validation-for="Attachments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

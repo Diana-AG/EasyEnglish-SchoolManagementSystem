@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
     using EasyEnglish.Common;
     using EasyEnglish.Data.Common.Repositories;
     using EasyEnglish.Data.Models;
@@ -23,19 +26,21 @@
     public class ResourcesController : AdministratorController
     {
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
-        private readonly IDeletableEntityRepository<Resource> dataRepository;
+        private readonly IDeletableEntityRepository<Data.Models.Resource> dataRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWebHostEnvironment environment;
         private readonly IResourcesService resourceService;
         private readonly ICourseTypesService courseTypeService;
+        private readonly Cloudinary cloudinary;
 
         public ResourcesController(
             IDeletableEntityRepository<CourseType> courseTypesRepository,
-            IDeletableEntityRepository<Resource> dataRepository,
+            IDeletableEntityRepository<Data.Models.Resource> dataRepository,
             UserManager<ApplicationUser> userManager,
             IWebHostEnvironment environment,
             IResourcesService resourceService,
-            ICourseTypesService courseTypeService)
+            ICourseTypesService courseTypeService,
+            Cloudinary cloudinary)
         {
             this.courseTypesRepository = courseTypesRepository;
             this.dataRepository = dataRepository;
@@ -43,6 +48,7 @@
             this.environment = environment;
             this.resourceService = resourceService;
             this.courseTypeService = courseTypeService;
+            this.cloudinary = cloudinary;
         }
 
         // GET: Administration/Resources
@@ -93,7 +99,6 @@
         [HttpPost]
         public async Task<IActionResult> UploadFile(ResourceUploadFileInputModel input)
         {
-
             if (!this.ModelState.IsValid)
             {
                 input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
@@ -114,6 +119,17 @@
             this.ViewData[MessageConstant.SuccessMessage] = "Resource added successfully.";
 
             // TODO: Redirect to resource details page
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        public async Task<IActionResult> Upload()
+        {
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new FileDescription(@"D:\!Dee folder\NoraFoxx\51.jpg"),
+            };
+            var uploadResult = await this.cloudinary.UploadAsync(uploadParams);
+
             return this.RedirectToAction(nameof(this.Index));
         }
 

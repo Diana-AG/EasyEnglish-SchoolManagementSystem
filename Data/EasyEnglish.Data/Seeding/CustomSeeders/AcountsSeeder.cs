@@ -135,7 +135,7 @@
             {
                 var role = await roleManager.FindByNameAsync(roleName);
 
-                if (!userManager.Users.Any(x => x.Roles.Any(x => x.RoleId == role.Id)))
+                if (!userManager.Users.Any(x => x.UserName == user.UserName))
                 {
                     var result = await userManager.CreateAsync(user, password);
 
