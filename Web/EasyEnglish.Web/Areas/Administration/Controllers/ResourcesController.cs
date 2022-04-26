@@ -30,8 +30,8 @@
         private readonly IDeletableEntityRepository<Data.Models.Resource> dataRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWebHostEnvironment environment;
-        private readonly IResourcesService resourceService;
-        private readonly ICourseTypesService courseTypeService;
+        private readonly IResourcesService resourcesService;
+        private readonly ICourseTypesService courseTypesService;
         private readonly Cloudinary cloudinary;
 
         public ResourcesController(
@@ -39,23 +39,23 @@
             IDeletableEntityRepository<Data.Models.Resource> dataRepository,
             UserManager<ApplicationUser> userManager,
             IWebHostEnvironment environment,
-            IResourcesService resourceService,
-            ICourseTypesService courseTypeService,
+            IResourcesService resourcesService,
+            ICourseTypesService courseTypesService,
             Cloudinary cloudinary)
         {
             this.courseTypesRepository = courseTypesRepository;
             this.dataRepository = dataRepository;
             this.userManager = userManager;
             this.environment = environment;
-            this.resourceService = resourceService;
-            this.courseTypeService = courseTypeService;
+            this.resourcesService = resourcesService;
+            this.courseTypesService = courseTypesService;
             this.cloudinary = cloudinary;
         }
 
         // GET: Administration/Resources
         public async Task<IActionResult> Index()
         {
-            var viewModel = this.resourceService.GetAll();
+            var viewModel = this.resourcesService.GetAll();
 
             return this.View(viewModel);
         }
@@ -64,7 +64,7 @@
         public IActionResult AddRemoteUrl()
         {
             var viewModel = new ResourceUrlInputModel();
-            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            viewModel.CourseTypeItems = this.courseTypesService.GetAllAsKeyValuePair();
 
             return this.View(viewModel);
         }
@@ -75,11 +75,11 @@
         {
             if (!this.ModelState.IsValid)
             {
-                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                input.CourseTypeItems = this.courseTypesService.GetAllAsKeyValuePair();
                 return this.View(input);
             }
 
-            await this.resourceService.AddRemoteUrlAsync(input);
+            await this.resourcesService.AddRemoteUrlAsync(input);
 
             this.ViewData[MessageConstant.SuccessMessage] = "Resource added successfully.";
 
@@ -91,7 +91,7 @@
         public IActionResult UploadFile()
         {
             var viewModel = new ResourceUploadFileInputModel();
-            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+            viewModel.CourseTypeItems = this.courseTypesService.GetAllAsKeyValuePair();
 
             return this.View(viewModel);
         }
@@ -102,18 +102,18 @@
         {
             if (!this.ModelState.IsValid)
             {
-                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                input.CourseTypeItems = this.courseTypesService.GetAllAsKeyValuePair();
                 return this.View(input);
             }
 
             try
             {
-                await this.resourceService.UploadFileAsync(input, $"{this.environment.WebRootPath}/resources");
+                await this.resourcesService.UploadFileAsync(input, $"{this.environment.WebRootPath}/resources");
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                input.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
+                input.CourseTypeItems = this.courseTypesService.GetAllAsKeyValuePair();
                 return this.View(input);
             }
 
@@ -149,14 +149,14 @@
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await this.resourceService.DeleteAsync(id);
+            await this.resourcesService.DeleteAsync(id);
             return this.RedirectToAction(nameof(this.Index));
         }
 
         [AcceptVerbs("GET", "POST")]
         public IActionResult VerifyName(string name)
         {
-            if (this.resourceService.NameExists(name))
+            if (this.resourcesService.NameExists(name))
             {
                 return this.Json($"Resource {name} already exists.");
             }

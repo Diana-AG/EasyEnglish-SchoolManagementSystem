@@ -1,4 +1,4 @@
-﻿namespace EasyEnglish.Web.ViewModels.Administration.Courses
+﻿namespace EasyEnglish.Web.ViewModels.Administration.Students
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -6,7 +6,7 @@
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Mapping;
 
-    public class StudentViewModel : IMapFrom<ApplicationUser>
+    public class StudentsViewModel : IMapFrom<ApplicationUser>
     {
         public string Id { get; set; }
 

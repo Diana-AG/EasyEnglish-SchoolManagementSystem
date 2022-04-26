@@ -7,6 +7,7 @@
     using AutoMapper;
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Mapping;
+    using EasyEnglish.Web.ViewModels.Administration.Students;
 
     public class CourseViewModel : IMapFrom<Course>, IHaveCustomMappings
     {
@@ -30,7 +31,7 @@
         public string CourseType { get; set; }
 
         [Display(Name = "Students")]
-        public IEnumerable<StudentViewModel> Students { get; set; }
+        public IEnumerable<StudentsViewModel> Students { get; set; }
 
         [Required]
         [MinLength(4)]

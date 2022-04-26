@@ -9,6 +9,7 @@
     using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.Controllers;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
+    using EasyEnglish.Web.ViewModels.Administration.Students;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@
             {
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
-                CoursesCount = this.courseService.GetCount(),
+                ItemsCount = this.courseService.GetCount(),
                 Courses = await this.courseService.GetAll<CourseInListViewModel>(id, ItemsPerPage),
             };
 
@@ -160,7 +161,7 @@
         public async Task<IActionResult> AddStudent(CourseStudentInputModel input)
         {
             var course = await this.courseService.GetByIdAsync<CourseViewModel>(input.CourseId);
-            var student = await this.courseService.GetByIdAsync<StudentViewModel>(input.StudentId);
+            var student = await this.courseService.GetByIdAsync<StudentsViewModel>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();
@@ -180,7 +181,7 @@
         public async Task<IActionResult> RemoveStudent(CourseStudentInputModel input)
         {
             var course = await this.courseService.GetByIdAsync<CourseViewModel>(input.CourseId);
-            var student = await this.courseService.GetByIdAsync<StudentViewModel>(input.StudentId);
+            var student = await this.courseService.GetByIdAsync<StudentsViewModel>(input.StudentId);
             if (course == null || student == null)
             {
                 return this.NotFound();

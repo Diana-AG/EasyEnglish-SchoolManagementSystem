@@ -1,0 +1,47 @@
+﻿@model EasyEnglish.Web.ViewModels.Administration.Students.StudentsListViewModel
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Students.First().Name)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Students.First().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Students.First().BirthDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Students)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => student.Name)
+            </td>                
+            <td>
+                @Html.DisplayFor(modelItem => student.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => student.BirthDate)
+            </td>
+            <td>
+                <p>
+                    <a asp-action="AddPortfolio" asp-route-id="@student.Id" class="btn btn-primary">Add Portfolio</a>
+                </p>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<partial name="_PagingPartial" model="@Model" />

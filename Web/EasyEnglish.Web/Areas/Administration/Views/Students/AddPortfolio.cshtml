@@ -1,0 +1,31 @@
+﻿@model EasyEnglish.Web.ViewModels.Administration.Students.StudentPortfolioInputModel
+
+@{
+    ViewData["Title"] = "Add Portfolio";
+}
+
+<h1>@this.ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddPortfolio" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
+            <div class="form-group">
+                <label asp-for="Images"></label>
+                <input asp-for="Images" class="form-control" />
+                <span asp-validation-for="Images" class="text-danger"></span>
+            </div>           
+            <div class="form-group">
+                <input type="text" hidden id="id" name="studentId" value="@Model.StudentId" />
+                <input type="submit" value="Add" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to All Students</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
