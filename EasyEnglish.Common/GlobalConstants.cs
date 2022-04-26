@@ -10,6 +10,8 @@
 
         public const string TeacherRoleName = "Teacher";
 
+        public const string EmailFrom = "deedee.ag@gmail.com";
+
         public static class AccountsSeeding
         {
             public const string Password = "123123";
@@ -44,8 +46,8 @@
             public const string Student2ProfilPic = "/images/profilPictures/student2.jpg";
             public const string Student2PhoneNumber = "+359888123456";
 
-            public const string Student3Email = "student3@easyenglish.com";
-            public const string Student3Name = "Niki Stone";
+            public const string Student3Email = "kostadin.2G@gmail.com";
+            public const string Student3Name = "Kostadin Piper";
             public const string Student3ProfilPic = "/images/profilPictures/student3.png";
             public const string Student3PhoneNumber = "+359888123456";
 

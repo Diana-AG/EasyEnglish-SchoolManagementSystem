@@ -2,13 +2,14 @@
 {
     using EasyEnglish.Common;
     using EasyEnglish.Services.Data;
+    using EasyEnglish.Web.Controllers;
     using EasyEnglish.Web.ViewModels.Administration.Dashboard;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Area("Administration")]
     [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
-    public class DashboardController : AdministratorController
+    public class DashboardController : BaseController
     {
         private readonly ISettingsService settingsService;
 

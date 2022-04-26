@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\EasyEnglish.Common\EasyEnglish.Common.csproj" />
     <ProjectReference Include="..\..\Web\EasyEnglish.Web.ViewModels\EasyEnglish.Web.ViewModels.csproj" />
     <ProjectReference Include="..\EasyEnglish.Services.Mapping\EasyEnglish.Services.Mapping.csproj" />
+    <ProjectReference Include="..\EasyEnglish.Services.Messaging\EasyEnglish.Services.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

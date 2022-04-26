@@ -5,12 +5,13 @@
 
     using EasyEnglish.Data;
     using EasyEnglish.Data.Models;
+    using EasyEnglish.Web.Controllers;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
     [Area("Administration")]
-    public class TeacherRequestsController : AdministratorController
+    public class TeacherRequestsController : BaseController
     {
         private readonly ApplicationDbContext _context;
 

@@ -147,7 +147,7 @@
             }
             else
             {
-                if (!userManager.Users.Any(x => x.Roles.Count() == 0))
+                if (!userManager.Users.Any(x => x.UserName == user.UserName))
                 {
                     var result = await userManager.CreateAsync(user, password);
                 }

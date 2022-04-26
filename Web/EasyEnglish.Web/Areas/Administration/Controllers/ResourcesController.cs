@@ -12,6 +12,7 @@
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
+    using EasyEnglish.Web.Controllers;
     using EasyEnglish.Web.ViewModels.Administration.Resources;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
@@ -23,7 +24,7 @@
 
     [Area("Administration")]
     [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
-    public class ResourcesController : AdministratorController
+    public class ResourcesController : BaseController
     {
         private readonly IDeletableEntityRepository<CourseType> courseTypesRepository;
         private readonly IDeletableEntityRepository<Data.Models.Resource> dataRepository;

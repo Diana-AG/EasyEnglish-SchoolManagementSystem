@@ -64,7 +64,7 @@
         public async Task<IEnumerable<CourseAddStudentViewModel>> GetAvailableStudents(int id)
         {
             var students = await this.usersRepository.All()
-                .Where(x => !x.StudentCourses.Any(sc => sc.Id == id))
+                .Where(x => !x.StudentCourses.Any(sc => sc.Id == id) && !x.Roles.Any())
                 .OrderBy(x => x.Name)
                 .Select(x => new CourseAddStudentViewModel
                 {

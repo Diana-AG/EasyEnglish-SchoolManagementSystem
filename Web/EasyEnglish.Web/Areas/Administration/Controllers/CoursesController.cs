@@ -7,14 +7,15 @@
     using EasyEnglish.Data.Models;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
+    using EasyEnglish.Web.Controllers;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     [Area("Administration")]
-    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
-    public class CoursesController : AdministratorController
+    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName}")]
+    public class CoursesController : BaseController
     {
         private readonly ICoursesService courseService;
         private readonly ITeachersService teachersService;

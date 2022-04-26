@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     using EasyEnglish.Common;
+    using EasyEnglish.Services.Data;
     using EasyEnglish.Services.Messaging;
     using EasyEnglish.Web.Controllers;
     using EasyEnglish.Web.ViewModels.Administration.Emails;
@@ -18,10 +18,14 @@
     public class EmailsController : BaseController
     {
         private readonly IEmailSender emailSender;
+        private readonly IStudentsService studentsService;
 
-        public EmailsController(IEmailSender emailSender)
+        public EmailsController(
+            IEmailSender emailSender,
+            IStudentsService studentsService)
         {
             this.emailSender = emailSender;
+            this.studentsService = studentsService;
         }
 
         public IActionResult Send()
@@ -37,9 +41,10 @@
                 return this.View(input);
             }
 
+            var emails = await this.studentsService.GetAllEmailsAsync();
             var html = $"<p>{input.Content}</p>";
             var attachments = new List<EmailAttachment>();
-            if (input.Attachments != null)
+            if (input.Attachments?.Any() == true)
             {
                 foreach (var attachment in input.Attachments)
                 {
@@ -60,7 +65,17 @@
                 }
             }
 
-            await this.emailSender.SendEmailAsync("deedee.ag@gmail.com", GlobalConstants.SystemName, "kostadin.2g@gmail.com", input.Subject, html.ToString(), attachments);
+            foreach (var email in emails)
+            {
+                await this.emailSender.SendEmailAsync(
+                    GlobalConstants.EmailFrom,
+                    GlobalConstants.SystemName,
+                    email,
+                    input.Subject,
+                    html.ToString(),
+                    attachments);
+            }
+
             return this.Redirect("/");
         }
     }
