@@ -3,39 +3,56 @@
 @{
     this.ViewData["Title"] = "Messages";
 }
-<div class="container" style="padding: 25px;">
-@foreach (var message in Model.Messages)
+<div class="container-fluid" style="padding: 25px;">
+    <div class="row">
+        @foreach (var message in Model.Messages)
 {
-    <a class="" asp-controller="Messages" asp-action="" asp-route-id="@message.Id" style="padding: 25px;">
-        <div class="card-panel hoverable grey lighten-5 z-depth-1">
-            <div class="row">
-                <div class="col s2">
-                    <img src="@message.AddedByUser.ProfilePicture" alt="" class="circle responsive-img">
-                    <p>@message.AddedByUser.Name</p>
+    @*<a class="" asp-controller="Messages" asp-action="" asp-route-id="@message.Id">
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <div class="col-lg-8 offset-md-2" >
+                <div class="card mb-3" style="max-width: 1440px;">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="@message.AddedByUser.ProfilePicture" alt="" class="img-fluid width: 100% \9;">
+                    </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Card Title</h5>
+                        <p class="card-text">@message.Description</p>
+                        <button type="button" class="btn btn-secondary">Go to post</button>
+                    </div>
                 </div>
-                <div class="col s9">
-                    <header>
-                        <h5>@message.StartDate</h5>
-                    </header>
-                    <span class="black-text">
-                @message.Description
-                    </span>
-                </div> 
-                <div class="col s1">
-                    <span class="black-text">
-                        <i class="material-icons amber-text text-lighten-1">star</i>
-                @if (message.StartDate <= DateTime.Now)
-                {
-                                <label>5.0/5.0</label>
-                }
-                else
-                {
-                                <label>Няма отзиви</label>
-                }
-                    </span>
                 </div>
             </div>
         </div>
-    </a>
+        </div>       
+    </a>*@
 }
+    </div>
+
 </div>
+<section class="page-section" id="about">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">About</h2>
+                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                </div>
+                <ul class="timeline">
+                    @foreach(var message in Model.Messages)
+                    {
+                    <li>
+                    <a class="" asp-controller="Messages" asp-action="" asp-route-id="@message.Id">
+                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="@message.AddedByUser.ProfilePicture" alt="UserProfilPicture" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>@message.StartDate</h4>
+                                <h4 class="subheading">Our Humble Beginnings</h4>
+                            </div>
+                        <div class="timeline-body"><p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p></div>
+                    </div>
+                    </a>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </section>

@@ -24,9 +24,6 @@
         [Display(Name = "Students")]
         public string Students { get; set; }
 
-        [Required]
-        [MinLength(4)]
-        [MaxLength(100)]
         public string Description { get; set; }
 
         [Display(Name = "Students Count")]

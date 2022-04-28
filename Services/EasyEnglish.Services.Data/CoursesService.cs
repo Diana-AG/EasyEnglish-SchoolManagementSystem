@@ -46,6 +46,20 @@
             await this.coursesRepository.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAll<T>()
+        {
+            var courses = await this.coursesRepository.AllAsNoTracking()
+                .Include(c => c.CourseType)
+                .Include(c => c.Teacher)
+                .Include(c => c.Students)
+                .OrderBy(x => x.Teacher.Name)
+                .ThenBy(x => x.CourseType.Language.Name)
+                .ThenBy(x => x.CourseType.Level.Name)
+                .To<T>().ToListAsync();
+
+            return courses;
+        }
+
         public async Task<IEnumerable<T>> GetAll<T>(int page, int itemsPerPage = 8)
         {
             var courses = await this.coursesRepository.AllAsNoTracking()

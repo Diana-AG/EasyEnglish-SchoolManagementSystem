@@ -1,15 +1,15 @@
 ﻿namespace EasyEnglish.Services.Data
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
-    using EasyEnglish.Data.Models;
     using EasyEnglish.Web.ViewModels.Administration.Courses;
 
     public interface ICoursesService
     {
         Task CreateAsync(CourseInputModel input, string userId);
+
+        Task<IEnumerable<T>> GetAll<T>();
 
         Task<IEnumerable<T>> GetAll<T>(int page, int itemsPerPage = 8);
 

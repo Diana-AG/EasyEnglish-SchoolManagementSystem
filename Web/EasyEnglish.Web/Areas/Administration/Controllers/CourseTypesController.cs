@@ -118,39 +118,39 @@
         }
 
         // GET: Administration/CourseTypes/AddResource/5
-        //public async Task<IActionResult> AddResource(int id)
-        //{
+        // public async Task<IActionResult> AddResource(int id)
+        // {
         //    var resources = await this.dbContext.Resources.ToListAsync();
 
-        //    var courseTypeResouce = new CourseTypeResourseViewModel
+        // var courseTypeResouce = new CourseTypeResourseViewModel
         //    {
         //        CourseId = id,
         //        Resources = resources,
         //    };
 
-        //    return this.View(courseTypeResouce);
-        //}
+        // return this.View(courseTypeResouce);
+        // }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddResource(CourseTypeResourseInputModel model)
-        //{
+        // [HttpPost]
+        // public async Task<IActionResult> AddResource(CourseTypeResourseInputModel model)
+        // {
         //    if (model.Id == null || model.CourseId == null)
         //    {
         //        return this.NotFound();
         //    }
 
-        //    var courseType = await this.dbContext.CourseTypes.FindAsync(model.CourseId);
+        // var courseType = await this.dbContext.CourseTypes.FindAsync(model.CourseId);
         //    var resource = await this.dbContext.Resources.FindAsync(model.Id);
         //    if (courseType == null || resource == null)
         //    {
         //        return this.NotFound();
         //    }
 
-        //    courseType.Resources.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = courseType.Id });
+        // courseType.Resources.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = courseType.Id });
         //    await this.dbContext.SaveChangesAsync();
 
-        //    return this.RedirectToAction(nameof(this.Index));
-        //}
+        // return this.RedirectToAction(nameof(this.Index));
+        // }
 
         // GET: Administration/CourseTypes/Delete/5
         public async Task<IActionResult> Delete(int id)

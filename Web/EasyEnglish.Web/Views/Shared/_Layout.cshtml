@@ -5,14 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - @GlobalConstants.SystemName</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/materialize.min.css" asp-append-version="true" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body>
+<body id="page-top">    
     <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -27,33 +24,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Messages" asp-action="Index">Messages</a>
                         </li>
-                        @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Create">Create Course</a>
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>*@
-                        @*@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        @if (this.User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Languages" asp-action="Index">Languages</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Levels" asp-action="Index">Levels</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="CourseTypes" asp-action="Index">Course Types</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Courses" asp-action="Index">Courses</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Resources" asp-action="Index">Resources</a>
-                            </li>
-                        }*@
+                            if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName) &&
+                            !this.User.IsInRole(GlobalConstants.ManagerRoleName) &&
+                            !this.User.IsInRole(GlobalConstants.TeacherRoleName))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="MyCourses">My Courses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="MyPortfolio">My Portfolio</a>
+                                </li>
+                            }
+                        }                        
                     </ul>
                 </div>
             </div>
@@ -67,17 +54,7 @@
         </main>
     </div>
     
-    <footer class="border-top footer text-muted">
-        <div class="float-right d-none d-sm-inline">                
-            <figure class="text-end">
-                <blockquote class="blockquote">
-                    <p>With languages, you are at home anywhere.</p>
-                </blockquote>
-                <figcaption class="blockquote-footer">
-                    <cite title="Source Title">Edward De Waal</cite>
-                </figcaption>
-            </figure>
-        </div>
+    <footer class="border-top footer text-muted">        
         <div class="container">
             &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
@@ -87,8 +64,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
-    <script src="~/js/materialize.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>    
     @await this.RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
