@@ -14,8 +14,16 @@
                     </div>
                 <div class="col-md-8">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-10">
                         <h5 class="card-title">@course.LanguageName @course.LevelName</h5>
-                        <p class="card-text">@course.Description.Substring(0, 400)...</p>
+                            </div>
+                            <div class="col">
+                                <i class="fas fa-star" style="color:#efcc00"></i>
+                                <p class="text-muted">5/5</p>
+                            </div>
+                        </div>                        
+                        <p class="card-text">@course.Description.Substring(0, @Math.Min(400, @course.Description.Length))...</p>
                         <button type="button" class="btn btn-secondary">See more</button>
                     </div>
                 </div>

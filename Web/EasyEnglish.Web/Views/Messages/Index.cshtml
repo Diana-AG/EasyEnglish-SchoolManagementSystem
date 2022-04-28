@@ -1,58 +1,36 @@
 ﻿@model EasyEnglish.Web.ViewModels.Messages.MessageListViewModel
-
 @{
     this.ViewData["Title"] = "Messages";
 }
-<div class="container-fluid" style="padding: 25px;">
+<div class="container-fluid">
     <div class="row">
         @foreach (var message in Model.Messages)
-{
-    @*<a class="" asp-controller="Messages" asp-action="" asp-route-id="@message.Id">
-        <div class="shadow p-3 mb-5 bg-body rounded">
-            <div class="col-lg-8 offset-md-2" >
+        {
+        <div class="col-lg-8 offset-md-2" >
                 <div class="card mb-3" style="max-width: 1440px;">
                 <div class="row">
                     <div class="col-md-4">
-                        <img src="@message.AddedByUser.ProfilePicture" alt="" class="img-fluid width: 100% \9;">
+                        <img src="@message.AddedByUser.ProfilePicture" alt="Profil Picture" class="img-fluid rounded-start" alt="...">
                     </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">Card Title</h5>
-                        <p class="card-text">@message.Description</p>
-                        <button type="button" class="btn btn-secondary">Go to post</button>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-        </div>       
-    </a>*@
-}
-    </div>
-
-</div>
-<section class="page-section" id="about">
-            <div class="container">
-                <div class="text-center">
-                    <h2 class="section-heading text-uppercase">About</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
-                </div>
-                <ul class="timeline">
-                    @foreach(var message in Model.Messages)
-                    {
-                    <li>
-                    <a class="" asp-controller="Messages" asp-action="" asp-route-id="@message.Id">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid" src="@message.AddedByUser.ProfilePicture" alt="UserProfilPicture" /></div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4>@message.StartDate</h4>
-                                <h4 class="subheading">Our Humble Beginnings</h4>
+                        <div class="row">
+                            <div class="col-md-10">
+                        <h5 class="card-title">@message.AddedByUser.Name</h5>
                             </div>
-                        <div class="timeline-body"><p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p></div>
+                            <div class="col">
+                                <i class="fas fa-star" style="color:#efcc00"></i>
+                                <p class="text-muted">5/5</p>
+                            </div>
+                        </div>
+                        <h6 class="card-title">@message.StartDate.ToShortDateString() </h6>
+                        <p class="card-text">@message.Description.Substring(0, @Math.Min(100, @message.Description.Length))...</p>
+                        <a asp-controller="Messages" asp-action="Details" asp-route-id="@message.Id" class="btn btn-secondary">See more</a>
                     </div>
-                    </a>
-                    </li>
-                    }
-                </ul>
+                </div>
+                </div>
             </div>
-        </section>
+        </div>        
+        }
+    </div>
+</div>
