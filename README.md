@@ -1,6 +1,52 @@
 # EasyEnglish School Management System
-ASP .NET Core 6.0 Web Application Project
+## How It Works
+- Guest visitors: 
+  - browse courses of Easy Eanglish
+  - read messages
+- Logged Student:
+  - can review its portfolio
+  - can review its active courses
+- Teacher (user role):
+  - creates/edits/delete course
+  - add/removes students to/from course
+  - add student's portfolio 
+  - send emails to its students
+  - add/download/delete resources
+  - add messages 
+  - can review his own courses
+- Manager (user role):
+  - can review all courses
+  - can review all students
+- Admin (user role):
+  - reviews/creates/edits/deletes base data like language, level, training form, course-type
 
+## Built with
+- ASP.NET Core 6.0
+- Entity Framework (EF) Core 6.0.3
+- Microsoft SQL Server Express
+- ASP.NET Identity System
+- MVC Areas with Multiple Layouts
+- Razor Pages, Sections, Partial Views
+- View Components
+- Repository Pattern
+- Auto Мapping
+- Dependency Injection
+- Status Code Pages Middleware
+- Exception Handling Middleware
+- Sorting, Filtering, and Paging with EF Core
+- Data Validation, both Client-side and Server-side
+- Data Validation in the Models and Input View Models
+- Custom Validation Attributes
+- Responsive Design
+- Cloudinary
+- SendGrid
+- Bootstrap
+- jQuery
+## Test Accounts
+**Admin:** admin@easyenglish.com 123123
+**Manager:** manager@easyenglish.com 123123
+**Teacher:** teacher1@easyenglish.com 123123
+**Student:** student1@easyenglish.com 123123
 ## Screenshots
 ![image](https://user-images.githubusercontent.com/81183265/166061256-649b83a7-95e1-458f-b016-3aca174094a8.png)
 ![image](https://user-images.githubusercontent.com/81183265/166007884-526761c7-f133-4779-b3e1-8df3d47b9220.png)
@@ -9,17 +55,9 @@ ASP .NET Core 6.0 Web Application Project
 ![image](https://user-images.githubusercontent.com/81183265/166062043-fcba943e-51e1-4f3b-8163-78b2b102e40b.png)
 ![image](https://user-images.githubusercontent.com/81183265/166009602-9a267fa6-a3b2-497d-94df-0ff2da6eb368.png)
 
-## Functionallity and Test Accounts
-
-**Admin:** admin@easyenglish.com 123123
-
-**Manager:** manager@easyenglish.com 123123
-
-**Teacher:** teacher1@easyenglish.com 123123
-
-**Student:** student1@easyenglish.com 123123
-
 ## Credits
 ASP.NET Core Template - [Nikolay Kostov](https://github.com/NikolayIT), [Stoyan Shopov](https://github.com/StoyanShopov), [Vladislav Karamfilov](https://github.com/vladislav-karamfilov)
 
 Project images - [freepik.com](https://www.freepik.com/home)
+
+Admin Area Template - [AdminLTE](https://adminlte.io/)
