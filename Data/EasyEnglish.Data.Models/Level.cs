@@ -1,8 +1,8 @@
 ﻿namespace EasyEnglish.Data.Models
 {
-    using EasyEnglish.Data.Common.Models;
-
     using System.Collections.Generic;
+
+    using EasyEnglish.Data.Common.Models;
 
     public class Level : BaseDeletableModel<int>
     {

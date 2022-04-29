@@ -10,17 +10,12 @@
 
         Task UploadFileAsync(ResourceUploadFileInputModel input, string imagePath);
 
-        // IEnumerable<T> GetAll<T>(int page, int itemsPerPage = 12);
-
-        // IEnumerable<T> GetRandom<T>(int count);
-
         int GetCount();
 
         Task<T> GetByIdAsync<T>(int id);
 
         Task<T> GetByNameAsync<T>(string name);
 
-        // IEnumerable<T> GetByIngredients<T>(IEnumerable<int> ingredientIds);
         ResourceViewModel GetAll();
 
         Task DeleteAsync(int id, string resourcePath);
