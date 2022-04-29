@@ -44,8 +44,11 @@
 - jQuery
 ## Test Accounts
 **Admin:** admin@easyenglish.com 123123
+
 **Manager:** manager@easyenglish.com 123123
+
 **Teacher:** teacher1@easyenglish.com 123123
+
 **Student:** student1@easyenglish.com 123123
 ## Screenshots
 ![image](https://user-images.githubusercontent.com/81183265/166061256-649b83a7-95e1-458f-b016-3aca174094a8.png)
