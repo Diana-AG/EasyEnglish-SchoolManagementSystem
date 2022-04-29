@@ -23,7 +23,7 @@
         // IEnumerable<T> GetByIngredients<T>(IEnumerable<int> ingredientIds);
         ResourceViewModel GetAll();
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int id, string resourcePath);
 
         bool NameExists(string name);
     }

@@ -1,10 +1,5 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using EasyEnglish.Common;
@@ -18,9 +13,9 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.AspNetCore.StaticFiles;
-    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     [Area("Administration")]
     [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
@@ -52,7 +47,6 @@
             this.cloudinary = cloudinary;
         }
 
-        // GET: Administration/Resources
         public async Task<IActionResult> Index()
         {
             var viewModel = this.resourcesService.GetAll();
@@ -60,7 +54,6 @@
             return this.View(viewModel);
         }
 
-        // GET: Administration/Resources/Create
         public IActionResult AddRemoteUrl()
         {
             var viewModel = new ResourceUrlInputModel();
@@ -69,7 +62,6 @@
             return this.View(viewModel);
         }
 
-        // POST: Administration/Resources/Create
         [HttpPost]
         public async Task<IActionResult> AddRemoteUrl(ResourceUrlInputModel input)
         {
@@ -83,11 +75,9 @@
 
             this.ViewData[MessageConstant.SuccessMessage] = "Resource added successfully.";
 
-            // TODO: Redirect to resource details page
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/Resources/Create
         public IActionResult UploadFile()
         {
             var viewModel = new ResourceUploadFileInputModel();
@@ -96,7 +86,6 @@
             return this.View(viewModel);
         }
 
-        // POST: Administration/Resources/Create
         [HttpPost]
         public async Task<IActionResult> UploadFile(ResourceUploadFileInputModel input)
         {
@@ -119,7 +108,6 @@
 
             this.ViewData[MessageConstant.SuccessMessage] = "Resource added successfully.";
 
-            // TODO: Redirect to resource details page
             return this.RedirectToAction(nameof(this.Index));
         }
 
@@ -145,11 +133,12 @@
             return this.PhysicalFile(phisicalPath, contentType, $"{resource.Name}.{resource.Extension}");
         }
 
-        // POST: Administration/Resources/Delete/5
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await this.resourcesService.DeleteAsync(id);
+            string phisicalPath = $"{this.environment.WebRootPath}/resources";
+
+            await this.resourcesService.DeleteAsync(id, phisicalPath);
             return this.RedirectToAction(nameof(this.Index));
         }
 

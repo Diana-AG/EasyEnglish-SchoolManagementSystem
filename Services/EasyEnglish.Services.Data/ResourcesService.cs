@@ -72,9 +72,16 @@
             await this.resourcesRepository.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, string resourcePath)
         {
             var resource = await this.resourcesRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            var physicalPath = $"{resourcePath}/{resource.Id}.{resource.Extension}";
+            var fileExists = File.Exists(physicalPath);
+            if (fileExists)
+            {
+                File.Delete(physicalPath);
+            }
 
             this.resourcesRepository.Delete(resource);
             await this.resourcesRepository.SaveChangesAsync();
