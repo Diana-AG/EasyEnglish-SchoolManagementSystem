@@ -3,7 +3,7 @@
     using EasyEnglish.Common;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Controllers;
-    using EasyEnglish.Web.ViewModels.Administration.Dashboard;
+    using EasyEnglish.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -11,16 +11,24 @@
     [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
     public class DashboardController : BaseController
     {
-        private readonly ISettingsService settingsService;
+        private readonly IGetCountsService countsService;
 
-        public DashboardController(ISettingsService settingsService)
+        public DashboardController(IGetCountsService countsService)
         {
-            this.settingsService = settingsService;
+            this.countsService = countsService;
         }
 
         public IActionResult Index()
         {
-            var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
+            var countsDto = this.countsService.GetCounts();
+            var viewModel = new IndexViewModel
+            {
+                CoursesCount = countsDto.CoursesCount,
+                LanguagesCount = countsDto.LanguagesCount,
+                StudentsCount = countsDto.StudentsCount,
+                TeachersCount = countsDto.TeachersCount,
+            };
+
             return this.View(viewModel);
         }
     }

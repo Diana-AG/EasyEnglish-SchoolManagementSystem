@@ -2,17 +2,13 @@
 {
     using System.Threading.Tasks;
 
-    using EasyEnglish.Common;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
-    using EasyEnglish.Web.Controllers;
     using EasyEnglish.Web.ViewModels.Administration.TrainingForms;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Area("Administration")]
-    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
-    public class TrainingFormsController : BaseController
+    public class TrainingFormsController : AdministratorController
     {
         private readonly ITrainingFormsService trainingFormsService;
 
@@ -22,7 +18,6 @@
             this.trainingFormsService = trainingFormsService;
         }
 
-        // GET: Administration/TrainingForms
         public async Task<IActionResult> Index()
         {
             var trainingFormViewModels = await this.trainingFormsService.GetAllAsync<TrainingFormViewModel>();
@@ -30,13 +25,11 @@
             return this.View(trainingFormViewModels);
         }
 
-        // GET: Administration/TrainingForms/Create
         public IActionResult Create()
         {
             return this.View();
         }
 
-        // POST: Administration/TrainingForms/Create
         [HttpPost]
         public async Task<IActionResult> Create(TrainingFormInputModel input)
         {
@@ -49,7 +42,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/TrainingForms/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var trainingForm = await this.trainingFormsService.GetByIdAsync<EditTrainingFormInputModel>(id);
@@ -61,7 +53,6 @@
             return this.View(trainingForm);
         }
 
-        // POST: Administration/TrainingForms/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditTrainingFormInputModel input)
         {
@@ -79,7 +70,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/TrainingForms/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var trainingForm = await this.trainingFormsService.GetByIdAsync<TrainingFormViewModel>(id);
@@ -93,7 +83,6 @@
             return this.View(trainingForm);
         }
 
-        // POST: Administration/TrainingForms/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -2,15 +2,12 @@
 {
     using System.Threading.Tasks;
 
-    using EasyEnglish.Common;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.Levels;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Area("Administration")]
-    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
     public class LevelsController : AdministratorController
     {
         private readonly ILevelsService levelsService;
@@ -21,7 +18,6 @@
             this.levelsService = levelsService;
         }
 
-        // GET: Administration/Levels
         public async Task<IActionResult> Index()
         {
             var levelViewModels = await this.levelsService.GetAllAsync<LevelViewModel>();
@@ -29,13 +25,11 @@
             return this.View(levelViewModels);
         }
 
-        // GET: Administration/Levels/Create
         public IActionResult Create()
         {
             return this.View();
         }
 
-        // POST: Administration/Levels/Create
         [HttpPost]
         public async Task<IActionResult> Create(LevelInputModel input)
         {
@@ -48,7 +42,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/Levels/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var level = await this.levelsService.GetByIdAsync<EditLevelInputModel>(id);
@@ -60,7 +53,6 @@
             return this.View(level);
         }
 
-        // POST: Administration/Levels/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditLevelInputModel input)
         {
@@ -78,7 +70,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/Levels/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var level = await this.levelsService.GetByIdAsync<LevelViewModel>(id);
@@ -92,7 +83,6 @@
             return this.View(level);
         }
 
-        // POST: Administration/Levels/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)

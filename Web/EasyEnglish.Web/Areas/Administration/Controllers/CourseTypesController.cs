@@ -2,17 +2,14 @@
 {
     using System.Threading.Tasks;
 
-    using EasyEnglish.Common;
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.CourseTypes;
     using EasyEnglish.Web.ViewModels.Administration.Languages;
     using EasyEnglish.Web.ViewModels.Administration.Levels;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Area("Administration")]
-    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
     public class CourseTypesController : AdministratorController
     {
         private readonly ICourseTypesService courseTypeService;
@@ -29,7 +26,6 @@
             this.levelsService = levelsService;
         }
 
-        // GET: Administration/CourseTypes
         public async Task<IActionResult> Index()
         {
             var courseTypeViewModels = await this.courseTypeService.GetAllAsync<CourseTypeViewModel>();
@@ -37,7 +33,6 @@
             return this.View(courseTypeViewModels);
         }
 
-        // GET: Administration/CourseTypes/Create
         public IActionResult Create()
         {
             var input = new CourseTypeInputModel
@@ -49,7 +44,6 @@
             return this.View(input);
         }
 
-        // POST: Administration/CourseTypes/Create
         [HttpPost]
         public async Task<IActionResult> Create(CourseTypeInputModel input)
         {
@@ -71,7 +65,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/CourseTypes/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var courseType = await this.courseTypeService.GetByIdAsync<CourseTypeViewModel>(id);
@@ -83,7 +76,6 @@
             return this.View(courseType);
         }
 
-        // GET: Administration/CourseTypes/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var courseType = await this.courseTypeService.GetByIdAsync<EditCourseTypeInputModel>(id);
@@ -97,7 +89,6 @@
             return this.View(courseType);
         }
 
-        // POST: Administration/CourseTypes/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditCourseTypeInputModel input)
         {
@@ -117,42 +108,6 @@
             return this.RedirectToAction(nameof(this.Details), new { Id = id });
         }
 
-        // GET: Administration/CourseTypes/AddResource/5
-        // public async Task<IActionResult> AddResource(int id)
-        // {
-        //    var resources = await this.dbContext.Resources.ToListAsync();
-
-        // var courseTypeResouce = new CourseTypeResourseViewModel
-        //    {
-        //        CourseId = id,
-        //        Resources = resources,
-        //    };
-
-        // return this.View(courseTypeResouce);
-        // }
-
-        // [HttpPost]
-        // public async Task<IActionResult> AddResource(CourseTypeResourseInputModel model)
-        // {
-        //    if (model.Id == null || model.CourseId == null)
-        //    {
-        //        return this.NotFound();
-        //    }
-
-        // var courseType = await this.dbContext.CourseTypes.FindAsync(model.CourseId);
-        //    var resource = await this.dbContext.Resources.FindAsync(model.Id);
-        //    if (courseType == null || resource == null)
-        //    {
-        //        return this.NotFound();
-        //    }
-
-        // courseType.Resources.Add(new ResourceCourseType { ResourceId = resource.Id, CourseTypeId = courseType.Id });
-        //    await this.dbContext.SaveChangesAsync();
-
-        // return this.RedirectToAction(nameof(this.Index));
-        // }
-
-        // GET: Administration/CourseTypes/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var courseType = await this.courseTypeService.GetByIdAsync<CourseTypeViewModel>(id);
@@ -166,7 +121,6 @@
             return this.View(courseType);
         }
 
-        // POST: Administration/CourseTypes/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -78,8 +78,15 @@
           </div>
         </div>
       </div>
-      <partial name="_AdminMenu" />
-    </div>
+      @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+      {
+          <partial name="_AdminMenu" />
+      }
+      else
+      {
+          <partial name="_ManagerTeacherMenu" />
+      }
+  </div>
   </aside>
   <div class="content-wrapper">
     <div class="content-header">

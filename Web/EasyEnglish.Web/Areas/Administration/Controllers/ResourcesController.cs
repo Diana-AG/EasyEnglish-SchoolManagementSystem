@@ -1,5 +1,9 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using EasyEnglish.Common;
@@ -13,9 +17,6 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     [Area("Administration")]
     [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
@@ -47,7 +48,7 @@
             this.cloudinary = cloudinary;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var viewModel = this.resourcesService.GetAll();
 

@@ -38,7 +38,6 @@
             this.trainingFormsService = trainingFormsService;
         }
 
-        // GET: Administration/Courses
         public async Task<IActionResult> Index(int id = 1)
         {
             if (id < 1)
@@ -58,7 +57,6 @@
             return this.View(viewModel);
         }
 
-        // GET: Administration/Courses/Create
         public IActionResult Create()
         {
             var viewModel = new CourseInputModel();
@@ -68,7 +66,6 @@
             return this.View(viewModel);
         }
 
-        // POST: Administration/Courses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CourseInputModel input)
@@ -100,7 +97,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/Courses/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var course = await this.courseService.GetByIdAsync<CourseViewModel>(id);
@@ -113,7 +109,6 @@
             return this.View(course);
         }
 
-        // GET: Administration/Courses/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var viewModel = await this.courseService.GetByIdAsync<EditCourseInputModel>(id);
@@ -127,7 +122,6 @@
             return this.View(viewModel);
         }
 
-        // POST: Administration/Courses/Edit/5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditCourseInputModel input)
         {
@@ -148,7 +142,6 @@
             return this.RedirectToAction(nameof(this.Details), new { Id = id });
         }
 
-        // GET: Administration/Courses/AddStudent/5
         public async Task<IActionResult> AddStudent(int id)
         {
             var viewModel = await this.courseService.GetAvailableStudents(id);
@@ -156,7 +149,6 @@
             return this.View(viewModel);
         }
 
-        // POST: Administration/Courses/AddStudent
         [HttpPost]
         public async Task<IActionResult> AddStudent(CourseStudentInputModel input)
         {
@@ -176,7 +168,6 @@
             return this.View();
         }
 
-        // POST: Administration/Courses/RemoveStudent
         [HttpPost]
         public async Task<IActionResult> RemoveStudent(CourseStudentInputModel input)
         {
@@ -196,7 +187,6 @@
             return this.View();
         }
 
-        // GET: Administration/Courses/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var course = await this.courseService.GetByIdAsync<CourseViewModel>(id);
@@ -210,7 +200,6 @@
             return this.View(course);
         }
 
-        // POST: Administration/Courses/Delete/5
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)

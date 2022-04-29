@@ -1,7 +1,19 @@
-﻿@model EasyEnglish.Web.ViewModels.Administration.Dashboard.IndexViewModel
+﻿@model EasyEnglish.Web.ViewModels.Home.IndexViewModel
 @{
     this.ViewData["Title"] = "Admin dashboard";
 }
 
-<h1>@this.ViewData["Title"]</h1>
-Settings: @this.Model.SettingsCount
+<div class="text-center">
+    <div class="col-md-4 offset-md-3">
+        <h5>We have:</h5>
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <ul class="list-group" class="shadow p-3 mb-5 bg-body rounded">
+            <li class="list-group-item">Courses: @Model.CoursesCount</li>
+            <li class="list-group-item">Teachers: @Model.TeachersCount</li>
+            <li class="list-group-item">Students: @Model.StudentsCount</li>
+            <li class="list-group-item">Languages: @Model.LanguagesCount</li>
+        </ul>
+        </div>
+        
+    </div>
+</div>

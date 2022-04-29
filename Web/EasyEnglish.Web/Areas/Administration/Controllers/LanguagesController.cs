@@ -1,15 +1,13 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
     using System.Threading.Tasks;
-    using EasyEnglish.Common;
+
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.Constants;
     using EasyEnglish.Web.ViewModels.Administration.Languages;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     [Area("Administration")]
-    [Authorize(Roles = $"{GlobalConstants.AdministratorRoleName}, {GlobalConstants.ManagerRoleName}, {GlobalConstants.TeacherRoleName} ")]
     public class LanguagesController : AdministratorController
     {
         private readonly ILanguagesService languagesService;
@@ -20,7 +18,6 @@
             this.languagesService = languagesService;
         }
 
-        // GET: Administration/Languages
         public async Task<IActionResult> Index()
         {
             var languageViewModels = await this.languagesService.GetAllAsync<LanguageViewModel>();
@@ -28,13 +25,11 @@
             return this.View(languageViewModels);
         }
 
-        // GET: Administration/Languages/Create
         public IActionResult Create()
         {
             return this.View();
         }
 
-        // POST: Administration/Languages/Create
         [HttpPost]
         public async Task<IActionResult> Create(LanguageInputModel input)
         {
@@ -47,7 +42,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/Languages/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var language = await this.languagesService.GetByIdAsync<EditLanguageInputModel>(id);
@@ -59,7 +53,7 @@
             return this.View(language);
         }
 
-        // POST: Administration/Languages/Edit/5
+
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditLanguageInputModel input)
         {
@@ -77,7 +71,6 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
-        // GET: Administration/Languages/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var language = await this.languagesService.GetByIdAsync<LanguageViewModel>(id);
@@ -91,7 +84,7 @@
             return this.View(language);
         }
 
-        // POST: Administration/Languages/Delete/5
+
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
