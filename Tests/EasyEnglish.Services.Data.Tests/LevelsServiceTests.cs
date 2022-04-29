@@ -50,7 +50,7 @@
                 Name = "New level name",
             };
 
-            await service.UpdateAsync(1, model);
+            await service.UpdateAsync(model.Id, model);
 
             var dataForEdit = await service.GetByIdAsync<LevelViewModel>(1);
 
@@ -60,7 +60,6 @@
 
             Assert.Equal("New level name", editedData.Name);
         }
-
 
         [Fact]
         public async Task GetByIdAsyncReturnsCorrectLevel()
