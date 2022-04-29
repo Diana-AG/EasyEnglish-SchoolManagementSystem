@@ -4,8 +4,6 @@
     ViewData["Title"] = "Delete Course Type";
 }
 
-<h1>@this.ViewData["Title"]</h1>
-
 <h4>Are you sure you want to delete this Course Type</h4>
 <div>
     <hr />
@@ -32,7 +30,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to All Course Types</a>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Back to All Course Types</a>
     </form>
 </div>

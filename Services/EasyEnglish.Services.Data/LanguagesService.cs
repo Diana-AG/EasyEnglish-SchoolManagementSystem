@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -46,7 +47,14 @@
 
         public async Task CreateAsync(LanguageInputModel input)
         {
-            var language = new Language { Name = input.Name };
+            var language = this.languagesRepository.All().FirstOrDefault(x => x.Name == input.Name);
+
+            if (language != null)
+            {
+                throw new Exception($"Language with name \"{input.Name}\" already exists");
+            }
+
+            language = new Language { Name = input.Name };
 
             await this.languagesRepository.AddAsync(language);
             await this.languagesRepository.SaveChangesAsync();

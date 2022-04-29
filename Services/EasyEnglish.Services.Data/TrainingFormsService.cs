@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -46,7 +47,13 @@
 
         public async Task CreateAsync(TrainingFormInputModel input)
         {
-            var trainingForm = new TrainingForm { Name = input.Name };
+            var trainingForm = this.trainingFormsRepository.All().FirstOrDefault(x => x.Name == input.Name);
+            if (trainingForm != null)
+            {
+                throw new Exception($"Training Form with name \"{input.Name}\" already exists");
+            }
+
+            trainingForm = new TrainingForm { Name = input.Name };
 
             await this.trainingFormsRepository.AddAsync(trainingForm);
             await this.trainingFormsRepository.SaveChangesAsync();

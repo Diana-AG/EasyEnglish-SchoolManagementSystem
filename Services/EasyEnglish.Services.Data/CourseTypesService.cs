@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -49,7 +50,14 @@
 
         public async Task CreateAsync(CourseTypeInputModel input)
         {
-            var courseType = new CourseType
+            var courseType = this.courseTypesRepository.All().FirstOrDefault(x => x.LanguageId == input.LanguageId && x.LevelId == input.LevelId);
+
+            if (courseType != null)
+            {
+                throw new Exception($"Course type with name \"{courseType.Language.Name} {courseType.Level.Name}\" already exists");
+            }
+
+            courseType = new CourseType
             {
                 LanguageId = input.LanguageId,
                 LevelId = input.LevelId,

@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using EasyEnglish.Services.Data;
@@ -61,7 +62,18 @@
                 return this.View(input);
             }
 
-            await this.courseTypeService.CreateAsync(input);
+            try
+            {
+                await this.courseTypeService.CreateAsync(input);
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                input.LevelsItems = this.levelsService.GetAllAsKeyValuePair();
+                input.LanguagesItems = this.languagesService.GetAllAsKeyValuePair();
+                return this.View(input);
+            }
+
             return this.RedirectToAction(nameof(this.Index));
         }
 

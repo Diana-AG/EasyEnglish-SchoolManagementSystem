@@ -1,5 +1,6 @@
 ﻿namespace EasyEnglish.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -46,7 +47,13 @@
 
         public async Task CreateAsync(LevelInputModel input)
         {
-            var level = new Level { Name = input.Name };
+            var level = this.levelsRepository.All().FirstOrDefault(x => x.Name == input.Name);
+            if (level != null)
+            {
+                throw new Exception($"Level with name \"{input.Name}\" already exists");
+            }
+
+            level = new Level { Name = input.Name };
 
             await this.levelsRepository.AddAsync(level);
             await this.levelsRepository.SaveChangesAsync();

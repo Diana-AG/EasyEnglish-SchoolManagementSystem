@@ -8,7 +8,6 @@
 
     public class CourseInputModel
     {
-
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
@@ -29,7 +28,7 @@
 
         [Required]
         [MinLength(4)]
-        [MaxLength(100)]
+        [MaxLength(10000)]
         public string Description { get; set; }
 
         public IEnumerable<KeyValuePair<string, string>> CourseTypeItems { get; set; }
