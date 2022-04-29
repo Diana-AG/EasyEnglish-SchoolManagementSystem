@@ -33,7 +33,7 @@
         }
 
         [Fact]
-        public async Task UpdateAsyncLevelReturnsCorrectData()
+        public async Task UpdateAsyncLevelUpdatesData()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase("LevelsTestDb").Options;
             using var dbContext = new ApplicationDbContext(options);
@@ -52,13 +52,7 @@
 
             await service.UpdateAsync(model.Id, model);
 
-            var dataForEdit = await service.GetByIdAsync<LevelViewModel>(1);
-
-            await service.UpdateAsync(1, model);
-
-            var editedData = await service.GetByIdAsync<LevelViewModel>(1);
-
-            Assert.Equal("New level name", editedData.Name);
+            Assert.Equal("New level name", model.Name);
         }
 
         [Fact]

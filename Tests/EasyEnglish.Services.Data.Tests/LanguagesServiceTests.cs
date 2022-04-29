@@ -32,8 +32,30 @@
                 Name = "Language 3",
             });
 
-            //var editedData = service.GetAllAsync<LanguageViewModel>();
             Assert.Equal(3, repository.All().Count());
+        }
+
+        [Fact]
+        public async Task UpdateAsyncLanguageUpdatesData()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase("LanguagesTestDb").Options;
+            using var dbContext = new ApplicationDbContext(options);
+            dbContext.Languages.Add(new Language { Id = 1, Name = "Language 1" });
+            dbContext.Languages.Add(new Language { Id = 2, Name = "Language 2" });
+            await dbContext.SaveChangesAsync();
+
+            using var repository = new EfDeletableEntityRepository<Language>(dbContext);
+            var service = new LanguagesService(repository);
+
+            var model = new EditLanguageInputModel
+            {
+                Id = 1,
+                Name = "New Language name",
+            };
+
+            await service.UpdateAsync(model.Id, model);
+
+            Assert.Equal("New Language name", model.Name);
         }
     }
 }
