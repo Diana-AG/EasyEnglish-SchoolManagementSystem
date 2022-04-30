@@ -1,7 +1,7 @@
 ﻿namespace EasyEnglish.Web.Controllers
 {
-    using System;
     using System.Threading.Tasks;
+
     using EasyEnglish.Services.Data;
     using EasyEnglish.Web.ViewModels.Courses;
     using EasyEnglish.Web.ViewModels.CourseTypes;
@@ -63,10 +63,6 @@
             }
 
             return this.Json(input);
-
-            // TODO: Create course using service method
-            // TODO: Redirect to course info page
-            // return this.Redirect("/");
         }
     }
 }

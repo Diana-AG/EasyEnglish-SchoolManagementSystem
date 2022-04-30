@@ -17,5 +17,8 @@
 
         [Display(Name = "Birth Date")]
         public DateTime BirthDate { get; set; }
+
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
     }
 }

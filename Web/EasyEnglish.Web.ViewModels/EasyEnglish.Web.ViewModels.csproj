@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\EasyEnglish.Data.Models\EasyEnglish.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\EasyEnglish.Services.Mapping\EasyEnglish.Services.Mapping.csproj" />
+    <ProjectReference Include="..\EasyEnglish.Web.Infrastructure\EasyEnglish.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

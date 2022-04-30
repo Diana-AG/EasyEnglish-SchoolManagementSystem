@@ -1,6 +1,7 @@
 ﻿namespace EasyEnglish.Services.Data
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using EasyEnglish.Data.Common.Repositories;
@@ -42,7 +43,10 @@
 
         public async Task<IEnumerable<T>> GetAllAsync<T>()
         {
-            return await this.messagesRepository.All().Include(x => x.AddedByUser).To<T>().ToListAsync();
+            return await this.messagesRepository.All()
+                .Include(x => x.AddedByUser)
+                .To<T>()
+                .ToListAsync();
         }
     }
 }

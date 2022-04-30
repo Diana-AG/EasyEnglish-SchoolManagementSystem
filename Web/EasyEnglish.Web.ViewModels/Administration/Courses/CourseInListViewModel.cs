@@ -15,6 +15,8 @@
         [Display(Name = "Teacher")]
         public string TeacherName { get; set; }
 
+        public ApplicationUser Teacher { get; set; }
+
         [Display(Name = "Course Type")]
         public string CourseType { get; set; }
 
