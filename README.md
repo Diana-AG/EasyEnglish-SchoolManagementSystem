@@ -37,12 +37,17 @@
 - Data Validation, both Client-side and Server-side
 - Data Validation in the Models and Input View Models
 - Custom Validation Attributes
+- Seeding data
 - Responsive Design
 - Cloudinary
 - SendGrid
+- Tpastr
+- Fontawesome
 - Bootstrap
 - jQuery
 ## Test Accounts
+https://easylanguage.azurewebsites.net
+
 **Admin:** admin@easyenglish.com 123123
 
 **Manager:** manager@easyenglish.com 123123
@@ -50,6 +55,22 @@
 **Teacher:** teacher1@easyenglish.com 123123
 
 **Student:** student1@easyenglish.com 123123
+
+**Additionally:**
+in `appsettings.json` set your connection string, cloudinary and sendGrid keys, 
+```json
+"ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=EasyEnglish;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "SendGrid": {
+    "ApiKey": "SendGridApiKey"
+  },
+  "Cloudinary": {
+    "ApiName": "cloudName",
+    "ApiKey": "ApiKey",
+    "ApiSecret": "ApiSecret"
+  }
+  ```
 ## Screenshots
 ![image](https://user-images.githubusercontent.com/81183265/166061256-649b83a7-95e1-458f-b016-3aca174094a8.png)
 ![image](https://user-images.githubusercontent.com/81183265/166007884-526761c7-f133-4779-b3e1-8df3d47b9220.png)
