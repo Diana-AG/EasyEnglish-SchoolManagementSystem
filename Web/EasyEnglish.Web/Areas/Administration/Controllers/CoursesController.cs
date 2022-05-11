@@ -59,9 +59,11 @@
 
         public IActionResult Create()
         {
-            var viewModel = new CourseInputModel();
-            viewModel.CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair();
-            viewModel.TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair();
+            var viewModel = new CourseInputModel
+            {
+                CourseTypeItems = this.courseTypeService.GetAllAsKeyValuePair(),
+                TrainingFormsItems = this.trainingFormsService.GetAllAsKeyValuePair(),
+            };
 
             return this.View(viewModel);
         }

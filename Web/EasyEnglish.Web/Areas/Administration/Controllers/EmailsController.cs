@@ -38,7 +38,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(input); 
+                return this.View(input);
             }
 
             var emails = await this.studentsService.GetAllEmailsAsync();

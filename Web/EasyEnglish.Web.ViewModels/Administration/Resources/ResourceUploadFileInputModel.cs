@@ -10,6 +10,9 @@
 
     public class ResourceUploadFileInputModel : IMapTo<Resource>, IValidatableObject
     {
+        [Required]
+        [MinLength(4)]
+        [MaxLength(100)]
         public string Name { get; set; } = null;
 
         [Display(Name = "Language-Level")]

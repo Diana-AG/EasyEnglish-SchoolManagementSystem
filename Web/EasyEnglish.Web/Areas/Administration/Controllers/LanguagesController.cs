@@ -63,7 +63,6 @@
             return this.View(language);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditLanguageInputModel input)
         {
@@ -93,7 +92,6 @@
 
             return this.View(language);
         }
-
 
         [HttpPost]
         [ActionName("Delete")]

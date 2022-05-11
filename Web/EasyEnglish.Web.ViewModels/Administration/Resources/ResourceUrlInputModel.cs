@@ -8,8 +8,13 @@
 
     public class ResourceUrlInputModel : IMapTo<Resource>
     {
+        [Required]
+        [MinLength(4)]
+        [MaxLength(100)]
         public string Name { get; set; }
 
+        [Required]
+        [Url]
         public string Url { get; set; }
 
         [Display(Name = "Language-Level")]

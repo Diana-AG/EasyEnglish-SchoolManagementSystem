@@ -41,12 +41,13 @@
 
         public IActionResult Create()
         {
-            var viewModel = new CreateCourseInputModel();
-
-            viewModel.LevelsItems = this.levelsService.GetAllAsKeyValuePair();
-            viewModel.TeachersItems = this.teachersService.GetAllAsKeyValuePair();
-            viewModel.LanguagesItems = this.languagesService.GetAllAsKeyValuePair();
-            viewModel.CurrenciesItems = this.currenciesService.GetAllAsKeyValuePair();
+            var viewModel = new CreateCourseInputModel
+            {
+                LevelsItems = this.levelsService.GetAllAsKeyValuePair(),
+                TeachersItems = this.teachersService.GetAllAsKeyValuePair(),
+                LanguagesItems = this.languagesService.GetAllAsKeyValuePair(),
+                CurrenciesItems = this.currenciesService.GetAllAsKeyValuePair(),
+            };
             return this.View(viewModel);
         }
 
