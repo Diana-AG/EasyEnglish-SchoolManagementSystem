@@ -17,7 +17,6 @@
 
             await dbContext.TrainingForms.AddAsync(new TrainingForm { Name = "Once per week" });
             await dbContext.TrainingForms.AddAsync(new TrainingForm { Name = "Twice per week" });
-            await dbContext.TrainingForms.AddAsync(new TrainingForm { Name = "Individual" });
 
             await dbContext.SaveChangesAsync();
         }
