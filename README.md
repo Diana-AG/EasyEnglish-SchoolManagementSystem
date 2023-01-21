@@ -1,3 +1,4 @@
+https://easyenglish.bsite.net/
 # EasyEnglish School Management System
 ## How It Works
 - Guest visitors: 
@@ -46,7 +47,6 @@
 - Bootstrap
 - jQuery
 ## Test Accounts
-https://easylanguage.azurewebsites.net
 
 **Admin:** admin@easyenglish.com 123123
 
