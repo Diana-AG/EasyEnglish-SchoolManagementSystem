@@ -50,7 +50,11 @@
 
         public async Task CreateAsync(CourseTypeInputModel input)
         {
-            var courseType = this.courseTypesRepository.All().FirstOrDefault(x => x.LanguageId == input.LanguageId && x.LevelId == input.LevelId);
+            var courseType = await this.courseTypesRepository
+                .AllAsNoTracking()
+                .Include(x => x.Level)
+                .Include(x => x.Language)
+                .FirstOrDefaultAsync(x => x.LanguageId == input.LanguageId && x.LevelId == input.LevelId);
 
             if (courseType != null)
             {
