@@ -1,5 +1,5 @@
-https://easyenglish.bsite.net/
-# [EasyEnglish School Management System](https://easyenglish.bsite.net/)
+[https:/easylanguages.bsite.net](https://easylanguages.bsite.net/)
+# [EasyEnglish School Management System](https://easylanguages.bsite.net/)
 ## How It Works
 - Guest visitors: 
   - browse courses of Easy Eanglish
